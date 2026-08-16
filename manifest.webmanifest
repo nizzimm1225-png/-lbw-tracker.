@@ -1,7 +1,7 @@
 {
-  "name": "LBW Tracker \u2014 Over Timeline",
+  "name": "LBW Tracker \u2014 Ball Tracking",
   "short_name": "LBW Tracker",
-  "description": "iPhone cricket over-buffer recorder and ball-by-ball review app.",
+  "description": "iPhone cricket over recorder with ball-by-ball timeline and experimental 2D ball tracking.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

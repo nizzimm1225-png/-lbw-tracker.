@@ -41,16 +41,29 @@
     .timeline-wrap{margin-top:12px;background:#0f0f11;border:1px solid #29292e;border-radius:14px;padding:10px 10px 8px}.timeline-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.timeline-head strong{font-size:11px;letter-spacing:.08em;color:#c8c8ce}.timeline-head span{font-size:11px;color:var(--muted)}.timeline{position:relative;height:54px;margin:0 4px}.timeline-track{position:absolute;left:0;right:0;top:25px;height:4px;border-radius:999px;background:#303036;overflow:hidden}.timeline-fill{height:100%;width:100%;background:linear-gradient(90deg,#245b35,var(--green));opacity:.65}.timeline-marker{position:absolute;top:9px;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;border:2px solid #79df95;background:#12331e;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0;min-height:0;z-index:3;box-shadow:0 3px 12px rgba(0,0,0,.3)}.timeline-marker:active{transform:translateX(-50%) scale(.94)}.timeline-marker.lbw{width:18px;height:18px;top:18px;border-radius:5px;background:var(--red);border-color:#ff9b96;color:transparent;transform:translateX(-50%) rotate(45deg)}.timeline-marker.review-active{outline:3px solid rgba(255,214,10,.55);outline-offset:2px}.timeline-now{position:absolute;right:-1px;top:15px;width:2px;height:24px;background:var(--amber);border-radius:2px;box-shadow:0 0 8px rgba(255,214,10,.65)}.timeline-labels{display:flex;justify-content:space-between;font-size:10px;color:#777780;margin-top:-2px}.timeline-help{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35}.review-timeline{margin:10px 0 4px}.review-timeline .timeline{height:58px}.review-playhead{position:absolute;top:12px;bottom:10px;width:2px;background:white;z-index:4;pointer-events:none;box-shadow:0 0 7px rgba(255,255,255,.65)}.review-title{font-size:14px;font-weight:850;margin:0 0 8px}.saved-mini-timeline{position:relative;height:26px;margin-top:10px}.saved-mini-timeline:before{content:"";position:absolute;left:0;right:0;top:12px;height:3px;background:#303036;border-radius:99px}.saved-dot{position:absolute;top:7px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid #a4edb8;transform:translateX(-50%)}.saved-dot.lbw{background:var(--red);border-color:#ff9b96;border-radius:3px;transform:translateX(-50%) rotate(45deg)}
     @media (orientation:landscape){.camera-card{aspect-ratio:16/9;max-height:64vh}.app{max-width:1100px}.controls{grid-template-columns:repeat(4,1fr)}.wide{grid-column:auto}}
     .rotate-overlay{display:none;position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.88);align-items:center;justify-content:center;text-align:center;padding:28px}.rotate-card{max-width:320px}.rotate-icon{font-size:46px;margin-bottom:10px}.rotate-card strong{font-size:20px;display:block}.rotate-card span{font-size:13px;color:#ccc;display:block;margin-top:8px;line-height:1.4}@media (orientation:portrait){.rotate-overlay{display:flex}.camera-card{aspect-ratio:16/9;max-height:none}.app{padding-top:8px}}
+
+    .tracking-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:auto;touch-action:none}
+    .tracking-canvas.off{pointer-events:none;opacity:0}
+    .hud{z-index:4}.rotate-overlay{z-index:8}
+    .tracker-pill{background:rgba(0,0,0,.68);border:1px solid rgba(52,199,89,.35)}
+    .tracker-pill.searching{color:#ffd60a}.tracker-pill.locked{color:#8df0a7}.tracker-pill.off{color:#aaa}
+    .tracking-note{margin-top:8px;padding:10px 11px;border-radius:12px;background:#111b14;border:1px solid #27432e;font-size:11px;line-height:1.45;color:#c8e8d0}
+    .review-video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
+    .review-video-wrap .dialog-video{width:100%;height:100%;max-height:none;object-fit:contain;border-radius:0}
+    .review-video-wrap .tracking-canvas{z-index:2;pointer-events:none}.review-video-wrap .tracking-canvas.seed-mode{pointer-events:auto;cursor:crosshair}
+    .tracker-legend{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:10px;color:var(--muted)}
+    .tracker-legend span{display:inline-flex;align-items:center;gap:5px}.tracker-dot{width:9px;height:9px;border-radius:50%;background:#39ff88;box-shadow:0 0 7px rgba(57,255,136,.65)}.tracker-dash{width:18px;border-top:2px dashed #ffd60a}
   </style>
 </head>
 <body>
 <main class="app">
-  <header><div><h1>LBW Tracker</h1><div class="sub">Over-buffer cricket review</div></div><span id="modeBadge" class="badge">READY</span></header>
+  <header><div><h1>LBW Tracker</h1><div class="sub">Over-buffer review · experimental 2D ball tracking</div></div><span id="modeBadge" class="badge">READY</span></header>
 
   <section class="camera-card">
     <video id="preview" autoplay muted playsinline></video>
+    <canvas id="trackingCanvas" class="tracking-canvas off" aria-label="Ball tracking overlay"></canvas>
     <div class="hud">
-      <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
+      <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="trackInfo" class="pill tracker-pill off">Ball track off</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
       <div class="reticle"><span class="crease left"></span><span class="crease right"></span><span class="pitch-axis"></span></div><div></div>
     </div>
       <div id="rotateOverlay" class="rotate-overlay"><div class="rotate-card"><div class="rotate-icon">↻</div><strong>Rotate iPhone sideways</strong><span>LBW Tracker records each over in landscape so the cricket pitch stays horizontally aligned in the frame.</span></div></div>
@@ -59,6 +72,7 @@
   <div class="controls">
     <button id="cameraBtn" class="secondary">Start Camera</button>
     <button id="switchBtn" class="secondary" disabled>Switch Camera</button>
+    <button id="trackBtn" class="secondary" disabled>BALL TRACK ON</button>
     <button id="startOverBtn" class="primary wide" disabled>START OVER</button>
     <button id="markBallBtn" class="amber" disabled>MARK BALL</button>
     <button id="reviewOverBtn" class="blue" disabled>REVIEW OVER</button>
@@ -98,8 +112,11 @@
     <div class="settings">
       <div class="setting"><label for="qualitySelect">Video quality</label><select id="qualitySelect"><option value="720" selected>720p</option><option value="1080">1080p</option></select></div>
       <div class="setting"><label for="fpsSelect">Frame rate preference</label><select id="fpsSelect"><option>30</option><option selected>60</option></select></div>
+      <div class="setting"><label for="ballColorSelect">Ball colour</label><select id="ballColorSelect"><option value="auto" selected>Auto (red / white)</option><option value="white">White ball</option><option value="red">Red ball</option></select></div>
+      <div class="setting"><label for="sensitivitySelect">Tracking sensitivity</label><select id="sensitivitySelect"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>
     </div>
     <div class="sub" style="margin-top:7px">The current over stays in memory until END OVER or Reset. Starting the next over clears the live over buffer.</div>
+    <div class="tracking-note"><strong>Ball tracking is experimental.</strong> It detects a small fast-moving red/white object inside the pitch frame and draws a 2D trail. Tap the ball on the camera/replay if it locks onto the wrong object. This is a visual aid, not an LBW decision or calibrated 3D Hawk-Eye result.</div>
   </section>
 
   <section class="section"><h2>Saved overs</h2><div id="savedOvers" class="saved"><div class="empty">No overs saved yet.</div></div></section>
@@ -109,7 +126,8 @@
 <dialog id="reviewDialog">
   <div class="dialog-body">
     <div id="reviewTitle" class="review-title">Over review</div>
-    <video id="reviewPlayer" class="dialog-video" controls playsinline></video>
+    <div class="review-video-wrap"><video id="reviewPlayer" class="dialog-video" controls playsinline></video><canvas id="reviewTrackingCanvas" class="tracking-canvas off" aria-label="Replay ball tracking overlay"></canvas></div>
+    <div class="tracker-legend"><span><i class="tracker-dot"></i> detected ball / trail</span><span><i class="tracker-dash"></i> short 2D motion projection</span><span>Tap video to re-seed tracker</span></div>
     <div class="timeline-wrap review-timeline">
       <div class="timeline-head"><strong>DELIVERY TIMELINE</strong><span id="reviewTimeLabel">00:00 / 00:00</span></div>
       <div id="reviewTimeline" class="timeline">
@@ -124,6 +142,9 @@
       <button id="slowBtn" class="secondary">0.25×</button>
       <button id="halfBtn" class="secondary">0.5×</button>
       <button id="normalBtn" class="secondary">1×</button>
+      <button id="reviewTrackBtn" class="secondary">TRACK ON</button>
+      <button id="seedBallBtn" class="secondary">Seed Ball</button>
+      <button id="clearTrailBtn" class="secondary">Clear Trail</button>
       <button id="closeReviewBtn" class="primary">Done</button>
     </div>
   </div>
@@ -134,14 +155,15 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const ui = {
-    preview:$('preview'),cameraBtn:$('cameraBtn'),switchBtn:$('switchBtn'),startOverBtn:$('startOverBtn'),markBallBtn:$('markBallBtn'),reviewOverBtn:$('reviewOverBtn'),endOverBtn:$('endOverBtn'),lbwMarkBtn:$('lbwMarkBtn'),resetOverBtn:$('resetOverBtn'),
-    status:$('status'),camInfo:$('camInfo'),bufferInfo:$('bufferInfo'),modeBadge:$('modeBadge'),overNumber:$('overNumber'),ballCount:$('ballCount'),overClock:$('overClock'),ballStrip:$('ballStrip'),timelineDuration:$('timelineDuration'),overTimeline:$('overTimeline'),timelineMarkers:$('timelineMarkers'),qualitySelect:$('qualitySelect'),fpsSelect:$('fpsSelect'),savedOvers:$('savedOvers'),
-    reviewDialog:$('reviewDialog'),reviewTitle:$('reviewTitle'),reviewPlayer:$('reviewPlayer'),jumpRow:$('jumpRow'),reviewTimeline:$('reviewTimeline'),reviewTimelineMarkers:$('reviewTimelineMarkers'),reviewPlayhead:$('reviewPlayhead'),reviewTimeLabel:$('reviewTimeLabel'),slowBtn:$('slowBtn'),halfBtn:$('halfBtn'),normalBtn:$('normalBtn'),closeReviewBtn:$('closeReviewBtn')
+    preview:$('preview'),trackingCanvas:$('trackingCanvas'),trackInfo:$('trackInfo'),cameraBtn:$('cameraBtn'),switchBtn:$('switchBtn'),trackBtn:$('trackBtn'),startOverBtn:$('startOverBtn'),markBallBtn:$('markBallBtn'),reviewOverBtn:$('reviewOverBtn'),endOverBtn:$('endOverBtn'),lbwMarkBtn:$('lbwMarkBtn'),resetOverBtn:$('resetOverBtn'),
+    status:$('status'),camInfo:$('camInfo'),bufferInfo:$('bufferInfo'),modeBadge:$('modeBadge'),overNumber:$('overNumber'),ballCount:$('ballCount'),overClock:$('overClock'),ballStrip:$('ballStrip'),timelineDuration:$('timelineDuration'),overTimeline:$('overTimeline'),timelineMarkers:$('timelineMarkers'),qualitySelect:$('qualitySelect'),fpsSelect:$('fpsSelect'),ballColorSelect:$('ballColorSelect'),sensitivitySelect:$('sensitivitySelect'),savedOvers:$('savedOvers'),
+    reviewDialog:$('reviewDialog'),reviewTitle:$('reviewTitle'),reviewPlayer:$('reviewPlayer'),reviewTrackingCanvas:$('reviewTrackingCanvas'),reviewTrackBtn:$('reviewTrackBtn'),seedBallBtn:$('seedBallBtn'),clearTrailBtn:$('clearTrailBtn'),jumpRow:$('jumpRow'),reviewTimeline:$('reviewTimeline'),reviewTimelineMarkers:$('reviewTimelineMarkers'),reviewPlayhead:$('reviewPlayhead'),reviewTimeLabel:$('reviewTimeLabel'),slowBtn:$('slowBtn'),halfBtn:$('halfBtn'),normalBtn:$('normalBtn'),closeReviewBtn:$('closeReviewBtn')
   };
 
   let stream=null, recorder=null, facingMode='environment', mimeType='';
   let overActive=false, overStartedAt=0, overSequence=0, chunks=[], initChunk=null, balls=[], lbwMoments=[];
   let clockTimer=null, db=null, reviewUrl=null, reviewMarks=[], reviewLbw=[], reviewDuration=0;
+  let liveTracker=null, reviewTracker=null, trackingEnabled=true, reviewTrackingEnabled=true;
 
   const isLandscape=()=>window.matchMedia('(orientation: landscape)').matches || innerWidth>innerHeight;
   function updateOrientationState(){
@@ -162,6 +184,96 @@
   const formatDate = ms => new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(ms));
   const pickMimeType=()=>['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=h264','video/mp4','video/webm;codecs=vp8','video/webm'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
 
+
+  class BallTracker {
+    constructor(video,overlay,statusEl=null){
+      this.video=video;this.overlay=overlay;this.statusEl=statusEl;this.analysis=document.createElement('canvas');this.ctx=this.analysis.getContext('2d',{willReadFrequently:true});this.octx=overlay.getContext('2d');
+      this.running=false;this.prev=null;this.trail=[];this.last=null;this.seed=null;this.lastFrameAt=0;this.misses=0;this.confidence=0;this.raf=0;
+      this.boundLoop=t=>this.loop(t);
+      overlay.addEventListener('pointerdown',e=>this.seedFromPointer(e));
+    }
+    settings(){return {colour:ui.ballColorSelect?.value||'auto',sensitivity:ui.sensitivitySelect?.value||'medium'};}
+    start(){if(this.running)return;this.running=true;this.overlay.classList.remove('off');this.reset(false);this.raf=requestAnimationFrame(this.boundLoop);}
+    stop(){this.running=false;cancelAnimationFrame(this.raf);this.overlay.classList.add('off');this.clearOverlay();if(this.statusEl){this.statusEl.textContent='Ball track off';this.statusEl.className='pill tracker-pill off';}}
+    reset(clearSeed=true){this.prev=null;this.trail=[];this.last=null;this.misses=0;this.confidence=0;if(clearSeed)this.seed=null;this.clearOverlay();}
+    clearTrail(){this.trail=[];this.last=null;this.seed=null;this.misses=0;this.clearOverlay();}
+    clearOverlay(){const c=this.overlay;if(c.width&&c.height)this.octx.clearRect(0,0,c.width,c.height);}
+    seedFromPointer(e){
+      if(!this.running)return;const r=this.overlay.getBoundingClientRect();if(!r.width||!r.height)return;
+      const fx=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),fy=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));
+      this.seed={fx,fy,until:performance.now()+1800};this.last={x:fx,y:fy,t:performance.now()};this.trail=[];this.overlay.classList.remove('seed-mode');this.updateStatus('LOCK SEED',1,'locked');
+    }
+    updateStatus(text,conf=0,state='searching'){
+      if(!this.statusEl)return;this.statusEl.textContent=conf?`${text} ${Math.round(conf*100)}%`:text;this.statusEl.className=`pill tracker-pill ${state}`;
+    }
+    loop(now){
+      if(!this.running)return;
+      if(this.video.readyState>=2 && !this.video.paused && now-this.lastFrameAt>60){this.lastFrameAt=now;try{this.process(now);}catch(_){}}
+      this.draw(now);this.raf=requestAnimationFrame(this.boundLoop);
+    }
+    process(now){
+      const vw=this.video.videoWidth||0,vh=this.video.videoHeight||0;if(!vw||!vh)return;
+      const aw=240,ah=Math.max(100,Math.round(aw*vh/vw));if(this.analysis.width!==aw||this.analysis.height!==ah){this.analysis.width=aw;this.analysis.height=ah;this.prev=null;}
+      this.ctx.drawImage(this.video,0,0,aw,ah);const img=this.ctx.getImageData(0,0,aw,ah),d=img.data;
+      if(!this.prev){this.prev=new Uint8ClampedArray(d);return;}
+      const prev=this.prev,step=2,gw=Math.floor(aw/step),gh=Math.floor(ah/step),mask=new Uint8Array(gw*gh),scores=new Float32Array(gw*gh);
+      const cfg=this.settings(),motionThreshold=cfg.sensitivity==='high'?32:cfg.sensitivity==='low'?58:44;
+      const yMin=Math.floor(gh*.08),yMax=Math.ceil(gh*.92),xMin=Math.floor(gw*.025),xMax=Math.ceil(gw*.975);
+      for(let gy=yMin;gy<yMax;gy++)for(let gx=xMin;gx<xMax;gx++){
+        const x=gx*step+1,y=gy*step+1,pi=(y*aw+x)*4,r=d[pi],g=d[pi+1],b=d[pi+2];
+        const diff=(Math.abs(r-prev[pi])+Math.abs(g-prev[pi+1])+Math.abs(b-prev[pi+2]))/3;if(diff<motionThreshold)continue;
+        const max=Math.max(r,g,b),min=Math.min(r,g,b),lum=.299*r+.587*g+.114*b;
+        const isWhite=lum>135 && (max-min)<88;
+        const isRed=r>90 && r>g*1.22 && r>b*1.12 && r-((g+b)/2)>28;
+        const colourOK=cfg.colour==='white'?isWhite:cfg.colour==='red'?isRed:(isWhite||isRed);
+        if(!colourOK)continue;
+        const idx=gy*gw+gx;mask[idx]=1;scores[idx]=diff+(isRed?32:20);
+      }
+      const seen=new Uint8Array(mask.length),components=[];
+      const dirs=[-1,1,-gw,gw,-gw-1,-gw+1,gw-1,gw+1];
+      for(let idx=0;idx<mask.length;idx++){
+        if(!mask[idx]||seen[idx])continue;const q=[idx];seen[idx]=1;let qi=0,n=0,sumX=0,sumY=0,sumS=0,minX=1e9,maxX=-1,minY=1e9,maxY=-1;
+        while(qi<q.length && n<120){const cur=q[qi++],cy=Math.floor(cur/gw),cx=cur-cy*gw;n++;sumX+=cx;sumY+=cy;sumS+=scores[cur];minX=Math.min(minX,cx);maxX=Math.max(maxX,cx);minY=Math.min(minY,cy);maxY=Math.max(maxY,cy);
+          for(const delta of dirs){const ni=cur+delta;if(ni<0||ni>=mask.length||seen[ni]||!mask[ni])continue;const ny=Math.floor(ni/gw),nx=ni-ny*gw;if(Math.abs(nx-cx)>1||Math.abs(ny-cy)>1)continue;seen[ni]=1;q.push(ni);}
+        }
+        const bw=maxX-minX+1,bh=maxY-minY+1;if(n<1||n>55||bw>14||bh>14)continue;
+        const fx=((sumX/n)*step+1)/aw,fy=((sumY/n)*step+1)/ah,compact=n/(bw*bh),base=(sumS/n)+Math.min(n,14)*1.6+compact*18;
+        components.push({fx,fy,n,bw,bh,base});
+      }
+      this.prev.set(d);
+      if(!components.length){this.miss(now);return;}
+      const anchor=this.seed&&this.seed.until>now?{x:this.seed.fx,y:this.seed.fy}:this.last;
+      let best=null,bestScore=-1e9;
+      for(const c of components){let sc=c.base;if(anchor){const dx=c.fx-anchor.x,dy=c.fy-anchor.y,dist=Math.hypot(dx,dy);sc+=Math.max(-40,55-dist*185);if(dist>.48)sc-=70;}else{sc+=18*(1-Math.abs(c.fy-.5));}
+        if(sc>bestScore){best=c;bestScore=sc;}
+      }
+      if(!best||bestScore<48){this.miss(now);return;}
+      const p={x:best.fx,y:best.fy,t:now,confidence:Math.max(.25,Math.min(.98,(bestScore-35)/95))};this.last=p;this.misses=0;this.confidence=p.confidence;this.trail.push(p);this.trail=this.trail.filter(x=>now-x.t<1500).slice(-28);this.updateStatus('BALL',p.confidence,'locked');
+    }
+    miss(now){this.misses++;this.trail=this.trail.filter(x=>now-x.t<1300);if(this.misses>7)this.last=null;this.updateStatus('SEARCHING',0,'searching');}
+    draw(now){
+      const vw=this.video.videoWidth||1280,vh=this.video.videoHeight||720;if(this.overlay.width!==vw||this.overlay.height!==vh){this.overlay.width=vw;this.overlay.height=vh;}
+      const c=this.octx;c.clearRect(0,0,vw,vh);const pts=this.trail.filter(p=>now-p.t<1500);if(!pts.length){if(this.seed&&this.seed.until>now){c.strokeStyle='#ffd60a';c.lineWidth=Math.max(3,vw/420);c.beginPath();c.arc(this.seed.fx*vw,this.seed.fy*vh,Math.max(9,vw/110),0,Math.PI*2);c.stroke();}return;}
+      c.save();c.lineCap='round';c.lineJoin='round';c.shadowBlur=Math.max(6,vw/170);c.shadowColor='rgba(57,255,136,.75)';
+      c.beginPath();pts.forEach((p,i)=>{const x=p.x*vw,y=p.y*vh;i?c.lineTo(x,y):c.moveTo(x,y);});c.strokeStyle='rgba(57,255,136,.88)';c.lineWidth=Math.max(3,vw/360);c.stroke();
+      pts.forEach((p,i)=>{const age=Math.max(0,1-(now-p.t)/1500);c.beginPath();c.arc(p.x*vw,p.y*vh,Math.max(3,vw/420)*(.65+age*.55),0,Math.PI*2);c.fillStyle=`rgba(57,255,136,${.25+.7*age})`;c.fill();});
+      const last=pts[pts.length-1];c.beginPath();c.arc(last.x*vw,last.y*vh,Math.max(8,vw/140),0,Math.PI*2);c.strokeStyle='#ffffff';c.lineWidth=Math.max(2,vw/600);c.stroke();c.beginPath();c.arc(last.x*vw,last.y*vh,Math.max(5,vw/210),0,Math.PI*2);c.fillStyle='#39ff88';c.fill();
+      if(pts.length>=4){const a=pts[Math.max(0,pts.length-4)],b=last,dt=Math.max(1,b.t-a.t),vx=(b.x-a.x)/dt,vy=(b.y-a.y)/dt,look=230;let ex=b.x+vx*look,ey=b.y+vy*look;const scale=Math.min(1,.32/Math.max(Math.abs(ex-b.x),Math.abs(ey-b.y),.001));ex=b.x+(ex-b.x)*scale;ey=b.y+(ey-b.y)*scale;c.setLineDash([12,10]);c.beginPath();c.moveTo(b.x*vw,b.y*vh);c.lineTo(ex*vw,ey*vh);c.strokeStyle='rgba(255,214,10,.85)';c.lineWidth=Math.max(2,vw/520);c.stroke();c.setLineDash([]);}
+      c.restore();
+    }
+  }
+
+  function setLiveTracking(on){
+    trackingEnabled=!!on;if(!liveTracker&&ui.preview&&ui.trackingCanvas)liveTracker=new BallTracker(ui.preview,ui.trackingCanvas,ui.trackInfo);
+    if(trackingEnabled&&stream){liveTracker.start();ui.trackBtn.textContent='BALL TRACK ON';ui.trackBtn.classList.add('primary');ui.trackBtn.classList.remove('secondary');}
+    else{liveTracker?.stop();ui.trackBtn.textContent='BALL TRACK OFF';ui.trackBtn.classList.remove('primary');ui.trackBtn.classList.add('secondary');}
+  }
+  function setReviewTracking(on){
+    reviewTrackingEnabled=!!on;if(!reviewTracker&&ui.reviewPlayer&&ui.reviewTrackingCanvas)reviewTracker=new BallTracker(ui.reviewPlayer,ui.reviewTrackingCanvas,null);
+    if(reviewTrackingEnabled){reviewTracker.start();ui.reviewTrackBtn.textContent='TRACK ON';ui.reviewTrackBtn.classList.add('primary');ui.reviewTrackBtn.classList.remove('secondary');}
+    else{reviewTracker?.stop();ui.reviewTrackBtn.textContent='TRACK OFF';ui.reviewTrackBtn.classList.remove('primary');ui.reviewTrackBtn.classList.add('secondary');}
+  }
+
   function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(STORE))r.result.createObjectStore(STORE,{keyPath:'id'});};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
   function put(v){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(v);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
   function del(id){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
@@ -177,15 +289,15 @@
       stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:facingMode},width:{ideal:q===1080?1920:1280},height:{ideal:q===1080?1080:720},frameRate:{ideal:fps,max:fps}}});
       ui.preview.srcObject=stream;await ui.preview.play();
       const s=stream.getVideoTracks()[0]?.getSettings?.()||{};ui.camInfo.textContent=`${s.width||''}×${s.height||''}${s.frameRate?' · '+Math.round(s.frameRate)+'fps':''}`;
-      ui.cameraBtn.textContent='Stop Camera';ui.switchBtn.disabled=false;ui.startOverBtn.disabled=!isLandscape();setMode('CAMERA');setStatus(isLandscape()?'Camera ready. Keep the pitch horizontal in the guide, then tap START OVER.':'Camera ready. Rotate the iPhone sideways to enable START OVER.');updateOrientationState();
+      ui.cameraBtn.textContent='Stop Camera';ui.switchBtn.disabled=false;ui.trackBtn.disabled=false;ui.startOverBtn.disabled=!isLandscape();setLiveTracking(trackingEnabled);setMode('CAMERA');setStatus(isLandscape()?'Camera ready. Keep the pitch horizontal in the guide, then tap START OVER.':'Camera ready. Rotate the iPhone sideways to enable START OVER.');updateOrientationState();
     }catch(e){setStatus(`Camera could not start: ${e.message}. Check Safari camera permission.`);}
   }
 
   async function stopCamera(){
     if(overActive) endOver(false);
     if(recorder&&recorder.state!=='inactive'){try{recorder.stop();}catch(_){}}
-    recorder=null;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;ui.preview.srcObject=null;
-    clearInterval(clockTimer);ui.cameraBtn.textContent='Start Camera';ui.switchBtn.disabled=true;ui.startOverBtn.disabled=true;disableOverControls();ui.camInfo.textContent='Camera off';setMode('READY');setStatus('Camera stopped.');
+    recorder=null;liveTracker?.stop();if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;ui.preview.srcObject=null;
+    clearInterval(clockTimer);ui.cameraBtn.textContent='Start Camera';ui.switchBtn.disabled=true;ui.trackBtn.disabled=true;ui.startOverBtn.disabled=true;disableOverControls();ui.camInfo.textContent='Camera off';setMode('READY');setStatus('Camera stopped.');
   }
 
   function disableOverControls(){ui.markBallBtn.disabled=true;ui.reviewOverBtn.disabled=true;ui.endOverBtn.disabled=true;ui.lbwMarkBtn.disabled=true;ui.resetOverBtn.disabled=true;}
@@ -201,7 +313,7 @@
     if(!isLandscape()){setStatus('START OVER requires landscape. Rotate the iPhone sideways so the pitch is horizontal.');return;}
     if(overActive&&!confirm('Reset the current over buffer and start a new over?'))return;
     if(recorder&&recorder.state!=='inactive'){try{recorder.stop();}catch(_){}}
-    overActive=true;overStartedAt=performance.now();overSequence+=1;chunks=[];initChunk=null;balls=[];lbwMoments=[];
+    overActive=true;overStartedAt=performance.now();overSequence+=1;chunks=[];initChunk=null;balls=[];lbwMoments=[];liveTracker?.reset();
     recorder=createRecorder();mimeType=recorder.mimeType||mimeType||'video/mp4';
     recorder.ondataavailable=e=>{if(!e.data||!e.data.size)return;if(!initChunk)initChunk=e.data;chunks.push({blob:e.data,at:performance.now()});updateClock();};
     recorder.onerror=e=>setStatus(`Recorder error: ${e.error?.message||'unknown error'}`);
@@ -273,7 +385,7 @@
     reviewMarks=[...(ballMarks||[])];reviewLbw=[...(lbw||[])];reviewDuration=durationHint||0;ui.reviewTitle.textContent=title||'Over review';
     const jumps=[];reviewMarks.forEach(b=>jumps.push(`<button data-time="${ballSeekTime(b)}">Ball ${b.number}</button>`));reviewLbw.forEach((t,i)=>jumps.push(`<button data-time="${Math.max(0,t-6)}">LBW ${i+1}</button>`));
     ui.jumpRow.innerHTML=jumps.length?jumps.join(''):`<span class="meta">No delivery markers in this over.</span>`;
-    ui.reviewDialog.showModal();renderReviewTimeline();
+    ui.reviewDialog.showModal();setReviewTracking(reviewTrackingEnabled);reviewTracker?.reset();renderReviewTimeline();
   }
 
   async function endOver(save=true){
@@ -304,6 +416,7 @@
   }
 
   ui.cameraBtn.addEventListener('click',startCamera);
+  ui.trackBtn.addEventListener('click',()=>setLiveTracking(!trackingEnabled));
   ui.switchBtn.addEventListener('click',async()=>{facingMode=facingMode==='environment'?'user':'environment';if(stream){await stopCamera();await startCamera();}});
   ui.startOverBtn.addEventListener('click',startOver);ui.markBallBtn.addEventListener('click',markBall);ui.reviewOverBtn.addEventListener('click',reviewCurrentOver);ui.endOverBtn.addEventListener('click',()=>endOver(true));ui.lbwMarkBtn.addEventListener('click',markLBW);ui.resetOverBtn.addEventListener('click',resetOver);
   const reviewBallFromLive=async number=>{const mark=balls[Number(number)-1];if(!mark)return;await reviewCurrentOver();setTimeout(()=>{try{ui.reviewPlayer.currentTime=ballSeekTime(mark);ui.reviewPlayer.play().catch(()=>{});}catch(_){}},180);};
@@ -313,11 +426,17 @@
   ui.reviewTimelineMarkers.addEventListener('click',e=>{const b=e.target.closest('[data-review-time]');if(b){ui.reviewPlayer.currentTime=Number(b.dataset.reviewTime)||0;ui.reviewPlayer.play().catch(()=>{});}});
   ui.reviewPlayer.addEventListener('loadedmetadata',()=>{if(Number.isFinite(ui.reviewPlayer.duration))reviewDuration=ui.reviewPlayer.duration;renderReviewTimeline();});
   ui.reviewPlayer.addEventListener('timeupdate',updateReviewPlayhead);
-  ui.slowBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.25);ui.halfBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.5);ui.normalBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=1);ui.closeReviewBtn.addEventListener('click',()=>{ui.reviewPlayer.pause();ui.reviewDialog.close();reviewMarks=[];reviewLbw=[];});
+  ui.reviewPlayer.addEventListener('seeking',()=>reviewTracker?.reset(false));
+  ui.reviewPlayer.addEventListener('play',()=>{if(reviewTrackingEnabled)reviewTracker?.start();});
+  ui.ballColorSelect.addEventListener('change',()=>{liveTracker?.reset(false);reviewTracker?.reset(false);});
+  ui.sensitivitySelect.addEventListener('change',()=>{liveTracker?.reset(false);reviewTracker?.reset(false);});
+  ui.slowBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.25);ui.halfBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.5);ui.normalBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=1);
+  ui.reviewTrackBtn.addEventListener('click',()=>setReviewTracking(!reviewTrackingEnabled));ui.seedBallBtn.addEventListener('click',()=>{if(!reviewTrackingEnabled)setReviewTracking(true);ui.reviewTrackingCanvas.classList.add('seed-mode');setStatus('Replay seed mode: tap directly on the ball in the video, then press Play.');});ui.clearTrailBtn.addEventListener('click',()=>reviewTracker?.clearTrail());
+  ui.closeReviewBtn.addEventListener('click',()=>{ui.reviewPlayer.pause();ui.reviewTrackingCanvas.classList.remove('seed-mode');reviewTracker?.stop();ui.reviewDialog.close();reviewMarks=[];reviewLbw=[];});
   ui.savedOvers.addEventListener('click',async e=>{const b=e.target.closest('button[data-action]');if(!b)return;const id=b.closest('[data-id]')?.dataset.id,item=id?await getItem(id):null;if(!item)return;if(b.dataset.action==='play')openReview(item.blob,item.balls||[],item.lbwMoments||[],`Over ${item.overNumber}`,item.duration||0);if(b.dataset.action==='share')await shareItem(item);if(b.dataset.action==='delete'&&confirm('Delete this saved over from this iPhone?')){await del(id);await renderSaved();}});
   window.addEventListener('orientationchange',()=>setTimeout(updateOrientationState,150));window.addEventListener('resize',updateOrientationState);
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&overActive)setStatus('Keep LBW Tracker visible while the over is recording.');});
-  window.addEventListener('beforeunload',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
+  window.addEventListener('beforeunload',()=>{liveTracker?.stop();reviewTracker?.stop();if(stream)stream.getTracks().forEach(t=>t.stop());});
 
   (async()=>{updateOrientationState();try{db=await openDB();await renderSaved();}catch(e){setStatus(`Local storage unavailable: ${e.message}`);}if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});})();
 })();
