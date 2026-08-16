@@ -7,273 +7,259 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LBW Tracker" />
+  <meta name="screen-orientation" content="landscape" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icon-180.png" />
   <title>LBW Tracker</title>
   <style>
-    :root { color-scheme: dark; --bg:#0a0a0b; --card:#151517; --line:#2a2a2f; --text:#f7f7f8; --muted:#a3a3ad; --accent:#34c759; --danger:#ff453a; --amber:#ffd60a; }
+    :root{color-scheme:dark;--bg:#09090b;--card:#151518;--card2:#1d1d21;--line:#2d2d32;--text:#f7f7f8;--muted:#a1a1aa;--green:#34c759;--red:#ff453a;--blue:#0a84ff;--amber:#ffd60a}
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;min-height:100%}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
     body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-    button,input,select,textarea{font:inherit}
-    .app{max-width:760px;margin:0 auto;padding:12px 14px 30px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 12px}
-    h1{font-size:22px;margin:0}.badge{font-size:12px;color:#0b0b0c;background:var(--accent);padding:5px 8px;border-radius:999px;font-weight:700}
-    .camera-card{position:relative;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:9/16;max-height:64vh;border:1px solid var(--line)}
-    video#preview{width:100%;height:100%;object-fit:cover;background:#000}
+    button,select{font:inherit}.hidden{display:none!important}
+    .app{max-width:760px;margin:0 auto;padding:12px 14px 32px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:5px 0 12px}
+    h1{font-size:22px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .badge{font-size:12px;background:var(--green);color:#050505;padding:6px 9px;border-radius:999px;font-weight:800}
+    .camera-card{position:relative;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:16/9;max-height:68vh;border:1px solid var(--line)}
+    #preview{width:100%;height:100%;object-fit:cover;background:#000}
     .hud{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:12px}
-    .top-hud{display:flex;justify-content:space-between;gap:8px}.pill{background:rgba(0,0,0,.58);backdrop-filter:blur(8px);padding:7px 10px;border-radius:999px;font-size:12px;font-weight:650}
-    .reticle{align-self:center;width:62%;height:24%;border:1px solid rgba(255,255,255,.45);border-radius:10px;position:relative}.reticle:before{content:"";position:absolute;left:50%;top:-18%;height:136%;border-left:1px dashed rgba(255,255,255,.3)}
-    .reticle-label{position:absolute;bottom:-25px;left:0;right:0;text-align:center;color:rgba(255,255,255,.65);font-size:11px}
-    .controls{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:12px}
-    button{border:0;border-radius:16px;padding:14px 16px;font-weight:750;min-height:52px;cursor:pointer}
-    .primary{background:var(--accent);color:#061008}.secondary{background:var(--card);color:var(--text);border:1px solid var(--line)}.review{grid-column:1/-1;background:var(--amber);color:#161400;font-size:18px;min-height:62px}.danger{background:var(--danger);color:white}
-    button:disabled{opacity:.45;cursor:not-allowed}
-    .status{margin:12px 0;padding:11px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--muted)}
-    .section{margin-top:18px}.section h2{font-size:17px;margin:0 0 10px}
-    .settings{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.setting{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}.setting label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.setting select{width:100%;background:#0f0f11;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px}
-    .reviews{display:grid;gap:10px}.review-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}.review-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.review-title{font-weight:750}.review-meta{font-size:12px;color:var(--muted);margin-top:3px}.review-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.review-actions button{padding:9px 11px;min-height:auto;border-radius:11px;font-size:13px}.tag-row{display:flex;gap:6px;margin-top:9px}.tag{padding:5px 8px;border-radius:999px;background:#242429;font-size:11px;color:var(--muted)}
-    dialog{width:min(94vw,700px);border:1px solid var(--line);border-radius:18px;background:#0c0c0e;color:var(--text);padding:0;overflow:hidden}dialog::backdrop{background:rgba(0,0,0,.72)}.dialog-body{padding:14px}.dialog-video{width:100%;background:#000;border-radius:12px;max-height:65vh}.dialog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.dialog-actions button{flex:1;min-width:100px}
-    .empty{padding:22px;text-align:center;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:16px;font-size:13px}
-    .small{font-size:12px;color:var(--muted);line-height:1.45}.install{margin-top:18px;padding:12px;background:#10151f;border:1px solid #26344e;border-radius:14px}
-    @media (orientation:landscape){.camera-card{aspect-ratio:16/9;max-height:58vh}.app{max-width:1000px}.controls{grid-template-columns:1fr 1fr 1.4fr}.review{grid-column:auto}}
+    .hudrow{display:flex;justify-content:space-between;gap:8px}.pill{background:rgba(0,0,0,.62);backdrop-filter:blur(8px);padding:7px 10px;border-radius:999px;font-size:12px}
+    .reticle{align-self:center;width:84%;height:44%;border-top:1px dashed rgba(255,255,255,.35);border-bottom:1px dashed rgba(255,255,255,.35);position:relative}.reticle:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(255,214,10,.72)}.reticle:after{content:"ALIGN PITCH HORIZONTALLY ↔";position:absolute;bottom:8px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(0,0,0,.62);padding:5px 8px;border-radius:999px;font-size:11px;color:#fff;font-weight:800}.crease{position:absolute;top:-8%;bottom:-8%;width:1px;background:rgba(255,255,255,.62)}.crease.left{left:10%}.crease.right{right:10%}.pitch-axis{position:absolute;left:0;right:0;top:50%;border-top:2px solid rgba(52,199,89,.72);box-shadow:0 0 8px rgba(52,199,89,.35)}
+    .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    button{border:0;border-radius:14px;padding:14px 12px;font-weight:800;min-height:50px}
+    button:disabled{opacity:.4}.primary{background:var(--green);color:#050505}.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line)}.danger{background:#351414;color:#ff9b96;border:1px solid #6b2521}.blue{background:var(--blue);color:white}.amber{background:var(--amber);color:#090909}
+    .wide{grid-column:1/-1}.status{margin-top:10px;padding:11px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;font-size:13px;line-height:1.4;color:#ddd}
+    .section{margin-top:18px}.section h2{font-size:16px;margin:0 0 9px}
+    .over-panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}.over-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#0f0f11;border:1px solid #27272b;border-radius:12px;padding:10px;text-align:center}.stat .v{font-size:19px;font-weight:800}.stat .k{font-size:11px;color:var(--muted);margin-top:2px}
+    .ball-strip{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px}.ball-chip{min-width:54px;padding:10px 12px;border-radius:999px;background:#202025;border:1px solid #35353a;color:#fff;font-weight:800}.ball-chip.marked{background:#12331e;border-color:#245b35}
+    .review-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .settings{display:grid;grid-template-columns:1fr 1fr;gap:9px}.setting{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}.setting label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.setting select{width:100%;background:#0f0f11;border:1px solid #303036;color:white;border-radius:10px;padding:9px}
+    .saved{display:grid;gap:9px}.saved-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px}.saved-head{display:flex;justify-content:space-between;gap:8px}.saved-title{font-weight:800}.meta{font-size:11px;color:var(--muted);margin-top:3px}.saved-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.saved-actions button{min-height:38px;padding:9px 11px;border-radius:10px;font-size:12px}.empty{padding:16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;font-size:13px}
+    .install{margin-top:18px;padding:12px;background:#10151f;border:1px solid #26344e;border-radius:14px;font-size:12px;color:#b8c6df;line-height:1.45}
+    dialog{width:min(96vw,720px);border:1px solid #34343a;border-radius:18px;background:#101012;color:white;padding:0}.dialog-body{padding:12px}.dialog-video{width:100%;max-height:66vh;background:#000;border-radius:12px}.dialog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.dialog-actions button{min-height:42px;padding:10px 12px}.jump-row{display:flex;gap:7px;overflow-x:auto;margin-top:10px}.jump-row button{min-height:38px;padding:8px 12px;border-radius:999px;background:#202025;color:white;border:1px solid #38383e;white-space:nowrap}
+    @media (orientation:landscape){.camera-card{aspect-ratio:16/9;max-height:64vh}.app{max-width:1100px}.controls{grid-template-columns:repeat(4,1fr)}.wide{grid-column:auto}}
+    .rotate-overlay{display:none;position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.88);align-items:center;justify-content:center;text-align:center;padding:28px}.rotate-card{max-width:320px}.rotate-icon{font-size:46px;margin-bottom:10px}.rotate-card strong{font-size:20px;display:block}.rotate-card span{font-size:13px;color:#ccc;display:block;margin-top:8px;line-height:1.4}@media (orientation:portrait){.rotate-overlay{display:flex}.camera-card{aspect-ratio:16/9;max-height:none}.app{padding-top:8px}}
   </style>
 </head>
 <body>
-  <main class="app">
-    <header><div><h1>LBW Tracker</h1><div class="small">iPhone local review recorder</div></div><span id="modeBadge" class="badge">READY</span></header>
+<main class="app">
+  <header><div><h1>LBW Tracker</h1><div class="sub">Over-buffer cricket review</div></div><span id="modeBadge" class="badge">READY</span></header>
 
-    <section class="camera-card">
-      <video id="preview" autoplay muted playsinline></video>
-      <div class="hud">
-        <div class="top-hud"><span id="camInfo" class="pill">Camera off</span><span id="bufferInfo" class="pill">Buffer 0s</span></div>
-        <div class="reticle"><div class="reticle-label">Align the pitch / stumps inside this guide</div></div>
-        <div></div>
-      </div>
-    </section>
-
-    <div class="controls">
-      <button id="cameraBtn" class="primary">Start Camera</button>
-      <button id="switchBtn" class="secondary" disabled>Switch Camera</button>
-      <button id="reviewBtn" class="review" disabled>REVIEW LBW</button>
+  <section class="camera-card">
+    <video id="preview" autoplay muted playsinline></video>
+    <div class="hud">
+      <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
+      <div class="reticle"><span class="crease left"></span><span class="crease right"></span><span class="pitch-axis"></span></div><div></div>
     </div>
+      <div id="rotateOverlay" class="rotate-overlay"><div class="rotate-card"><div class="rotate-icon">↻</div><strong>Rotate iPhone sideways</strong><span>LBW Tracker records each over in landscape so the cricket pitch stays horizontally aligned in the frame.</span></div></div>
+  </section>
 
-    <div id="status" class="status">Tap Start Camera. Video stays on this device unless you explicitly share it.</div>
+  <div class="controls">
+    <button id="cameraBtn" class="secondary">Start Camera</button>
+    <button id="switchBtn" class="secondary" disabled>Switch Camera</button>
+    <button id="startOverBtn" class="primary wide" disabled>START OVER</button>
+    <button id="markBallBtn" class="amber" disabled>MARK BALL</button>
+    <button id="reviewOverBtn" class="blue" disabled>REVIEW OVER</button>
+    <button id="endOverBtn" class="danger wide" disabled>END OVER</button>
+  </div>
 
-    <section class="section">
-      <h2>Capture settings</h2>
-      <div class="settings">
-        <div class="setting"><label for="bufferSelect">Rolling buffer</label><select id="bufferSelect"><option>15</option><option selected>30</option><option>45</option><option>60</option></select></div>
-        <div class="setting"><label for="preSelect">Before appeal</label><select id="preSelect"><option>5</option><option selected>8</option><option>10</option><option>15</option></select></div>
-        <div class="setting"><label for="postSelect">After appeal</label><select id="postSelect"><option>3</option><option selected>5</option><option>8</option><option>10</option></select></div>
+  <div id="status" class="status">Rotate the iPhone to landscape, start the camera, then tap START OVER. Keep the pitch horizontal inside the green guide.</div>
+
+  <section class="section">
+    <h2>Current over</h2>
+    <div class="over-panel">
+      <div class="over-stats">
+        <div class="stat"><div id="overNumber" class="v">—</div><div class="k">OVER</div></div>
+        <div class="stat"><div id="ballCount" class="v">0</div><div class="k">BALLS MARKED</div></div>
+        <div class="stat"><div id="overClock" class="v">00:00</div><div class="k">BUFFER</div></div>
       </div>
-    </section>
-
-    <section class="section">
-      <h2>Saved reviews</h2>
-      <div id="reviews" class="reviews"><div class="empty">No LBW reviews saved yet.</div></div>
-    </section>
-
-    <div class="install small"><strong>Install on iPhone:</strong> open this site in Safari → Share → <strong>Add to Home Screen</strong>. Camera access requires HTTPS.</div>
-  </main>
-
-  <dialog id="playerDialog">
-    <div class="dialog-body">
-      <video id="player" class="dialog-video" controls playsinline></video>
-      <div class="dialog-actions">
-        <button id="slowBtn" class="secondary">0.25×</button>
-        <button id="normalBtn" class="secondary">1×</button>
-        <button id="closeDialog" class="primary">Done</button>
+      <div id="ballStrip" class="ball-strip"><span class="meta">No balls marked yet.</span></div>
+      <div class="review-actions">
+        <button id="lbwMarkBtn" class="secondary" disabled>Mark LBW Moment</button>
+        <button id="resetOverBtn" class="danger" disabled>Reset Buffer</button>
       </div>
     </div>
-  </dialog>
+  </section>
+
+  <section class="section">
+    <h2>Capture settings</h2>
+    <div class="settings">
+      <div class="setting"><label for="qualitySelect">Video quality</label><select id="qualitySelect"><option value="720" selected>720p</option><option value="1080">1080p</option></select></div>
+      <div class="setting"><label for="fpsSelect">Frame rate preference</label><select id="fpsSelect"><option>30</option><option selected>60</option></select></div>
+    </div>
+    <div class="sub" style="margin-top:7px">The current over stays in memory until END OVER or Reset. Starting the next over clears the live over buffer.</div>
+  </section>
+
+  <section class="section"><h2>Saved overs</h2><div id="savedOvers" class="saved"><div class="empty">No overs saved yet.</div></div></section>
+  <div class="install"><strong>iPhone:</strong> keep this web app visible while recording. Video is stored locally on this iPhone unless you explicitly share it.</div>
+</main>
+
+<dialog id="reviewDialog">
+  <div class="dialog-body">
+    <video id="reviewPlayer" class="dialog-video" controls playsinline></video>
+    <div id="jumpRow" class="jump-row"></div>
+    <div class="dialog-actions">
+      <button id="slowBtn" class="secondary">0.25×</button>
+      <button id="halfBtn" class="secondary">0.5×</button>
+      <button id="normalBtn" class="secondary">1×</button>
+      <button id="closeReviewBtn" class="primary">Done</button>
+    </div>
+  </div>
+</dialog>
 
 <script>
 (() => {
   'use strict';
-  const $ = (id) => document.getElementById(id);
+  const $ = id => document.getElementById(id);
   const ui = {
-    preview: $('preview'), cameraBtn: $('cameraBtn'), switchBtn: $('switchBtn'), reviewBtn: $('reviewBtn'),
-    status: $('status'), camInfo: $('camInfo'), bufferInfo: $('bufferInfo'), modeBadge: $('modeBadge'),
-    bufferSelect: $('bufferSelect'), preSelect: $('preSelect'), postSelect: $('postSelect'), reviews: $('reviews'),
-    playerDialog: $('playerDialog'), player: $('player'), closeDialog: $('closeDialog'), slowBtn: $('slowBtn'), normalBtn: $('normalBtn')
+    preview:$('preview'),cameraBtn:$('cameraBtn'),switchBtn:$('switchBtn'),startOverBtn:$('startOverBtn'),markBallBtn:$('markBallBtn'),reviewOverBtn:$('reviewOverBtn'),endOverBtn:$('endOverBtn'),lbwMarkBtn:$('lbwMarkBtn'),resetOverBtn:$('resetOverBtn'),
+    status:$('status'),camInfo:$('camInfo'),bufferInfo:$('bufferInfo'),modeBadge:$('modeBadge'),overNumber:$('overNumber'),ballCount:$('ballCount'),overClock:$('overClock'),ballStrip:$('ballStrip'),qualitySelect:$('qualitySelect'),fpsSelect:$('fpsSelect'),savedOvers:$('savedOvers'),
+    reviewDialog:$('reviewDialog'),reviewPlayer:$('reviewPlayer'),jumpRow:$('jumpRow'),slowBtn:$('slowBtn'),halfBtn:$('halfBtn'),normalBtn:$('normalBtn'),closeReviewBtn:$('closeReviewBtn')
   };
 
-  let stream = null;
-  let recorder = null;
-  let facingMode = 'environment';
-  let chunks = [];
-  let initChunk = null;
-  let mimeType = '';
-  let pendingReview = null;
-  let captureStartedAt = 0;
-  let db = null;
+  let stream=null, recorder=null, facingMode='environment', mimeType='';
+  let overActive=false, overStartedAt=0, overSequence=0, chunks=[], initChunk=null, balls=[], lbwMoments=[];
+  let clockTimer=null, db=null, reviewUrl=null;
 
-  const DB_NAME = 'lbw-tracker-db';
-  const STORE = 'reviews';
+  const isLandscape=()=>window.matchMedia('(orientation: landscape)').matches || innerWidth>innerHeight;
+  function updateOrientationState(){
+    const landscape=isLandscape();
+    if(ui.startOverBtn) ui.startOverBtn.dataset.orientationOk=landscape?'1':'0';
+    if(stream && !overActive) ui.startOverBtn.disabled=!landscape;
+    if(!landscape && overActive) setStatus('Rotate the iPhone to landscape. The over buffer is still running, but horizontal pitch alignment is required for review.');
+  }
+  async function requestLandscape(){
+    try{if(screen.orientation?.lock) await screen.orientation.lock('landscape');}catch(_){}
+  }
+  const DB_NAME='lbw-over-tracker-db', STORE='overs';
 
-  function setStatus(msg) { ui.status.textContent = msg; }
-  function setMode(text, active = false) { ui.modeBadge.textContent = text; ui.modeBadge.style.background = active ? 'var(--danger)' : 'var(--accent)'; }
-  function seconds(select) { return Number(select.value); }
-  function pickMimeType() {
-    const candidates = ['video/mp4;codecs=h264,aac','video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm'];
-    return candidates.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
+  const fmtTime = ms => { const s=Math.max(0,Math.floor(ms/1000)); return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; };
+  const setStatus = msg => ui.status.textContent=msg;
+  const setMode = (text,color='green') => { ui.modeBadge.textContent=text; ui.modeBadge.style.background=color==='red'?'var(--red)':color==='blue'?'var(--blue)':color==='amber'?'var(--amber)':'var(--green)'; ui.modeBadge.style.color=color==='blue'||color==='red'?'white':'#050505'; };
+  const formatBytes = n => n<1048576?`${Math.round(n/1024)} KB`:`${(n/1048576).toFixed(1)} MB`;
+  const formatDate = ms => new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(ms));
+  const pickMimeType=()=>['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=h264','video/mp4','video/webm;codecs=vp8','video/webm'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
+
+  function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(STORE))r.result.createObjectStore(STORE,{keyPath:'id'});};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+  function put(v){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(v);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
+  function del(id){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
+  function all(){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readonly');const r=tx.objectStore(STORE).getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error);});}
+
+  async function startCamera(){
+    await requestLandscape();
+    if(stream){await stopCamera();return;}
+    if(!window.isSecureContext){setStatus('Camera needs HTTPS. Open the published GitHub Pages URL.');return;}
+    if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){setStatus('Current Safari camera recording APIs are required.');return;}
+    try{
+      const q=Number(ui.qualitySelect.value),fps=Number(ui.fpsSelect.value);
+      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:facingMode},width:{ideal:q===1080?1920:1280},height:{ideal:q===1080?1080:720},frameRate:{ideal:fps,max:fps}}});
+      ui.preview.srcObject=stream;await ui.preview.play();
+      const s=stream.getVideoTracks()[0]?.getSettings?.()||{};ui.camInfo.textContent=`${s.width||''}×${s.height||''}${s.frameRate?' · '+Math.round(s.frameRate)+'fps':''}`;
+      ui.cameraBtn.textContent='Stop Camera';ui.switchBtn.disabled=false;ui.startOverBtn.disabled=!isLandscape();setMode('CAMERA');setStatus(isLandscape()?'Camera ready. Keep the pitch horizontal in the guide, then tap START OVER.':'Camera ready. Rotate the iPhone sideways to enable START OVER.');updateOrientationState();
+    }catch(e){setStatus(`Camera could not start: ${e.message}. Check Safari camera permission.`);}
   }
 
-  function openDB() {
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, 1);
-      req.onupgradeneeded = () => {
-        const d = req.result;
-        if (!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, { keyPath: 'id' });
-      };
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
+  async function stopCamera(){
+    if(overActive) endOver(false);
+    if(recorder&&recorder.state!=='inactive'){try{recorder.stop();}catch(_){}}
+    recorder=null;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;ui.preview.srcObject=null;
+    clearInterval(clockTimer);ui.cameraBtn.textContent='Start Camera';ui.switchBtn.disabled=true;ui.startOverBtn.disabled=true;disableOverControls();ui.camInfo.textContent='Camera off';setMode('READY');setStatus('Camera stopped.');
   }
 
-  function idbPut(value) { return new Promise((res, rej) => { const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).put(value); tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error); }); }
-  function idbDelete(id) { return new Promise((res, rej) => { const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).delete(id); tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error); }); }
-  function idbAll() { return new Promise((res, rej) => { const tx=db.transaction(STORE,'readonly'); const r=tx.objectStore(STORE).getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=()=>rej(r.error); }); }
+  function disableOverControls(){ui.markBallBtn.disabled=true;ui.reviewOverBtn.disabled=true;ui.endOverBtn.disabled=true;ui.lbwMarkBtn.disabled=true;ui.resetOverBtn.disabled=true;}
 
-  async function startCamera() {
-    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-      setStatus('This browser does not expose the required camera recording APIs. Open the site in current Safari on iPhone.');
-      return;
+  function createRecorder(){
+    mimeType=pickMimeType();const opts={videoBitsPerSecond:Number(ui.qualitySelect.value)===1080?5_000_000:3_000_000};if(mimeType)opts.mimeType=mimeType;
+    try{return new MediaRecorder(stream,opts);}catch(_){delete opts.videoBitsPerSecond;return mimeType?new MediaRecorder(stream,{mimeType}):new MediaRecorder(stream);}
+  }
+
+  async function startOver(){
+    if(!stream)return;
+    await requestLandscape();
+    if(!isLandscape()){setStatus('START OVER requires landscape. Rotate the iPhone sideways so the pitch is horizontal.');return;}
+    if(overActive&&!confirm('Reset the current over buffer and start a new over?'))return;
+    if(recorder&&recorder.state!=='inactive'){try{recorder.stop();}catch(_){}}
+    overActive=true;overStartedAt=performance.now();overSequence+=1;chunks=[];initChunk=null;balls=[];lbwMoments=[];
+    recorder=createRecorder();mimeType=recorder.mimeType||mimeType||'video/mp4';
+    recorder.ondataavailable=e=>{if(!e.data||!e.data.size)return;if(!initChunk)initChunk=e.data;chunks.push({blob:e.data,at:performance.now()});updateClock();};
+    recorder.onerror=e=>setStatus(`Recorder error: ${e.error?.message||'unknown error'}`);
+    recorder.start(1000);
+    ui.overNumber.textContent=String(overSequence);ui.ballCount.textContent='0';renderBalls();
+    ui.startOverBtn.textContent='START NEXT OVER';ui.markBallBtn.disabled=false;ui.reviewOverBtn.disabled=false;ui.endOverBtn.disabled=false;ui.lbwMarkBtn.disabled=false;ui.resetOverBtn.disabled=false;
+    setMode('OVER LIVE','red');setStatus('Over buffer running. Mark each completed ball. You can review the whole over at any time without stopping recording.');
+    clearInterval(clockTimer);clockTimer=setInterval(updateClock,500);updateClock();
+  }
+
+  function updateClock(){if(!overActive)return;const elapsed=performance.now()-overStartedAt;ui.overClock.textContent=fmtTime(elapsed);ui.bufferInfo.textContent=`Over ${fmtTime(elapsed)}`;}
+
+  function markBall(){
+    if(!overActive)return;const offset=(performance.now()-overStartedAt)/1000;balls.push({number:balls.length+1,offset});ui.ballCount.textContent=String(balls.length);renderBalls();setStatus(`Ball ${balls.length} marked at ${fmtTime(offset*1000)}. The over continues recording.`);
+  }
+  function markLBW(){if(!overActive)return;const offset=(performance.now()-overStartedAt)/1000;lbwMoments.push(offset);setStatus(`LBW moment marked at ${fmtTime(offset*1000)}. Tap REVIEW OVER to inspect it.`);}
+
+  function renderBalls(){
+    if(!balls.length){ui.ballStrip.innerHTML='<span class="meta">No balls marked yet.</span>';return;}
+    ui.ballStrip.innerHTML=balls.map(b=>`<button class="ball-chip marked" data-ball="${b.number}">Ball ${b.number}</button>`).join('');
+  }
+
+  function currentBlob(){
+    const parts=chunks.map(c=>c.blob);if(initChunk&&parts[0]!==initChunk)parts.unshift(initChunk);return parts.length?new Blob(parts,{type:mimeType||parts[0].type||'video/mp4'}):null;
+  }
+
+  async function reviewCurrentOver(){
+    if(!overActive||!chunks.length){setStatus('Wait a moment for the over buffer to contain video.');return;}
+    if(recorder?.state==='recording'&&recorder.requestData){try{recorder.requestData();await new Promise(r=>setTimeout(r,120));}catch(_){}}
+    const blob=currentBlob();if(!blob)return;
+    openReview(blob,balls,lbwMoments,`Over ${overSequence} · LIVE`);
+    setStatus('Review opened. Recording continues behind the review screen; close it to return to live view.');
+  }
+
+  function openReview(blob,ballMarks,lbw,title){
+    if(reviewUrl)URL.revokeObjectURL(reviewUrl);reviewUrl=URL.createObjectURL(blob);ui.reviewPlayer.src=reviewUrl;ui.reviewPlayer.playbackRate=1;
+    const jumps=[];ballMarks.forEach(b=>jumps.push(`<button data-time="${Math.max(0,b.offset-4)}">Ball ${b.number}</button>`));lbw.forEach((t,i)=>jumps.push(`<button data-time="${Math.max(0,t-4)}">LBW ${i+1}</button>`));
+    ui.jumpRow.innerHTML=jumps.length?jumps.join(''):`<span class="meta">${title}</span>`;ui.reviewDialog.showModal();
+  }
+
+  async function endOver(save=true){
+    if(!overActive)return;
+    overActive=false;clearInterval(clockTimer);
+    if(recorder&&recorder.state!=='inactive'){
+      await new Promise(resolve=>{const old=recorder.onstop;recorder.onstop=e=>{if(old)old(e);resolve();};try{recorder.stop();}catch(_){resolve();}});
     }
-    await stopCamera();
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: { facingMode: { ideal: facingMode }, width: { ideal: 1920 }, height: { ideal: 1080 }, frameRate: { ideal: 60, max: 60 } }
-      });
-      ui.preview.srcObject = stream;
-      await ui.preview.play();
-      const track = stream.getVideoTracks()[0];
-      const settings = track.getSettings ? track.getSettings() : {};
-      ui.camInfo.textContent = `${settings.width || ''}×${settings.height || ''}${settings.frameRate ? ' · '+Math.round(settings.frameRate)+'fps' : ''}`.replace(/^×/, 'Camera');
-      mimeType = pickMimeType();
-      recorder = mimeType ? new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8_000_000 }) : new MediaRecorder(stream);
-      chunks = []; initChunk = null; pendingReview = null; captureStartedAt = performance.now();
-      recorder.ondataavailable = onChunk;
-      recorder.onerror = (e) => setStatus(`Recorder error: ${e.error?.message || 'unknown error'}`);
-      recorder.start(1000);
-      ui.cameraBtn.textContent = 'Stop Camera';
-      ui.switchBtn.disabled = false; ui.reviewBtn.disabled = false;
-      setMode('LIVE', false); setStatus('Live camera active. Rolling buffer is running. Tap REVIEW LBW after an appeal.');
-    } catch (err) {
-      setStatus(`Camera could not start: ${err.message}. Check Safari camera permission.`);
-    }
+    const blob=currentBlob();const duration=(performance.now()-overStartedAt)/1000;
+    if(save&&blob){
+      const item={id:`${Date.now()}-${Math.random().toString(36).slice(2,7)}`,createdAt:Date.now(),overNumber:overSequence,duration,balls:[...balls],lbwMoments:[...lbwMoments],mimeType:blob.type,size:blob.size,blob};
+      try{await put(item);setStatus(`Over ${overSequence} saved locally (${formatBytes(blob.size)}). Start the next over to reset the live buffer.`);await renderSaved();}catch(e){setStatus(`Could not save the over: ${e.message}`);}
+    }else setStatus('Over ended. Start the next over to reset the buffer.');
+    recorder=null;disableOverControls();ui.startOverBtn.disabled=false;ui.startOverBtn.textContent='START NEXT OVER';setMode('OVER ENDED','amber');
   }
 
-  async function stopCamera() {
-    if (recorder && recorder.state !== 'inactive') {
-      try { recorder.stop(); } catch (_) {}
-    }
-    recorder = null;
-    if (stream) stream.getTracks().forEach(t => t.stop());
-    stream = null; ui.preview.srcObject = null;
-    ui.cameraBtn.textContent = 'Start Camera'; ui.switchBtn.disabled = true; ui.reviewBtn.disabled = true;
-    ui.camInfo.textContent = 'Camera off'; ui.bufferInfo.textContent = 'Buffer 0s'; setMode('READY');
+  function resetOver(){if(!overActive)return;if(confirm('Clear this over buffer and immediately restart it?'))startOver();}
+
+  async function renderSaved(){
+    const items=(await all()).sort((a,b)=>b.createdAt-a.createdAt);if(!items.length){ui.savedOvers.innerHTML='<div class="empty">No overs saved yet.</div>';return;}
+    ui.savedOvers.innerHTML=items.map(i=>`<article class="saved-card" data-id="${i.id}"><div class="saved-head"><div><div class="saved-title">Over ${i.overNumber}</div><div class="meta">${formatDate(i.createdAt)} · ${fmtTime(i.duration*1000)} · ${i.balls?.length||0} balls · ${formatBytes(i.size||0)}</div></div></div><div class="saved-actions"><button class="secondary" data-action="play">Review</button><button class="secondary" data-action="share">Share</button><button class="danger" data-action="delete">Delete</button></div></article>`).join('');
   }
 
-  function onChunk(event) {
-    if (!event.data || event.data.size === 0) return;
-    const now = performance.now();
-    const entry = { blob: event.data, at: now };
-    if (!initChunk) initChunk = event.data;
-    chunks.push(entry);
-    const maxMs = seconds(ui.bufferSelect) * 1000;
-    chunks = chunks.filter(c => now - c.at <= maxMs);
-    ui.bufferInfo.textContent = `Buffer ${Math.min(seconds(ui.bufferSelect), Math.round((now-captureStartedAt)/1000))}s`;
-
-    if (pendingReview && now >= pendingReview.finishAt) finalizeReview(now).catch(err => setStatus(`Could not save review: ${err.message}`));
+  async function getItem(id){return (await all()).find(x=>x.id===id);}
+  async function shareItem(item){
+    const ext=(item.mimeType||'').includes('webm')?'webm':'mp4';const f=new File([item.blob],`LBW-Over-${item.overNumber}.${ext}`,{type:item.mimeType||item.blob.type});
+    try{if(navigator.canShare?.({files:[f]}))await navigator.share({title:`LBW Over ${item.overNumber}`,files:[f]});else throw new Error('File sharing is not available here.');}catch(e){if(e.name!=='AbortError')setStatus(e.message);}
   }
 
-  function triggerReview() {
-    if (!recorder || recorder.state !== 'recording' || pendingReview) return;
-    const now = performance.now();
-    const pre = seconds(ui.preSelect); const post = seconds(ui.postSelect);
-    pendingReview = { eventAt: now, startAt: now - pre*1000, finishAt: now + post*1000, pre, post };
-    ui.reviewBtn.disabled = true; setMode('CAPTURING', true);
-    setStatus(`LBW marked. Capturing ${post}s after the appeal…`);
-  }
+  ui.cameraBtn.addEventListener('click',startCamera);
+  ui.switchBtn.addEventListener('click',async()=>{facingMode=facingMode==='environment'?'user':'environment';if(stream){await stopCamera();await startCamera();}});
+  ui.startOverBtn.addEventListener('click',startOver);ui.markBallBtn.addEventListener('click',markBall);ui.reviewOverBtn.addEventListener('click',reviewCurrentOver);ui.endOverBtn.addEventListener('click',()=>endOver(true));ui.lbwMarkBtn.addEventListener('click',markLBW);ui.resetOverBtn.addEventListener('click',resetOver);
+  ui.ballStrip.addEventListener('click',e=>{const b=e.target.closest('[data-ball]');if(!b)return;reviewCurrentOver().then(()=>{const mark=balls[Number(b.dataset.ball)-1];if(mark)setTimeout(()=>{try{ui.reviewPlayer.currentTime=Math.max(0,mark.offset-4);}catch(_){}},200);});});
+  ui.jumpRow.addEventListener('click',e=>{const b=e.target.closest('[data-time]');if(b)ui.reviewPlayer.currentTime=Number(b.dataset.time)||0;});
+  ui.slowBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.25);ui.halfBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.5);ui.normalBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=1);ui.closeReviewBtn.addEventListener('click',()=>{ui.reviewPlayer.pause();ui.reviewDialog.close();});
+  ui.savedOvers.addEventListener('click',async e=>{const b=e.target.closest('button[data-action]');if(!b)return;const id=b.closest('[data-id]')?.dataset.id,item=id?await getItem(id):null;if(!item)return;if(b.dataset.action==='play')openReview(item.blob,item.balls||[],item.lbwMoments||[],`Over ${item.overNumber}`);if(b.dataset.action==='share')await shareItem(item);if(b.dataset.action==='delete'&&confirm('Delete this saved over from this iPhone?')){await del(id);await renderSaved();}});
+  window.addEventListener('orientationchange',()=>setTimeout(updateOrientationState,150));window.addEventListener('resize',updateOrientationState);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&overActive)setStatus('Keep LBW Tracker visible while the over is recording.');});
+  window.addEventListener('beforeunload',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
 
-  async function finalizeReview(now) {
-    const r = pendingReview; if (!r) return;
-    const selected = chunks.filter(c => c.at >= r.startAt && c.at <= now).map(c => c.blob);
-    // Safari's MP4 MediaRecorder is fragmented. Keeping the initial fragment improves replayability
-    // if the rolling window no longer contains it. Avoid duplicating when it is already selected.
-    const parts = (initChunk && selected[0] !== initChunk) ? [initChunk, ...selected] : selected;
-    if (!parts.length) throw new Error('No buffered media was available.');
-    const blob = new Blob(parts, { type: mimeType || parts[0].type || 'video/mp4' });
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-    const item = { id, createdAt: Date.now(), eventOffset: r.pre, pre: r.pre, post: r.post, mimeType: blob.type, size: blob.size, decision: 'UNREVIEWED', note: '', blob };
-    await idbPut(item);
-    pendingReview = null; ui.reviewBtn.disabled = false; setMode('LIVE');
-    setStatus(`Review saved locally (${formatBytes(blob.size)}). Tap Play below to inspect it.`);
-    await renderReviews();
-  }
-
-  function formatBytes(n) { if (n < 1024*1024) return `${Math.round(n/1024)} KB`; return `${(n/1024/1024).toFixed(1)} MB`; }
-  function formatDate(ms) { return new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(ms)); }
-  function escapeHtml(s='') { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-
-  async function renderReviews() {
-    const items = (await idbAll()).sort((a,b)=>b.createdAt-a.createdAt);
-    if (!items.length) { ui.reviews.innerHTML = '<div class="empty">No LBW reviews saved yet.</div>'; return; }
-    ui.reviews.innerHTML = items.map(i => `
-      <article class="review-card" data-id="${i.id}">
-        <div class="review-head"><div><div class="review-title">${escapeHtml(i.decision || 'UNREVIEWED')}</div><div class="review-meta">${escapeHtml(formatDate(i.createdAt))} · ${i.pre}s before / ${i.post}s after · ${escapeHtml(formatBytes(i.size||0))}</div></div></div>
-        <div class="tag-row"><span class="tag">LBW</span><span class="tag">Local</span></div>
-        <div class="review-actions">
-          <button class="secondary" data-action="play">Play</button>
-          <button class="secondary" data-action="out">OUT</button>
-          <button class="secondary" data-action="notout">NOT OUT</button>
-          <button class="secondary" data-action="share">Share</button>
-          <button class="danger" data-action="delete">Delete</button>
-        </div>
-      </article>`).join('');
-  }
-
-  async function getItem(id) { const all=await idbAll(); return all.find(x=>x.id===id); }
-  async function updateDecision(id, decision) { const item=await getItem(id); if (!item) return; item.decision=decision; await idbPut(item); await renderReviews(); }
-  async function playItem(item) { if (!item?.blob) return; if (ui.player.src) URL.revokeObjectURL(ui.player.src); ui.player.src=URL.createObjectURL(item.blob); ui.player.playbackRate=1; ui.playerDialog.showModal(); try{await ui.player.play();}catch(_){} }
-  async function shareItem(item) {
-    if (!item?.blob) return;
-    const ext = (item.mimeType||'').includes('webm') ? 'webm' : 'mp4';
-    const file = new File([item.blob], `LBW-${new Date(item.createdAt).toISOString().replace(/[:.]/g,'-')}.${ext}`, {type:item.mimeType||item.blob.type});
-    try {
-      if (navigator.canShare?.({files:[file]})) await navigator.share({title:'LBW Review',files:[file]});
-      else if (navigator.share) await navigator.share({title:'LBW Review', text:'LBW review recorded in LBW Tracker'});
-      else throw new Error('Sharing is not supported by this browser.');
-    } catch (err) { if (err.name !== 'AbortError') setStatus(err.message); }
-  }
-
-  ui.cameraBtn.addEventListener('click', () => stream ? stopCamera() : startCamera());
-  ui.switchBtn.addEventListener('click', async () => { facingMode = facingMode === 'environment' ? 'user' : 'environment'; await startCamera(); });
-  ui.reviewBtn.addEventListener('click', triggerReview);
-  ui.reviews.addEventListener('click', async (e) => {
-    const btn=e.target.closest('button[data-action]'); if(!btn) return;
-    const card=btn.closest('[data-id]'); const id=card?.dataset.id; if(!id) return;
-    const item=await getItem(id); if(!item) return;
-    const action=btn.dataset.action;
-    if(action==='play') await playItem(item);
-    if(action==='out') await updateDecision(id,'OUT');
-    if(action==='notout') await updateDecision(id,'NOT OUT');
-    if(action==='share') await shareItem(item);
-    if(action==='delete' && confirm('Delete this LBW review from this iPhone?')) { await idbDelete(id); await renderReviews(); }
-  });
-  ui.closeDialog.addEventListener('click', ()=>{ ui.player.pause(); ui.playerDialog.close(); });
-  ui.slowBtn.addEventListener('click', ()=>{ ui.player.playbackRate=.25; });
-  ui.normalBtn.addEventListener('click', ()=>{ ui.player.playbackRate=1; });
-  document.addEventListener('visibilitychange', ()=>{ if(document.hidden && pendingReview) setStatus('Keep LBW Tracker visible until the post-appeal capture finishes.'); });
-  window.addEventListener('beforeunload', ()=>{ if(stream) stream.getTracks().forEach(t=>t.stop()); });
-
-  (async () => {
-    try { db = await openDB(); await renderReviews(); } catch (e) { setStatus(`Local storage unavailable: ${e.message}`); }
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  })();
+  (async()=>{updateOrientationState();try{db=await openDB();await renderSaved();}catch(e){setStatus(`Local storage unavailable: ${e.message}`);}if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});})();
 })();
 </script>
 </body>
