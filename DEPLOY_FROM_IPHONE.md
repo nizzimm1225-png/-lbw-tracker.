@@ -1,15 +1,10 @@
-# Update from iPhone
+# Deploy from iPhone
 
-1. Unzip this package in the iPhone Files app.
-2. Open your existing GitHub repository in Safari.
-3. Replace these three root files:
-   - `index.html`
-   - `manifest.webmanifest`
-   - `sw.js`
-4. Commit the changes to `main`.
-5. Open **Actions** and wait for **pages build and deployment** to show a green check.
-6. Open the published GitHub Pages URL in Safari and refresh it.
-7. Fully close the existing LBW Tracker Home Screen app and reopen it.
-8. Start Camera -> CALIBRATE -> check/drag points -> SAVE POINTS -> START OVER.
+1. In Safari open your GitHub repository.
+2. Upload/replace `index.html`, `styles.css`, `app.js`, `manifest.webmanifest`, `sw.js`, `.nojekyll`, `icon-180.png`, `icon-512.png`, and the `icons` folder.
+3. Commit to `main`.
+4. Open **Actions** and wait for **pages build and deployment** to show a green check.
+5. Open your GitHub Pages URL in Safari and refresh once.
+6. Fully close and reopen the Home Screen app.
 
-If the old UI still appears, open the Pages URL in Safari once more and refresh; the service worker cache name was changed in this release.
+If the previous UI remains, remove the Home Screen icon, open the Pages URL in Safari, refresh, then Add to Home Screen again.

@@ -3,717 +3,178 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-  <meta name="theme-color" content="#0a0a0b" />
+  <meta name="theme-color" content="#07110d" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="LBW Tracker" />
+  <meta name="apple-mobile-web-app-title" content="LBW Tracker Pro" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icon-180.png" />
-  <title>LBW Tracker</title>
-  <style>
-    :root{color-scheme:dark;--bg:#09090b;--card:#151518;--card2:#1d1d21;--line:#2d2d32;--text:#f7f7f8;--muted:#a1a1aa;--green:#34c759;--red:#ff453a;--blue:#0a84ff;--amber:#ffd60a}
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
-    body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-    button,select{font:inherit}.hidden{display:none!important}
-    .app{max-width:760px;margin:0 auto;padding:12px 14px 32px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:5px 0 12px}
-    h1{font-size:22px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:2px}
-    .badge{font-size:12px;background:var(--green);color:#050505;padding:6px 9px;border-radius:999px;font-weight:800}
-    .camera-card{position:relative;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:16/9;max-height:68vh;border:1px solid var(--line)}
-    #preview{width:100%;height:100%;object-fit:cover;background:#000}
-    .hud{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:12px}
-    .hudrow{display:flex;justify-content:space-between;gap:8px}.pill{background:rgba(0,0,0,.62);backdrop-filter:blur(8px);padding:7px 10px;border-radius:999px;font-size:12px}
-    .reticle{align-self:center;width:84%;height:44%;border-top:1px dashed rgba(255,255,255,.35);border-bottom:1px dashed rgba(255,255,255,.35);position:relative}.reticle:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(255,214,10,.72)}.reticle:after{content:"CENTRE BOTH SETS OF STUMPS";position:absolute;bottom:8px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(0,0,0,.62);padding:5px 8px;border-radius:999px;font-size:11px;color:#fff;font-weight:800}.crease{position:absolute;top:-8%;bottom:-8%;width:1px;background:rgba(255,255,255,.62)}.crease.left{left:10%}.crease.right{right:10%}.pitch-axis{position:absolute;top:0;bottom:0;left:50%;border-left:2px solid rgba(52,199,89,.72);box-shadow:0 0 8px rgba(52,199,89,.35)}
-    .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-    button{border:0;border-radius:14px;padding:14px 12px;font-weight:800;min-height:50px}
-    button:disabled{opacity:.4}.primary{background:var(--green);color:#050505}.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line)}.danger{background:#351414;color:#ff9b96;border:1px solid #6b2521}.blue{background:var(--blue);color:white}.amber{background:var(--amber);color:#090909}
-    .wide{grid-column:1/-1}.status{margin-top:10px;padding:11px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;font-size:13px;line-height:1.4;color:#ddd}
-    .section{margin-top:18px}.section h2{font-size:16px;margin:0 0 9px}
-    .over-panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}.over-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#0f0f11;border:1px solid #27272b;border-radius:12px;padding:10px;text-align:center}.stat .v{font-size:19px;font-weight:800}.stat .k{font-size:11px;color:var(--muted);margin-top:2px}
-    .ball-strip{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px}.ball-chip{min-width:54px;padding:10px 12px;border-radius:999px;background:#202025;border:1px solid #35353a;color:#fff;font-weight:800}.ball-chip.marked{background:#12331e;border-color:#245b35}
-    .review-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-    .settings{display:grid;grid-template-columns:1fr 1fr;gap:9px}.setting{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}.setting label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.setting select{width:100%;background:#0f0f11;border:1px solid #303036;color:white;border-radius:10px;padding:9px}
-    .saved{display:grid;gap:9px}.saved-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px}.saved-head{display:flex;justify-content:space-between;gap:8px}.saved-title{font-weight:800}.meta{font-size:11px;color:var(--muted);margin-top:3px}.saved-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.saved-actions button{min-height:38px;padding:9px 11px;border-radius:10px;font-size:12px}.empty{padding:16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;font-size:13px}
-    .install{margin-top:18px;padding:12px;background:#10151f;border:1px solid #26344e;border-radius:14px;font-size:12px;color:#b8c6df;line-height:1.45}
-    dialog{width:min(96vw,720px);border:1px solid #34343a;border-radius:18px;background:#101012;color:white;padding:0}.dialog-body{padding:12px}.dialog-video{width:100%;max-height:66vh;background:#000;border-radius:12px}.dialog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.dialog-actions button{min-height:42px;padding:10px 12px}.jump-row{display:flex;gap:7px;overflow-x:auto;margin-top:10px}.jump-row button{min-height:38px;padding:8px 12px;border-radius:999px;background:#202025;color:white;border:1px solid #38383e;white-space:nowrap}
-    .timeline-wrap{margin-top:12px;background:#0f0f11;border:1px solid #29292e;border-radius:14px;padding:10px 10px 8px}.timeline-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.timeline-head strong{font-size:11px;letter-spacing:.08em;color:#c8c8ce}.timeline-head span{font-size:11px;color:var(--muted)}.timeline{position:relative;height:54px;margin:0 4px}.timeline-track{position:absolute;left:0;right:0;top:25px;height:4px;border-radius:999px;background:#303036;overflow:hidden}.timeline-fill{height:100%;width:100%;background:linear-gradient(90deg,#245b35,var(--green));opacity:.65}.timeline-marker{position:absolute;top:9px;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;border:2px solid #79df95;background:#12331e;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0;min-height:0;z-index:3;box-shadow:0 3px 12px rgba(0,0,0,.3)}.timeline-marker:active{transform:translateX(-50%) scale(.94)}.timeline-marker.lbw{width:18px;height:18px;top:18px;border-radius:5px;background:var(--red);border-color:#ff9b96;color:transparent;transform:translateX(-50%) rotate(45deg)}.timeline-marker.review-active{outline:3px solid rgba(255,214,10,.55);outline-offset:2px}.timeline-now{position:absolute;right:-1px;top:15px;width:2px;height:24px;background:var(--amber);border-radius:2px;box-shadow:0 0 8px rgba(255,214,10,.65)}.timeline-labels{display:flex;justify-content:space-between;font-size:10px;color:#777780;margin-top:-2px}.timeline-help{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35}.review-timeline{margin:10px 0 4px}.review-timeline .timeline{height:58px}.review-playhead{position:absolute;top:12px;bottom:10px;width:2px;background:white;z-index:4;pointer-events:none;box-shadow:0 0 7px rgba(255,255,255,.65)}.review-title{font-size:14px;font-weight:850;margin:0 0 8px}.saved-mini-timeline{position:relative;height:26px;margin-top:10px}.saved-mini-timeline:before{content:"";position:absolute;left:0;right:0;top:12px;height:3px;background:#303036;border-radius:99px}.saved-dot{position:absolute;top:7px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid #a4edb8;transform:translateX(-50%)}.saved-dot.lbw{background:var(--red);border-color:#ff9b96;border-radius:3px;transform:translateX(-50%) rotate(45deg)}
-    .calibration-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
-    .calibration-canvas.active{pointer-events:auto;touch-action:none;cursor:crosshair}
-    .calibration-hud{display:none;position:absolute;left:10px;right:10px;bottom:10px;z-index:7;background:rgba(0,0,0,.88);border:1px solid #54545d;border-radius:14px;padding:10px;backdrop-filter:blur(10px)}
-    .calibration-hud.show{display:block}.cal-step{font-size:13px;font-weight:850}.cal-help{font-size:11px;color:#c7c7cd;margin-top:4px;line-height:1.35}.cal-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.cal-actions button{min-height:36px;padding:7px 9px;border-radius:9px;font-size:11px}
-    .calibration-canvas.active{pointer-events:auto;touch-action:none;cursor:grab}.calibration-canvas.dragging{cursor:grabbing}
-    .cal-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:#d1d1d6}.cal-legend span{display:inline-flex;align-items:center;gap:4px}.cal-key{width:9px;height:9px;border-radius:50%;display:inline-block}.cal-key.stump{background:var(--green)}.cal-key.wide{background:var(--amber)}
-    .result-flash{position:absolute;inset:0;z-index:6;display:none;align-items:center;justify-content:center;pointer-events:none;background:rgba(0,0,0,.16)}
-    .result-flash.show{display:flex}.result-card{min-width:210px;text-align:center;padding:20px 24px;border-radius:22px;background:rgba(10,10,12,.9);border:2px solid #666;box-shadow:0 12px 42px rgba(0,0,0,.55);backdrop-filter:blur(12px)}
-    .result-main{font-size:34px;font-weight:950;letter-spacing:.04em}.result-sub{margin-top:5px;font-size:11px;color:#d4d4d8}.result-flash.wide .result-card{border-color:var(--amber)}.result-flash.wide .result-main{color:var(--amber)}.result-flash.lbw .result-card{border-color:var(--red)}.result-flash.lbw .result-main{color:#ff8f89}.result-flash.nothing .result-card{border-color:var(--green)}.result-flash.nothing .result-main{color:#8df0a7}.result-flash.review .result-card{border-color:var(--blue)}.result-flash.review .result-main{color:#7ebcff}
-    .decision-row{display:flex;gap:7px;overflow-x:auto;padding:8px 0 0}.decision-chip{white-space:nowrap;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:850;border:1px solid #3b3b42;background:#1d1d21}.decision-chip.WIDE{border-color:#846e12;color:#ffe36a}.decision-chip.LBW{border-color:#7c2d29;color:#ff9b96}.decision-chip.NOTHING{border-color:#245b35;color:#8df0a7}.decision-chip.REVIEW{border-color:#24508a;color:#8cc5ff}
-    .cal-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:8px}.cal-dot{width:8px;height:8px;border-radius:50%;background:#555}.cal-dot.ok{background:var(--green)}
-    @media (orientation:landscape){.app{max-width:1100px}.controls{grid-template-columns:repeat(4,1fr)}.wide{grid-column:auto}}
-    @media (orientation:portrait){.app{padding-top:8px;max-width:760px}.camera-card{max-height:64vh}.controls{grid-template-columns:1fr 1fr}}
-    .camera-card{aspect-ratio:9/16;max-height:70vh}.camera-card.landscape-stream{aspect-ratio:16/9}.camera-card.portrait-stream{aspect-ratio:9/16}
-    #preview{object-fit:contain}
-
-    .tracking-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:auto;touch-action:none}
-    .tracking-canvas.off{pointer-events:none;opacity:0}
-    .hud{z-index:4}
-    .tracker-pill{background:rgba(0,0,0,.68);border:1px solid rgba(52,199,89,.35)}
-    .tracker-pill.searching{color:#ffd60a}.tracker-pill.locked{color:#8df0a7}.tracker-pill.off{color:#aaa}
-    .tracking-note{margin-top:8px;padding:10px 11px;border-radius:12px;background:#111b14;border:1px solid #27432e;font-size:11px;line-height:1.45;color:#c8e8d0}
-    .review-video-wrap{position:relative;width:100%;aspect-ratio:16/9;max-height:70vh;background:#000;border-radius:12px;overflow:hidden}
-    .review-video-wrap .dialog-video{width:100%;height:100%;max-height:none;object-fit:contain;border-radius:0}
-    .review-video-wrap .tracking-canvas{z-index:2;pointer-events:none}.review-video-wrap .tracking-canvas.seed-mode{pointer-events:auto;cursor:crosshair}
-    .tracker-legend{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:10px;color:var(--muted)}
-    .tracker-legend span{display:inline-flex;align-items:center;gap:5px}.tracker-dot{width:9px;height:9px;border-radius:50%;background:#39ff88;box-shadow:0 0 7px rgba(57,255,136,.65)}.tracker-dash{width:18px;border-top:2px dashed #ffd60a}
-  </style>
+  <link rel="stylesheet" href="./styles.css" />
+  <title>LBW Tracker Pro</title>
 </head>
 <body>
 <main class="app">
-  <header><div><h1>LBW Tracker</h1><div class="sub">Portrait-ready · adjustable auto calibration · auto decision assist</div></div><span id="modeBadge" class="badge">READY</span></header>
-
-  <section class="camera-card">
-    <video id="preview" autoplay muted playsinline></video>
-    <canvas id="trackingCanvas" class="tracking-canvas off" aria-label="Ball tracking overlay"></canvas>
-    <canvas id="calibrationCanvas" class="calibration-canvas" aria-label="Pitch calibration overlay"></canvas>
-    <div id="resultFlash" class="result-flash"><div class="result-card"><div id="resultMain" class="result-main">NOTHING</div><div id="resultSub" class="result-sub">AUTO ASSIST</div></div></div>
-    <div id="calibrationHud" class="calibration-hud">
-      <div id="calStep" class="cal-step">Calibration</div>
-      <div id="calHelp" class="cal-help"></div>
-      <div class="cal-legend"><span><i class="cal-key stump"></i> stump points 1–6</span><span><i class="cal-key wide"></i> wide guides 7–8</span></div>
-      <div class="cal-actions">
-        <button id="calAutoBtn" class="blue">AUTO DETECT</button>
-        <button id="calSaveBtn" class="primary">SAVE POINTS</button>
-        <button id="calResetBtn" class="secondary">RESET DEFAULT</button>
-        <button id="calCancelBtn" class="danger">CANCEL</button>
-      </div>
+  <header class="topbar" id="liveAnchor">
+    <div>
+      <div class="eyebrow">CRICKET VISION · SINGLE IPHONE</div>
+      <h1>LBW Tracker <span>Pro</span></h1>
+      <div class="sub">Live ball tracking · DRS assist · automatic analytics</div>
     </div>
-    <div class="hud">
-      <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="trackInfo" class="pill tracker-pill off">Ball track off</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
-      <div class="reticle"><span class="crease left"></span><span class="crease right"></span><span class="pitch-axis"></span></div><div></div>
+    <span id="modeBadge" class="badge">READY</span>
+  </header>
+
+  <section class="session-ribbon">
+    <div><strong id="sessionLabel">Match Session</strong><small id="sessionSub">22 yd · right-handed striker · auto decision on</small></div>
+    <button id="newSessionBtn" class="icon-button" aria-label="New session">＋</button>
+  </section>
+
+  <section class="camera-shell">
+    <div class="camera-card">
+      <video id="preview" autoplay muted playsinline></video>
+      <canvas id="trackingCanvas" class="tracking-canvas off" aria-label="Ball tracking overlay"></canvas>
+      <canvas id="calibrationCanvas" class="calibration-canvas" aria-label="Pitch calibration overlay"></canvas>
+      <canvas id="arCanvas" class="ar-canvas" aria-label="Trajectory projection overlay"></canvas>
+      <div id="resultFlash" class="result-flash"><div class="result-card"><div id="resultMain" class="result-main">NOTHING</div><div id="resultSub" class="result-sub">DECISION ASSIST</div></div></div>
+
+      <div class="live-metrics">
+        <div class="metric-tile"><span>Speed</span><strong id="metricSpeed">—</strong><small id="metricSpeedUnit">mph</small></div>
+        <div class="metric-tile"><span>Swing</span><strong id="metricSwing">—</strong><small>cm</small></div>
+        <div class="metric-tile"><span>Post-bounce</span><strong id="metricTurn">—</strong><small>° proxy</small></div>
+        <div class="metric-tile decision"><span>Last call</span><strong id="metricDecision">—</strong><small id="metricConfidence">waiting</small></div>
+      </div>
+
+      <div class="camera-actions">
+        <button id="quickCalBtn" class="round-button" aria-label="Calibration">⌖</button>
+        <button id="quickTrackBtn" class="round-button" aria-label="Tracking">●</button>
+        <button id="quickReviewBtn" class="round-button" aria-label="Review">↻</button>
+      </div>
+
+      <div id="calibrationHud" class="calibration-hud">
+        <div id="calStep" class="cal-step">Calibration</div>
+        <div id="calHelp" class="cal-help"></div>
+        <div class="cal-legend"><span><i class="cal-key stump"></i> stumps 1–6</span><span><i class="cal-key wide"></i> wide guides 7–8</span></div>
+        <div class="cal-actions">
+          <button id="calAutoBtn" class="blue">AUTO DETECT</button>
+          <button id="calSaveBtn" class="primary">SAVE POINTS</button>
+          <button id="calResetBtn" class="secondary">RESET</button>
+          <button id="calCancelBtn" class="danger">CANCEL</button>
+        </div>
+      </div>
+
+      <div class="hud">
+        <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="trackInfo" class="pill tracker-pill off">Track off</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
+        <div class="reticle"><span class="crease left"></span><span class="crease right"></span><span class="pitch-axis"></span></div><div></div>
+      </div>
     </div>
   </section>
 
-  <div class="controls">
-    <button id="cameraBtn" class="secondary">Start Camera</button>
-    <button id="switchBtn" class="secondary" disabled>Switch Camera</button>
-    <button id="trackBtn" class="secondary" disabled>BALL TRACK ON</button>
-    <button id="calibrateBtn" class="secondary" disabled>CALIBRATE</button>
-    <button id="startOverBtn" class="primary wide" disabled>START OVER</button>
-    <button id="markBallBtn" class="amber" disabled>MARK BALL</button>
-    <button id="reviewOverBtn" class="blue" disabled>REVIEW OVER</button>
-    <button id="endOverBtn" class="danger wide" disabled>END OVER</button>
-  </div>
+  <section class="match-control-card">
+    <div class="primary-actions">
+      <button id="cameraBtn" class="secondary">START CAMERA</button>
+      <button id="startOverBtn" class="primary" disabled>START OVER</button>
+      <button id="endOverBtn" class="danger" disabled>END OVER</button>
+    </div>
+    <div class="secondary-actions">
+      <button id="markBallBtn" class="amber" disabled>MARK DELIVERY</button>
+      <button id="reviewOverBtn" class="blue" disabled>REVIEW OVER</button>
+      <button id="lbwMarkBtn" class="secondary" disabled>MARK LBW</button>
+      <button id="resetOverBtn" class="danger" disabled>RESET BUFFER</button>
+      <button id="trackBtn" class="secondary" disabled>TRACK ON</button>
+      <button id="calibrateBtn" class="secondary" disabled>CALIBRATE</button>
+      <button id="switchBtn" class="secondary" disabled>SWITCH CAMERA</button>
+    </div>
+  </section>
 
-  <div id="status" class="status">Keep the iPhone upright if you prefer portrait mode. Start the camera, auto-detect the pitch points, adjust any marker if needed, save calibration, then start the over.</div>
+  <div id="status" class="status">Start the camera, calibrate the pitch, then start an over. The app will try to segment each delivery automatically when the tracked ball disappears.</div>
 
-  <section class="section">
-    <h2>Current over</h2>
+  <section class="section current-over" id="overAnchor">
+    <div class="section-title"><div><span class="eyebrow">LIVE BUFFER</span><h2>Current over</h2></div><span class="assist-chip">AUTO CLIP READY</span></div>
     <div class="over-panel">
       <div class="over-stats">
         <div class="stat"><div id="overNumber" class="v">—</div><div class="k">OVER</div></div>
-        <div class="stat"><div id="ballCount" class="v">0</div><div class="k">DELIVERIES MARKED</div></div>
+        <div class="stat"><div id="ballCount" class="v">0</div><div class="k">DELIVERIES</div></div>
         <div class="stat"><div id="overClock" class="v">00:00</div><div class="k">BUFFER</div></div>
       </div>
-      <div id="ballStrip" class="ball-strip"><span class="meta">No balls marked yet.</span></div>
+      <div id="ballStrip" class="ball-strip"><span class="meta">No deliveries captured yet.</span></div>
       <div class="timeline-wrap">
         <div class="timeline-head"><strong>OVER TIMELINE</strong><span id="timelineDuration">00:00</span></div>
-        <div id="overTimeline" class="timeline" aria-label="Current over timeline">
-          <div class="timeline-track"><div class="timeline-fill"></div></div>
-          <div id="timelineMarkers"></div>
-          <div class="timeline-now" aria-hidden="true"></div>
-        </div>
+        <div id="overTimeline" class="timeline" aria-label="Current over timeline"><div class="timeline-track"><div class="timeline-fill"></div></div><div id="timelineMarkers"></div><div class="timeline-now"></div></div>
         <div class="timeline-labels"><span>START</span><span>NOW</span></div>
-        <div class="timeline-help">Tap a numbered marker to review that delivery. LBW moments appear as red diamonds.</div>
-      </div>
-      <div class="review-actions">
-        <button id="lbwMarkBtn" class="secondary" disabled>Mark LBW Moment</button>
-        <button id="resetOverBtn" class="danger" disabled>Reset Buffer</button>
+        <div class="timeline-help">Tap a numbered delivery to jump straight into replay. Calls are attached to the same delivery automatically.</div>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <h2>Capture settings</h2>
-    <div class="settings">
+  <section class="section" id="analysisAnchor">
+    <div class="section-title"><div><span class="eyebrow">SESSION INTELLIGENCE</span><h2>Analysis</h2></div><button id="refreshAnalyticsBtn" class="small-button">Refresh</button></div>
+    <div id="analyticsSummary" class="analytics-summary">
+      <div class="summary-card"><span>Deliveries</span><strong id="summaryBalls">0</strong></div>
+      <div class="summary-card"><span>Avg speed</span><strong id="summarySpeed">—</strong></div>
+      <div class="summary-card"><span>Wides</span><strong id="summaryWides">0</strong></div>
+      <div class="summary-card"><span>LBW assist</span><strong id="summaryLbw">0</strong></div>
+    </div>
+    <div class="filter-row">
+      <select id="filterResult"><option value="all">All results</option><option>LBW</option><option>WIDE</option><option>NOTHING</option><option>REVIEW</option></select>
+      <select id="filterLength"><option value="all">All lengths</option><option>Yorker</option><option>Full</option><option>Good</option><option>Short</option></select>
+      <select id="filterLine"><option value="all">All lines</option><option>Off</option><option>Middle</option><option>Leg</option></select>
+    </div>
+    <div class="chart-grid">
+      <article class="chart-card"><div class="chart-head"><strong>Pitch map</strong><span>bounce estimate</span></div><canvas id="pitchMapCanvas" width="440" height="560"></canvas></article>
+      <article class="chart-card"><div class="chart-head"><strong>Beehive</strong><span>striker-end pass points</span></div><canvas id="beehiveCanvas" width="440" height="420"></canvas></article>
+      <article class="chart-card"><div class="chart-head"><strong>Speed trend</strong><span>delivery by delivery</span></div><canvas id="speedChartCanvas" width="620" height="280"></canvas></article>
+      <article class="chart-card"><div class="chart-head"><strong>Wagon wheel</strong><span>shot tags</span></div><canvas id="wagonCanvas" width="440" height="440"></canvas></article>
+    </div>
+    <div class="feature-note"><strong>Single-camera analytics:</strong> speed, swing and post-bounce movement are estimates derived from calibration and frame timing. “Post-bounce” is a movement proxy, not measured ball RPM.</div>
+  </section>
+
+  <section class="section" id="libraryAnchor">
+    <div class="section-title"><div><span class="eyebrow">BALL-BY-BALL VIDEO</span><h2>Library</h2></div><button id="exportDataBtn" class="small-button">Export data</button></div>
+    <div id="savedOvers" class="saved"><div class="empty">No overs saved yet.</div></div>
+  </section>
+
+  <section class="section" id="setupAnchor">
+    <div class="section-title"><div><span class="eyebrow">MATCH SETUP</span><h2>Setup & calibration</h2></div></div>
+    <div class="settings pro-settings">
+      <div class="setting"><label for="sessionName">Session name</label><input id="sessionName" value="Match Session" /></div>
+      <div class="setting"><label for="sessionMode">Mode</label><select id="sessionMode"><option value="match" selected>Match</option><option value="practice">Practice</option><option value="nets">Nets</option></select></div>
+      <div class="setting"><label for="pitchLength">Pitch length</label><select id="pitchLength"><option value="20.12" selected>22 yards</option><option value="18.29">20 yards</option><option value="16.46">18 yards</option></select></div>
+      <div class="setting"><label for="speedUnit">Speed unit</label><select id="speedUnit"><option value="mph" selected>mph</option><option value="kph">km/h</option></select></div>
       <div class="setting"><label for="qualitySelect">Video quality</label><select id="qualitySelect"><option value="720" selected>720p</option><option value="1080">1080p</option></select></div>
       <div class="setting"><label for="fpsSelect">Frame rate preference</label><select id="fpsSelect"><option>30</option><option selected>60</option></select></div>
-      <div class="setting"><label for="ballColorSelect">Ball colour</label><select id="ballColorSelect"><option value="auto" selected>Auto (red / white)</option><option value="white">White ball</option><option value="red">Red ball</option></select></div>
+      <div class="setting"><label for="ballColorSelect">Ball colour</label><select id="ballColorSelect"><option value="auto" selected>Auto red/white</option><option value="white">White</option><option value="red">Red</option></select></div>
       <div class="setting"><label for="sensitivitySelect">Tracking sensitivity</label><select id="sensitivitySelect"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>
-    </div>
-    <div class="settings" style="margin-top:9px">
       <div class="setting"><label for="handednessSelect">Striker</label><select id="handednessSelect"><option value="right" selected>Right-handed</option><option value="left">Left-handed</option></select></div>
-      <div class="setting"><label for="shotSelect">LBW shot assumption</label><select id="shotSelect"><option value="shot" selected>Assume shot offered</option><option value="noshot">No genuine shot</option></select></div>
-      <div class="setting"><label for="autoDecisionSelect">Auto decision</label><select id="autoDecisionSelect"><option value="on" selected>On</option><option value="off">Off</option></select></div>
-      <div class="setting"><label for="decisionSensitivity">Decision confidence</label><select id="decisionSensitivity"><option value="strict" selected>Strict</option><option value="normal">Normal</option></select></div>
+      <div class="setting"><label for="shotSelect">LBW shot assumption</label><select id="shotSelect"><option value="shot" selected>Shot offered</option><option value="noshot">No genuine shot</option></select></div>
+      <div class="setting"><label for="autoDecisionSelect">Decision assist</label><select id="autoDecisionSelect"><option value="on" selected>On</option><option value="off">Off</option></select></div>
+      <div class="setting"><label for="decisionSensitivity">Confidence gate</label><select id="decisionSensitivity"><option value="strict" selected>Strict</option><option value="normal">Normal</option></select></div>
     </div>
     <div id="calibrationStatus" class="cal-status"><span id="calDot" class="cal-dot"></span><span id="calText">Pitch not calibrated</span></div>
     <div id="decisionStrip" class="decision-row"></div>
-    <div class="sub" style="margin-top:7px">The current over stays in memory until END OVER or Reset. Starting the next over clears the live over buffer.</div>
-    <div class="tracking-note"><strong>Auto decisions are experimental.</strong> WIDE uses the two calibrated wide-guideline points; official Wide law also depends on striker position, movement and reach. LBW uses a single-camera 2D projection and an impact estimate; it cannot reliably verify bat contact, exact pitching point, ball height, or No ball. <strong>REVIEW remains the safe fallback.</strong><br><br><strong>Calibration:</strong> AUTO DETECT makes an initial best-effort guess from the live camera frame. Always check all eight numbered markers and drag any incorrect point before saving. Tap EDIT CALIBRATION later to correct a saved setup without recreating it.<br><br><strong>Ball tracking:</strong> It detects a small fast-moving red/white object inside the pitch frame and draws a 2D trail. Tap the ball on the camera/replay if it locks onto the wrong object. After calibration, the app can flash WIDE / LBW / NOTHING when a tracked trajectory ends. Single-camera LBW remains an assistive estimate, not umpire-grade DRS; low-confidence cases show REVIEW.</div>
+    <div class="setup-actions"><button id="setupCalBtn" class="primary">AUTO CALIBRATE / EDIT</button><button id="clearSessionBtn" class="danger">CLEAR SESSION DATA</button></div>
+    <div class="tracking-note"><strong>Decision Assist, not certified DRS.</strong> This browser build is designed for club review and experimentation. It cannot reliably establish bat-before-pad, exact 3D impact height, front-foot No ball or every Wide-law nuance from a single phone. Low-confidence trajectories are deliberately returned as <strong>REVIEW</strong>.</div>
   </section>
 
-  <section class="section"><h2>Saved overs</h2><div id="savedOvers" class="saved"><div class="empty">No overs saved yet.</div></div></section>
-  <div class="install"><strong>iPhone:</strong> keep this web app visible while recording. Video and pitch calibration are stored locally on this iPhone unless you explicitly share a clip.</div>
+  <div class="install"><strong>iPhone PWA:</strong> keep the app visible while recording. Videos and analytics stay on this iPhone unless you explicitly share/export them.</div>
 </main>
+
+<nav class="bottom-nav" aria-label="App navigation">
+  <button data-scroll="liveAnchor" class="nav-active"><span>◉</span>Live</button>
+  <button data-scroll="analysisAnchor"><span>⌁</span>Analysis</button>
+  <button data-scroll="libraryAnchor"><span>▣</span>Library</button>
+  <button data-scroll="setupAnchor"><span>⚙</span>Setup</button>
+</nav>
 
 <dialog id="reviewDialog">
   <div class="dialog-body">
-    <div id="reviewTitle" class="review-title">Over review</div>
-    <div id="reviewVideoWrap" class="review-video-wrap"><video id="reviewPlayer" class="dialog-video" controls playsinline></video><canvas id="reviewTrackingCanvas" class="tracking-canvas off" aria-label="Replay ball tracking overlay"></canvas></div>
-    <div class="tracker-legend"><span><i class="tracker-dot"></i> detected ball / trail</span><span><i class="tracker-dash"></i> short 2D motion projection</span><span>Tap video to re-seed tracker</span></div>
-    <div class="timeline-wrap review-timeline">
-      <div class="timeline-head"><strong>DELIVERY TIMELINE</strong><span id="reviewTimeLabel">00:00 / 00:00</span></div>
-      <div id="reviewTimeline" class="timeline">
-        <div class="timeline-track"><div class="timeline-fill"></div></div>
-        <div id="reviewTimelineMarkers"></div>
-        <div id="reviewPlayhead" class="review-playhead" style="left:0%"></div>
-      </div>
-      <div class="timeline-labels"><span>START</span><span>END</span></div>
-    </div>
+    <div class="review-header"><div><span class="eyebrow">TRAJECTORY REVIEW</span><div id="reviewTitle" class="review-title">Over review</div></div><button id="closeReviewBtn" class="close-x">×</button></div>
+    <div id="reviewVideoWrap" class="review-video-wrap"><video id="reviewPlayer" class="dialog-video" controls playsinline></video><canvas id="reviewTrackingCanvas" class="tracking-canvas off" aria-label="Replay ball tracking overlay"></canvas><canvas id="drsCanvas" class="drs-canvas"></canvas></div>
+    <div class="review-metrics"><div><span>Speed</span><strong id="reviewSpeed">—</strong></div><div><span>Swing</span><strong id="reviewSwing">—</strong></div><div><span>Move</span><strong id="reviewTurn">—</strong></div><div><span>Call</span><strong id="reviewCall">—</strong></div></div>
+    <div class="timeline-wrap review-timeline"><div class="timeline-head"><strong>DELIVERY TIMELINE</strong><span id="reviewTimeLabel">00:00 / 00:00</span></div><div id="reviewTimeline" class="timeline"><div class="timeline-track"><div class="timeline-fill"></div></div><div id="reviewTimelineMarkers"></div><div id="reviewPlayhead" class="review-playhead" style="left:0%"></div></div><div class="timeline-labels"><span>START</span><span>END</span></div></div>
     <div id="jumpRow" class="jump-row"></div>
-    <div class="dialog-actions">
-      <button id="slowBtn" class="secondary">0.25×</button>
-      <button id="halfBtn" class="secondary">0.5×</button>
-      <button id="normalBtn" class="secondary">1×</button>
-      <button id="reviewTrackBtn" class="secondary">TRACK ON</button>
-      <button id="seedBallBtn" class="secondary">Seed Ball</button>
-      <button id="clearTrailBtn" class="secondary">Clear Trail</button>
-      <button id="closeReviewBtn" class="primary">Done</button>
-    </div>
+    <div class="dialog-actions compact"><button id="slowBtn" class="secondary">0.25×</button><button id="halfBtn" class="secondary">0.5×</button><button id="normalBtn" class="secondary">1×</button><button id="reviewTrackBtn" class="secondary">TRACK ON</button><button id="seedBallBtn" class="secondary">SEED BALL</button><button id="clearTrailBtn" class="secondary">CLEAR TRAIL</button></div>
+    <section class="tag-panel"><div class="chart-head"><strong>Delivery tags</strong><span>batting analysis</span></div><div class="tag-grid"><select id="tagOutcome"><option value="">Outcome</option><option>Dot</option><option>1</option><option>2</option><option>3</option><option>4</option><option>6</option><option>Wicket</option></select><select id="tagIntent"><option value="">Intent</option><option>Attack</option><option>Defend</option><option>Leave</option></select><select id="tagFootwork"><option value="">Footwork</option><option>Front foot</option><option>Back foot</option><option>Static</option></select><select id="tagLoft"><option value="">Loft</option><option>Ground</option><option>Lofted</option></select><select id="tagDirection"><option value="">Shot direction</option><option value="0">Straight</option><option value="45">Cover</option><option value="90">Point</option><option value="135">Third</option><option value="180">Fine leg</option><option value="225">Square leg</option><option value="270">Midwicket</option><option value="315">Mid-on</option></select><button id="saveTagsBtn" class="primary">SAVE TAGS</button></div></section>
   </div>
 </dialog>
-
-<script>
-(() => {
-  'use strict';
-  const $ = id => document.getElementById(id);
-  const ui = {
-    preview:$('preview'),trackingCanvas:$('trackingCanvas'),calibrationCanvas:$('calibrationCanvas'),trackInfo:$('trackInfo'),resultFlash:$('resultFlash'),resultMain:$('resultMain'),resultSub:$('resultSub'),calibrationHud:$('calibrationHud'),calStep:$('calStep'),calHelp:$('calHelp'),calAutoBtn:$('calAutoBtn'),calSaveBtn:$('calSaveBtn'),calResetBtn:$('calResetBtn'),calCancelBtn:$('calCancelBtn'),calibrateBtn:$('calibrateBtn'),cameraCard:document.querySelector('.camera-card'),cameraBtn:$('cameraBtn'),switchBtn:$('switchBtn'),trackBtn:$('trackBtn'),startOverBtn:$('startOverBtn'),markBallBtn:$('markBallBtn'),reviewOverBtn:$('reviewOverBtn'),endOverBtn:$('endOverBtn'),lbwMarkBtn:$('lbwMarkBtn'),resetOverBtn:$('resetOverBtn'),
-    status:$('status'),camInfo:$('camInfo'),bufferInfo:$('bufferInfo'),modeBadge:$('modeBadge'),overNumber:$('overNumber'),ballCount:$('ballCount'),overClock:$('overClock'),ballStrip:$('ballStrip'),timelineDuration:$('timelineDuration'),overTimeline:$('overTimeline'),timelineMarkers:$('timelineMarkers'),qualitySelect:$('qualitySelect'),fpsSelect:$('fpsSelect'),ballColorSelect:$('ballColorSelect'),sensitivitySelect:$('sensitivitySelect'),handednessSelect:$('handednessSelect'),shotSelect:$('shotSelect'),autoDecisionSelect:$('autoDecisionSelect'),decisionSensitivity:$('decisionSensitivity'),calibrationStatus:$('calibrationStatus'),calDot:$('calDot'),calText:$('calText'),decisionStrip:$('decisionStrip'),savedOvers:$('savedOvers'),
-    reviewDialog:$('reviewDialog'),reviewTitle:$('reviewTitle'),reviewPlayer:$('reviewPlayer'),reviewVideoWrap:$('reviewVideoWrap'),reviewTrackingCanvas:$('reviewTrackingCanvas'),reviewTrackBtn:$('reviewTrackBtn'),seedBallBtn:$('seedBallBtn'),clearTrailBtn:$('clearTrailBtn'),jumpRow:$('jumpRow'),reviewTimeline:$('reviewTimeline'),reviewTimelineMarkers:$('reviewTimelineMarkers'),reviewPlayhead:$('reviewPlayhead'),reviewTimeLabel:$('reviewTimeLabel'),slowBtn:$('slowBtn'),halfBtn:$('halfBtn'),normalBtn:$('normalBtn'),closeReviewBtn:$('closeReviewBtn')
-  };
-
-  let stream=null, recorder=null, facingMode='environment', mimeType='';
-  let overActive=false, overStartedAt=0, overSequence=0, chunks=[], initChunk=null, balls=[], lbwMoments=[], autoResults=[];
-  let clockTimer=null, db=null, reviewUrl=null, reviewMarks=[], reviewLbw=[], reviewDuration=0;
-  let liveTracker=null, reviewTracker=null, trackingEnabled=true, reviewTrackingEnabled=true, decisionEngine=null, resultFlashTimer=null;
-
-  const isLandscape=()=>window.matchMedia('(orientation: landscape)').matches || innerWidth>innerHeight;
-  function updateOrientationState(){
-    if(stream && !overActive) ui.startOverBtn.disabled=false;
-    if(ui.cameraCard&&ui.preview?.videoWidth&&ui.preview?.videoHeight){
-      const portrait=ui.preview.videoHeight>ui.preview.videoWidth;
-      ui.cameraCard.classList.toggle('portrait-stream',portrait);
-      ui.cameraCard.classList.toggle('landscape-stream',!portrait);
-      ui.cameraCard.style.aspectRatio=`${ui.preview.videoWidth}/${ui.preview.videoHeight}`;
-    }
-  }
-  const DB_NAME='lbw-over-tracker-db', STORE='overs';
-
-  const fmtTime = ms => { const s=Math.max(0,Math.floor(ms/1000)); return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; };
-  const setStatus = msg => ui.status.textContent=msg;
-  const setMode = (text,color='green') => { ui.modeBadge.textContent=text; ui.modeBadge.style.background=color==='red'?'var(--red)':color==='blue'?'var(--blue)':color==='amber'?'var(--amber)':'var(--green)'; ui.modeBadge.style.color=color==='blue'||color==='red'?'white':'#050505'; };
-  const formatBytes = n => n<1048576?`${Math.round(n/1024)} KB`:`${(n/1048576).toFixed(1)} MB`;
-  const formatDate = ms => new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(ms));
-  const pickMimeType=()=>['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=h264','video/mp4','video/webm;codecs=vp8','video/webm'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
-
-
-  const CAL_KEY='lbwPitchCalibrationV3';
-  const CAL_KEYS=['bL','bM','bR','sL','sM','sR','wL','wR'];
-  const CAL_LABELS=['Bowler L','Bowler M','Bowler R','Striker L','Striker M','Striker R','Wide L','Wide R'];
-  let calibration=null,calibrationDraft=[],calibrationMode=false,calDragIndex=-1,calPointerId=null;
-  try{
-    const saved=localStorage.getItem(CAL_KEY)||localStorage.getItem('lbwPitchCalibrationV2');
-    if(saved)calibration=JSON.parse(saved);
-  }catch(_){}
-  const lerp=(a,b,t)=>a+(b-a)*t;
-  function calPoint(name){return calibration?.[name]||null;}
-  function calibrationArray(src=calibration){return CAL_KEYS.map(k=>src?.[k]).filter(Boolean).map(p=>({x:p.x,y:p.y}));}
-  function arrayToCalibration(arr){const out={updatedAt:Date.now(),source:'adjusted'};CAL_KEYS.forEach((k,i)=>out[k]={x:arr[i].x,y:arr[i].y});return out;}
-  function defaultCalibration(){
-    return [
-      {x:.39,y:.80},{x:.50,y:.80},{x:.61,y:.80},
-      {x:.465,y:.30},{x:.50,y:.30},{x:.535,y:.30},
-      {x:.34,y:.30},{x:.66,y:.30}
-    ];
-  }
-  function calibrationValid(src=calibration){return src&&CAL_KEYS.every(k=>src[k]&&Number.isFinite(src[k].x)&&Number.isFinite(src[k].y));}
-  function updateCalibrationStatus(){
-    const ok=calibrationValid();
-    ui.calDot?.classList.toggle('ok',ok);
-    if(ui.calText)ui.calText.textContent=ok?'Pitch calibrated · auto decisions ready':'Pitch not calibrated · auto decisions disabled';
-    if(ui.calibrateBtn)ui.calibrateBtn.textContent=ok?'EDIT CALIBRATION':'CALIBRATE';
-    drawCalibrationGuide();
-  }
-  function canvasFit(canvas){const vw=ui.preview.videoWidth||1280,vh=ui.preview.videoHeight||720;if(canvas.width!==vw||canvas.height!==vh){canvas.width=vw;canvas.height=vh;}return {vw,vh};}
-  function drawCalibrationGuide(){
-    if(!ui.calibrationCanvas)return;
-    const {vw,vh}=canvasFit(ui.calibrationCanvas),c=ui.calibrationCanvas.getContext('2d');
-    c.clearRect(0,0,vw,vh);
-    const pts=calibrationMode?calibrationDraft:(calibrationValid()?calibrationArray():[]);
-    if(!pts.length)return;
-    c.save();c.lineCap='round';c.lineJoin='round';
-    const P=p=>[p.x*vw,p.y*vh];
-    c.strokeStyle='rgba(52,199,89,.72)';c.lineWidth=Math.max(2,vw/600);c.setLineDash([10,8]);
-    if(pts.length>=6){
-      const [bL,bM,bR,sL,sM,sR]=pts;
-      [[bL,sL],[bM,sM],[bR,sR]].forEach(pair=>{const a=P(pair[0]),b=P(pair[1]);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();});
-      let a=P(bL),b=P(bR);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();
-      a=P(sL);b=P(sR);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();
-    }
-    if(pts.length>=8){
-      c.strokeStyle='rgba(255,214,10,.80)';
-      const bM=pts[1],sM=pts[4],wL=pts[6],wR=pts[7];
-      const axis={x:sM.x-bM.x,y:sM.y-bM.y},len=Math.hypot(axis.x,axis.y)||1,n={x:-axis.y/len,y:axis.x/len};
-      [wL,wR].forEach(w=>{const a=P({x:w.x-n.x*.14,y:w.y-n.y*.14}),b=P({x:w.x+n.x*.14,y:w.y+n.y*.14});c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();});
-    }
-    pts.forEach((p,i)=>{
-      const [x,y]=P(p),r=Math.max(8,Math.min(vw,vh)/70);
-      c.setLineDash([]);c.beginPath();c.arc(x,y,r,0,Math.PI*2);
-      c.fillStyle=i>=6?'#ffd60a':'#34c759';c.fill();
-      c.lineWidth=Math.max(2,vw/700);c.strokeStyle=i===calDragIndex?'#ffffff':'rgba(0,0,0,.72)';c.stroke();
-      c.fillStyle=i>=6?'#111':'#041008';c.font=`900 ${Math.max(12,Math.min(vw,vh)/55)}px -apple-system`;c.textAlign='center';c.textBaseline='middle';c.fillText(String(i+1),x,y);
-      c.textAlign='left';c.textBaseline='alphabetic';c.fillStyle='rgba(255,255,255,.92)';c.font=`700 ${Math.max(10,Math.min(vw,vh)/70)}px -apple-system`;
-      c.fillText(CAL_LABELS[i],x+r+4,y-r-2);
-    });
-    c.restore();
-  }
-
-  function frameLuma(){
-    if(!ui.preview.videoWidth||!ui.preview.videoHeight)return null;
-    const targetW=320,targetH=Math.max(180,Math.round(targetW*ui.preview.videoHeight/ui.preview.videoWidth));
-    const cv=document.createElement('canvas');cv.width=targetW;cv.height=targetH;
-    const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(ui.preview,0,0,targetW,targetH);
-    const data=cx.getImageData(0,0,targetW,targetH).data,luma=new Float32Array(targetW*targetH);
-    for(let i=0,j=0;i<data.length;i+=4,j++)luma[j]=.2126*data[i]+.7152*data[i+1]+.0722*data[i+2];
-    return {w:targetW,h:targetH,luma};
-  }
-  function pxLuma(f,x,y){x=Math.max(0,Math.min(f.w-1,x|0));y=Math.max(0,Math.min(f.h-1,y|0));return f.luma[y*f.w+x];}
-  function bestHorizontalLine(f,y0,y1){
-    let bestY=Math.round((y0+y1)*f.h/2),best=-Infinity;
-    const xa=Math.round(f.w*.18),xb=Math.round(f.w*.82);
-    for(let y=Math.max(5,Math.round(y0*f.h));y<Math.min(f.h-5,Math.round(y1*f.h));y++){
-      let score=0;
-      for(let x=xa;x<xb;x+=2){
-        const c=pxLuma(f,x,y),around=(pxLuma(f,x,y-4)+pxLuma(f,x,y+4))/2;
-        score+=Math.max(0,c-around-5);
-      }
-      if(score>best){best=score;bestY=y;}
-    }
-    return {y:bestY/f.h,score:Math.max(0,best)};
-  }
-  function verticalPeaks(f,y0,y1){
-    const scores=[],xa=Math.round(f.w*.18),xb=Math.round(f.w*.82),ya=Math.round(y0*f.h),yb=Math.round(y1*f.h);
-    for(let x=xa;x<=xb;x++){
-      let score=0;
-      for(let y=ya;y<yb;y+=2){
-        const c=pxLuma(f,x,y),side=(pxLuma(f,x-4,y)+pxLuma(f,x+4,y))/2;
-        score+=Math.max(0,c-side-4);
-      }
-      scores.push({x,score});
-    }
-    const local=scores.filter((v,i,a)=>i>1&&i<a.length-2&&v.score>=a[i-1].score&&v.score>=a[i+1].score).sort((a,b)=>b.score-a.score);
-    const picked=[];
-    for(const p of local){
-      if(picked.every(q=>Math.abs(q.x-p.x)>=3)){picked.push(p);if(picked.length>=14)break;}
-    }
-    return picked;
-  }
-  function chooseStumpTriplet(peaks,far=false){
-    if(peaks.length<3)return null;
-    const top=peaks.slice(0,10);let best=null,bestScore=-Infinity;
-    for(let i=0;i<top.length;i++)for(let j=i+1;j<top.length;j++)for(let k=j+1;k<top.length;k++){
-      const xs=[top[i],top[j],top[k]].sort((a,b)=>a.x-b.x),span=(xs[2].x-xs[0].x);
-      const center=(xs[0].x+xs[2].x)/2,centerPenalty=Math.abs(center-160)*(far?.35:.16);
-      const idealSpan=far?12:36,spanPenalty=Math.abs(span-idealSpan)*(far?.4:.18);
-      const spacingPenalty=Math.abs((xs[1].x-xs[0].x)-(xs[2].x-xs[1].x))*.6;
-      const sc=xs.reduce((a,p)=>a+p.score,0)-centerPenalty-spanPenalty-spacingPenalty;
-      if(sc>bestScore){bestScore=sc;best=xs;}
-    }
-    return best;
-  }
-  function bestWideX(f,strikerY,side,stumpEdge){
-    const y=Math.round(strikerY*f.h),xStart=side==='left'?Math.round(f.w*.12):Math.round(stumpEdge*f.w+8),xEnd=side==='left'?Math.round(stumpEdge*f.w-8):Math.round(f.w*.88);
-    let bestX=side==='left'?f.w*.34:f.w*.66,best=-Infinity;
-    for(let x=Math.max(5,xStart);x<Math.min(f.w-5,xEnd);x++){
-      let score=0;
-      for(let dy=-8;dy<=8;dy+=2){
-        const c=pxLuma(f,x,y+dy),sideLum=(pxLuma(f,x-4,y+dy)+pxLuma(f,x+4,y+dy))/2;
-        score+=Math.max(0,c-sideLum-3);
-      }
-      if(score>best){best=score;bestX=x;}
-    }
-    return bestX/f.w;
-  }
-  function autoDetectCalibration(){
-    const f=frameLuma();
-    if(!f)return {points:defaultCalibration(),confidence:.25};
-    const nearLine=bestHorizontalLine(f,.58,.92),farLine=bestHorizontalLine(f,.16,.52);
-    const near=chooseStumpTriplet(verticalPeaks(f,.50,.93),false);
-    const far=chooseStumpTriplet(verticalPeaks(f,.10,.58),true);
-    const d=defaultCalibration();
-    const nearXs=near?near.map(p=>p.x/f.w):d.slice(0,3).map(p=>p.x);
-    const farXs=far?far.map(p=>p.x/f.w):d.slice(3,6).map(p=>p.x);
-    let bY=nearLine.y,sY=farLine.y;
-    if(!(bY>.52&&bY<.95))bY=d[1].y;
-    if(!(sY>.12&&sY<.56))sY=d[4].y;
-    const sLeft=Math.min(...farXs),sRight=Math.max(...farXs);
-    let wL=bestWideX(f,sY,'left',sLeft),wR=bestWideX(f,sY,'right',sRight);
-    const stumpSpan=Math.max(.02,sRight-sLeft);
-    if(wL>=sLeft-.02)wL=Math.max(.06,sLeft-stumpSpan*3.5);
-    if(wR<=sRight+.02)wR=Math.min(.94,sRight+stumpSpan*3.5);
-    const points=[
-      {x:nearXs[0],y:bY},{x:nearXs[1],y:bY},{x:nearXs[2],y:bY},
-      {x:farXs[0],y:sY},{x:farXs[1],y:sY},{x:farXs[2],y:sY},
-      {x:wL,y:sY},{x:wR,y:sY}
-    ];
-    const confidence=Math.min(.88,.35+(near?.length===3?.20:0)+(far?.length===3?.20:0)+(nearLine.score>100?.06:0)+(farLine.score>100?.06:0));
-    return {points,confidence};
-  }
-  function applyAutoCalibration(){
-    const found=autoDetectCalibration();
-    calibrationDraft=found.points;
-    calDragIndex=-1;
-    ui.calStep.textContent=`Auto-detected · ${Math.round(found.confidence*100)}% initial confidence`;
-    ui.calHelp.textContent='Check all 8 markers. Drag any marker that is not exactly on the stump base or wide-line intersection, then tap SAVE POINTS.';
-    drawCalibrationGuide();
-    setStatus(`Calibration points auto-detected (${Math.round(found.confidence*100)}% initial confidence). Adjust before saving.`);
-  }
-  function startCalibration(){
-    if(!stream){setStatus('Start the camera first.');return;}
-    calibrationMode=true;calDragIndex=-1;calPointerId=null;
-    liveTracker?.stop();
-    ui.calibrationCanvas.classList.add('active');ui.calibrationHud.classList.add('show');
-    if(calibrationValid()){
-      calibrationDraft=calibrationArray();
-      ui.calStep.textContent='Edit saved calibration';
-      ui.calHelp.textContent='Drag any numbered marker to correct it. AUTO DETECT can replace all markers with a new camera-based estimate.';
-    }else applyAutoCalibration();
-    drawCalibrationGuide();setMode('CALIBRATE','blue');
-  }
-  function finishCalibration(){
-    if(calibrationDraft.length!==8){setStatus('Calibration needs all 8 points. Tap AUTO DETECT or RESET DEFAULT first.');return;}
-    calibration=arrayToCalibration(calibrationDraft);
-    try{localStorage.setItem(CAL_KEY,JSON.stringify(calibration));}catch(_){}
-    calibrationMode=false;calDragIndex=-1;calPointerId=null;
-    ui.calibrationCanvas.classList.remove('active','dragging');ui.calibrationHud.classList.remove('show');
-    updateCalibrationStatus();if(trackingEnabled)liveTracker?.start();
-    setMode(overActive?'OVER LIVE':'CAMERA',overActive?'red':'green');
-    setStatus('Calibration saved. Tap EDIT CALIBRATION at any time to correct a point later.');
-  }
-  function cancelCalibration(){
-    calibrationMode=false;calDragIndex=-1;calPointerId=null;calibrationDraft=[];
-    ui.calibrationCanvas.classList.remove('active','dragging');ui.calibrationHud.classList.remove('show');
-    drawCalibrationGuide();if(trackingEnabled)liveTracker?.start();setMode(overActive?'OVER LIVE':'CAMERA',overActive?'red':'green');
-  }
-  function pointerToCal(e){
-    const r=ui.calibrationCanvas.getBoundingClientRect();
-    return {x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))};
-  }
-  function nearestCalIndex(p){
-    if(!calibrationDraft.length)return -1;
-    const r=ui.calibrationCanvas.getBoundingClientRect(),rx=28/Math.max(1,r.width),ry=28/Math.max(1,r.height);
-    let best=-1,dist=Infinity;
-    calibrationDraft.forEach((q,i)=>{const dx=(q.x-p.x)/rx,dy=(q.y-p.y)/ry,d=dx*dx+dy*dy;if(d<dist){dist=d;best=i;}});
-    return dist<=1.7?best:-1;
-  }
-  function calibrationPointerDown(e){
-    if(!calibrationMode)return;
-    const p=pointerToCal(e),idx=nearestCalIndex(p);if(idx<0)return;
-    calDragIndex=idx;calPointerId=e.pointerId;ui.calibrationCanvas.setPointerCapture?.(e.pointerId);ui.calibrationCanvas.classList.add('dragging');
-    calibrationDraft[idx]=p;drawCalibrationGuide();
-  }
-  function calibrationPointerMove(e){
-    if(!calibrationMode||calDragIndex<0||(calPointerId!==null&&e.pointerId!==calPointerId))return;
-    calibrationDraft[calDragIndex]=pointerToCal(e);drawCalibrationGuide();
-  }
-  function calibrationPointerUp(e){
-    if(calDragIndex<0)return;
-    if(calPointerId===null||e.pointerId===calPointerId){calDragIndex=-1;calPointerId=null;ui.calibrationCanvas.classList.remove('dragging');drawCalibrationGuide();}
-  }
-  function axisMetrics(p){if(!calibrationValid())return null;const B=calibration.bM,S=calibration.sM,ax=S.x-B.x,ay=S.y-B.y,L2=ax*ax+ay*ay;if(L2<1e-6)return null;const u=((p.x-B.x)*ax+(p.y-B.y)*ay)/L2;const L=Math.sqrt(L2),nx=-ay/L,ny=ax/L;const C={x:B.x+ax*u,y:B.y+ay*u};const signed=(p.x-C.x)*nx+(p.y-C.y)*ny;const bHalf=Math.max(.001,Math.abs((calibration.bR.x-calibration.bL.x)*nx+(calibration.bR.y-calibration.bL.y)*ny)/2);const sHalf=Math.max(.001,Math.abs((calibration.sR.x-calibration.sL.x)*nx+(calibration.sR.y-calibration.sL.y)*ny)/2);const half=Math.max(.001,lerp(bHalf,sHalf,Math.max(0,Math.min(1,u))));return {u,lat:signed/half,nx,ny,half};}
-  function wideLimits(){if(!calibrationValid())return null;const a=axisMetrics(calibration.wL),b=axisMetrics(calibration.wR);if(!a||!b)return null;return {min:Math.min(a.lat,b.lat),max:Math.max(a.lat,b.lat)};}
-  function linearFit(points){if(points.length<3)return null;let su=0,sl=0,suu=0,sul=0;for(const q of points){su+=q.u;sl+=q.lat;suu+=q.u*q.u;sul+=q.u*q.lat;}const n=points.length,d=n*suu-su*su;if(Math.abs(d)<1e-7)return null;const m=(n*sul-su*sl)/d,b=(sl-m*su)/n;let err=0;for(const q of points){const e=q.lat-(m*q.u+b);err+=e*e;}return {m,b,rmse:Math.sqrt(err/n),predict:u=>m*u+b};}
-  function showAutoResult(result,confidence,detail=''){if(!ui.resultFlash)return;clearTimeout(resultFlashTimer);ui.resultMain.textContent=result;ui.resultSub.textContent=`AUTO ASSIST · ${Math.round(confidence*100)}%${detail?' · '+detail:''}`;ui.resultFlash.className=`result-flash show ${result.toLowerCase()}`;resultFlashTimer=setTimeout(()=>ui.resultFlash.className='result-flash',2200);}
-  function renderDecisionStrip(){if(!ui.decisionStrip)return;ui.decisionStrip.innerHTML=autoResults.slice(-8).map((r,i)=>`<span class="decision-chip ${r.result}">${r.result} · ${Math.round(r.confidence*100)}%</span>`).join('');}
-  class DecisionEngine{
-    constructor(){this.points=[];this.lastAcceptedAt=0;this.cooldownUntil=0;}
-    reset(){this.points=[];this.lastAcceptedAt=0;}
-    onPoint(p){if(!overActive||ui.autoDecisionSelect?.value!=='on'||!calibrationValid())return;const m=axisMetrics(p);if(!m||m.u<-.25||m.u>1.35||Math.abs(m.lat)>12)return;this.points.push({...p,...m});this.points=this.points.filter(q=>p.t-q.t<2600).slice(-60);this.lastAcceptedAt=p.t;}
-    onLost(now){if(!overActive||now<this.cooldownUntil||ui.autoDecisionSelect?.value!=='on'||!calibrationValid())return;if(this.points.length<6)return;const pts=this.points.slice();this.points=[];const us=pts.map(p=>p.u),minU=Math.min(...us),maxU=Math.max(...us);if(maxU<.58||maxU-minU<.22)return;const last=pts.slice(-Math.min(12,pts.length));const fit=linearFit(last);if(!fit)return;const pred=fit.predict(1);const limits=wideLimits();const meanConf=pts.reduce((a,p)=>a+(p.confidence||.5),0)/pts.length;const progress=Math.max(0,Math.min(1,(maxU-.45)/.5));const fitScore=Math.max(0,1-fit.rmse/1.4);let confidence=Math.max(.25,Math.min(.97,.38*meanConf+.32*progress+.30*fitScore));const strict=ui.decisionSensitivity?.value==='strict';const threshold=strict ? .72 : .60;let result='NOTHING',detail='';const impactLat=pts[pts.length-1].lat;const handed=ui.handednessSelect?.value||'right';const offPoint=handed==='right'?calibration.sL:calibration.sR;const offSign=Math.sign(axisMetrics(offPoint)?.lat||1);const impactInLine=Math.abs(impactLat)<=1.12;const impactOutsideOff=(impactLat*offSign)>1.12;const impactEligible=impactInLine||(ui.shotSelect?.value==='noshot'&&impactOutsideOff);
-      if(limits&&(pred<limits.min||pred>limits.max)){result='WIDE';detail='outside calibrated wide corridor';}
-      else if(Math.abs(pred)<=1.08&&impactEligible){result='LBW';detail='wicket corridor · impact estimate eligible · REVIEW';confidence*=.84;}
-      else{result='NOTHING';detail=Math.abs(pred)>1.08?'projected clear of wicket':'LBW impact condition not met';}
-      if(confidence<threshold){result='REVIEW';detail='low confidence trajectory';}
-      const offset=(performance.now()-overStartedAt)/1000;autoResults.push({offset,result,confidence,predictedLateral:pred,detail,handedness:ui.handednessSelect?.value||'right',shot:ui.shotSelect?.value||'shot'});renderDecisionStrip();renderLiveTimeline(offset);showAutoResult(result,confidence,detail);setStatus(`${result} · auto assist ${Math.round(confidence*100)}%. ${detail}`);this.cooldownUntil=now+1300;
-    }
-  }
-  decisionEngine=new DecisionEngine();
-
-  class BallTracker {
-    constructor(video,overlay,statusEl=null,hooks={}){
-      this.video=video;this.overlay=overlay;this.statusEl=statusEl;this.analysis=document.createElement('canvas');this.ctx=this.analysis.getContext('2d',{willReadFrequently:true});this.octx=overlay.getContext('2d');
-      this.running=false;this.prev=null;this.trail=[];this.last=null;this.seed=null;this.lastFrameAt=0;this.misses=0;this.confidence=0;this.raf=0;this.hooks=hooks||{};this.lostFired=false;
-      this.boundLoop=t=>this.loop(t);
-      overlay.addEventListener('pointerdown',e=>this.seedFromPointer(e));
-    }
-    settings(){return {colour:ui.ballColorSelect?.value||'auto',sensitivity:ui.sensitivitySelect?.value||'medium'};}
-    start(){if(this.running)return;this.running=true;this.overlay.classList.remove('off');this.reset(false);this.raf=requestAnimationFrame(this.boundLoop);}
-    stop(){this.running=false;cancelAnimationFrame(this.raf);this.overlay.classList.add('off');this.clearOverlay();if(this.statusEl){this.statusEl.textContent='Ball track off';this.statusEl.className='pill tracker-pill off';}}
-    reset(clearSeed=true){this.prev=null;this.trail=[];this.last=null;this.misses=0;this.confidence=0;if(clearSeed)this.seed=null;this.clearOverlay();}
-    clearTrail(){this.trail=[];this.last=null;this.seed=null;this.misses=0;this.clearOverlay();}
-    clearOverlay(){const c=this.overlay;if(c.width&&c.height)this.octx.clearRect(0,0,c.width,c.height);}
-    seedFromPointer(e){
-      if(!this.running)return;const r=this.overlay.getBoundingClientRect();if(!r.width||!r.height)return;
-      const fx=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),fy=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));
-      this.seed={fx,fy,until:performance.now()+1800};this.last={x:fx,y:fy,t:performance.now()};this.trail=[];this.overlay.classList.remove('seed-mode');this.updateStatus('LOCK SEED',1,'locked');
-    }
-    updateStatus(text,conf=0,state='searching'){
-      if(!this.statusEl)return;this.statusEl.textContent=conf?`${text} ${Math.round(conf*100)}%`:text;this.statusEl.className=`pill tracker-pill ${state}`;
-    }
-    loop(now){
-      if(!this.running)return;
-      if(this.video.readyState>=2 && !this.video.paused && now-this.lastFrameAt>60){this.lastFrameAt=now;try{this.process(now);}catch(_){}}
-      this.draw(now);this.raf=requestAnimationFrame(this.boundLoop);
-    }
-    process(now){
-      const vw=this.video.videoWidth||0,vh=this.video.videoHeight||0;if(!vw||!vh)return;
-      const aw=240,ah=Math.max(100,Math.round(aw*vh/vw));if(this.analysis.width!==aw||this.analysis.height!==ah){this.analysis.width=aw;this.analysis.height=ah;this.prev=null;}
-      this.ctx.drawImage(this.video,0,0,aw,ah);const img=this.ctx.getImageData(0,0,aw,ah),d=img.data;
-      if(!this.prev){this.prev=new Uint8ClampedArray(d);return;}
-      const prev=this.prev,step=2,gw=Math.floor(aw/step),gh=Math.floor(ah/step),mask=new Uint8Array(gw*gh),scores=new Float32Array(gw*gh);
-      const cfg=this.settings(),motionThreshold=cfg.sensitivity==='high'?32:cfg.sensitivity==='low'?58:44;
-      const yMin=Math.floor(gh*.08),yMax=Math.ceil(gh*.92),xMin=Math.floor(gw*.025),xMax=Math.ceil(gw*.975);
-      for(let gy=yMin;gy<yMax;gy++)for(let gx=xMin;gx<xMax;gx++){
-        const x=gx*step+1,y=gy*step+1,pi=(y*aw+x)*4,r=d[pi],g=d[pi+1],b=d[pi+2];
-        const diff=(Math.abs(r-prev[pi])+Math.abs(g-prev[pi+1])+Math.abs(b-prev[pi+2]))/3;if(diff<motionThreshold)continue;
-        const max=Math.max(r,g,b),min=Math.min(r,g,b),lum=.299*r+.587*g+.114*b;
-        const isWhite=lum>135 && (max-min)<88;
-        const isRed=r>90 && r>g*1.22 && r>b*1.12 && r-((g+b)/2)>28;
-        const colourOK=cfg.colour==='white'?isWhite:cfg.colour==='red'?isRed:(isWhite||isRed);
-        if(!colourOK)continue;
-        const idx=gy*gw+gx;mask[idx]=1;scores[idx]=diff+(isRed?32:20);
-      }
-      const seen=new Uint8Array(mask.length),components=[];
-      const dirs=[-1,1,-gw,gw,-gw-1,-gw+1,gw-1,gw+1];
-      for(let idx=0;idx<mask.length;idx++){
-        if(!mask[idx]||seen[idx])continue;const q=[idx];seen[idx]=1;let qi=0,n=0,sumX=0,sumY=0,sumS=0,minX=1e9,maxX=-1,minY=1e9,maxY=-1;
-        while(qi<q.length && n<120){const cur=q[qi++],cy=Math.floor(cur/gw),cx=cur-cy*gw;n++;sumX+=cx;sumY+=cy;sumS+=scores[cur];minX=Math.min(minX,cx);maxX=Math.max(maxX,cx);minY=Math.min(minY,cy);maxY=Math.max(maxY,cy);
-          for(const delta of dirs){const ni=cur+delta;if(ni<0||ni>=mask.length||seen[ni]||!mask[ni])continue;const ny=Math.floor(ni/gw),nx=ni-ny*gw;if(Math.abs(nx-cx)>1||Math.abs(ny-cy)>1)continue;seen[ni]=1;q.push(ni);}
-        }
-        const bw=maxX-minX+1,bh=maxY-minY+1;if(n<1||n>55||bw>14||bh>14)continue;
-        const fx=((sumX/n)*step+1)/aw,fy=((sumY/n)*step+1)/ah,compact=n/(bw*bh),base=(sumS/n)+Math.min(n,14)*1.6+compact*18;
-        components.push({fx,fy,n,bw,bh,base});
-      }
-      this.prev.set(d);
-      if(!components.length){this.miss(now);return;}
-      const anchor=this.seed&&this.seed.until>now?{x:this.seed.fx,y:this.seed.fy}:this.last;
-      let best=null,bestScore=-1e9;
-      for(const c of components){let sc=c.base;if(anchor){const dx=c.fx-anchor.x,dy=c.fy-anchor.y,dist=Math.hypot(dx,dy);sc+=Math.max(-40,55-dist*185);if(dist>.48)sc-=70;}else{sc+=18*(1-Math.abs(c.fy-.5));}
-        if(sc>bestScore){best=c;bestScore=sc;}
-      }
-      if(!best||bestScore<48){this.miss(now);return;}
-      const p={x:best.fx,y:best.fy,t:now,confidence:Math.max(.25,Math.min(.98,(bestScore-35)/95))};this.last=p;this.misses=0;this.lostFired=false;this.confidence=p.confidence;this.trail.push(p);this.trail=this.trail.filter(x=>now-x.t<1500).slice(-28);this.updateStatus('BALL',p.confidence,'locked');try{this.hooks.onPoint?.(p);}catch(_){}
-    }
-    miss(now){this.misses++;this.trail=this.trail.filter(x=>now-x.t<1300);if(this.misses>9&&!this.lostFired){this.lostFired=true;try{this.hooks.onLost?.(now);}catch(_){}}if(this.misses>11)this.last=null;this.updateStatus('SEARCHING',0,'searching');}
-    draw(now){
-      const vw=this.video.videoWidth||1280,vh=this.video.videoHeight||720;if(this.overlay.width!==vw||this.overlay.height!==vh){this.overlay.width=vw;this.overlay.height=vh;}
-      const c=this.octx;c.clearRect(0,0,vw,vh);const pts=this.trail.filter(p=>now-p.t<1500);if(!pts.length){if(this.seed&&this.seed.until>now){c.strokeStyle='#ffd60a';c.lineWidth=Math.max(3,vw/420);c.beginPath();c.arc(this.seed.fx*vw,this.seed.fy*vh,Math.max(9,vw/110),0,Math.PI*2);c.stroke();}return;}
-      c.save();c.lineCap='round';c.lineJoin='round';c.shadowBlur=Math.max(6,vw/170);c.shadowColor='rgba(57,255,136,.75)';
-      c.beginPath();pts.forEach((p,i)=>{const x=p.x*vw,y=p.y*vh;i?c.lineTo(x,y):c.moveTo(x,y);});c.strokeStyle='rgba(57,255,136,.88)';c.lineWidth=Math.max(3,vw/360);c.stroke();
-      pts.forEach((p,i)=>{const age=Math.max(0,1-(now-p.t)/1500);c.beginPath();c.arc(p.x*vw,p.y*vh,Math.max(3,vw/420)*(.65+age*.55),0,Math.PI*2);c.fillStyle=`rgba(57,255,136,${.25+.7*age})`;c.fill();});
-      const last=pts[pts.length-1];c.beginPath();c.arc(last.x*vw,last.y*vh,Math.max(8,vw/140),0,Math.PI*2);c.strokeStyle='#ffffff';c.lineWidth=Math.max(2,vw/600);c.stroke();c.beginPath();c.arc(last.x*vw,last.y*vh,Math.max(5,vw/210),0,Math.PI*2);c.fillStyle='#39ff88';c.fill();
-      if(pts.length>=4){const a=pts[Math.max(0,pts.length-4)],b=last,dt=Math.max(1,b.t-a.t),vx=(b.x-a.x)/dt,vy=(b.y-a.y)/dt,look=230;let ex=b.x+vx*look,ey=b.y+vy*look;const scale=Math.min(1,.32/Math.max(Math.abs(ex-b.x),Math.abs(ey-b.y),.001));ex=b.x+(ex-b.x)*scale;ey=b.y+(ey-b.y)*scale;c.setLineDash([12,10]);c.beginPath();c.moveTo(b.x*vw,b.y*vh);c.lineTo(ex*vw,ey*vh);c.strokeStyle='rgba(255,214,10,.85)';c.lineWidth=Math.max(2,vw/520);c.stroke();c.setLineDash([]);}
-      c.restore();
-    }
-  }
-
-  function setLiveTracking(on){
-    trackingEnabled=!!on;if(!liveTracker&&ui.preview&&ui.trackingCanvas)liveTracker=new BallTracker(ui.preview,ui.trackingCanvas,ui.trackInfo,{onPoint:p=>decisionEngine?.onPoint(p),onLost:n=>decisionEngine?.onLost(n)});
-    if(trackingEnabled&&stream){liveTracker.start();ui.trackBtn.textContent='BALL TRACK ON';ui.trackBtn.classList.add('primary');ui.trackBtn.classList.remove('secondary');}
-    else{liveTracker?.stop();ui.trackBtn.textContent='BALL TRACK OFF';ui.trackBtn.classList.remove('primary');ui.trackBtn.classList.add('secondary');}
-  }
-  function setReviewTracking(on){
-    reviewTrackingEnabled=!!on;if(!reviewTracker&&ui.reviewPlayer&&ui.reviewTrackingCanvas)reviewTracker=new BallTracker(ui.reviewPlayer,ui.reviewTrackingCanvas,null);
-    if(reviewTrackingEnabled){reviewTracker.start();ui.reviewTrackBtn.textContent='TRACK ON';ui.reviewTrackBtn.classList.add('primary');ui.reviewTrackBtn.classList.remove('secondary');}
-    else{reviewTracker?.stop();ui.reviewTrackBtn.textContent='TRACK OFF';ui.reviewTrackBtn.classList.remove('primary');ui.reviewTrackBtn.classList.add('secondary');}
-  }
-
-  function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(STORE))r.result.createObjectStore(STORE,{keyPath:'id'});};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
-  function put(v){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(v);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
-  function del(id){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
-  function all(){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readonly');const r=tx.objectStore(STORE).getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error);});}
-
-  async function startCamera(){
-    if(stream){await stopCamera();return;}
-    if(!window.isSecureContext){setStatus('Camera needs HTTPS. Open the published GitHub Pages URL.');return;}
-    if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){setStatus('Current Safari camera recording APIs are required.');return;}
-    try{
-      const q=Number(ui.qualitySelect.value),fps=Number(ui.fpsSelect.value),portrait=!isLandscape();
-      const longSide=q===1080?1920:1280,shortSide=q===1080?1080:720;
-      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:facingMode},width:{ideal:portrait?shortSide:longSide},height:{ideal:portrait?longSide:shortSide},frameRate:{ideal:fps,max:fps}}});
-      ui.preview.srcObject=stream;await ui.preview.play();
-      const settings=stream.getVideoTracks()[0]?.getSettings?.()||{};
-      ui.camInfo.textContent=`${settings.width||ui.preview.videoWidth||''}×${settings.height||ui.preview.videoHeight||''}${settings.frameRate?' · '+Math.round(settings.frameRate)+'fps':''}`;
-      updateOrientationState();
-      ui.cameraBtn.textContent='Stop Camera';ui.switchBtn.disabled=false;ui.trackBtn.disabled=false;ui.calibrateBtn.disabled=false;ui.startOverBtn.disabled=false;setLiveTracking(trackingEnabled);updateCalibrationStatus();setMode('CAMERA');
-      setStatus(calibrationValid()?'Camera ready in portrait or landscape. Check EDIT CALIBRATION if the phone/tripod moved.':'Camera ready. Tap CALIBRATE: AUTO DETECT will suggest the 8 pitch points, then drag any incorrect marker and save.');
-    }catch(e){setStatus(`Camera could not start: ${e.message}. Check Safari camera permission.`);}
-  }
-
-  async function stopCamera(){
-    if(overActive) endOver(false);
-    if(recorder&&recorder.state!=='inactive'){try{recorder.stop();}catch(_){}}
-    recorder=null;liveTracker?.stop();if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;ui.preview.srcObject=null;
-    clearInterval(clockTimer);ui.cameraBtn.textContent='Start Camera';ui.switchBtn.disabled=true;ui.trackBtn.disabled=true;ui.calibrateBtn.disabled=true;ui.startOverBtn.disabled=true;disableOverControls();ui.camInfo.textContent='Camera off';setMode('READY');setStatus('Camera stopped.');
-  }
-
-  function disableOverControls(){ui.markBallBtn.disabled=true;ui.reviewOverBtn.disabled=true;ui.endOverBtn.disabled=true;ui.lbwMarkBtn.disabled=true;ui.resetOverBtn.disabled=true;}
-
-  function createRecorder(){
-    mimeType=pickMimeType();const opts={videoBitsPerSecond:Number(ui.qualitySelect.value)===1080?5_000_000:3_000_000};if(mimeType)opts.mimeType=mimeType;
-    try{return new MediaRecorder(stream,opts);}catch(_){delete opts.videoBitsPerSecond;return mimeType?new MediaRecorder(stream,{mimeType}):new MediaRecorder(stream);}
-  }
-
-  async function startOver(){
-    if(!stream)return;
-    if(overActive&&!confirm('Reset the current over buffer and start a new over?'))return;
-    if(recorder&&recorder.state!=='inactive'){try{recorder.stop();}catch(_){}}
-    overActive=true;overStartedAt=performance.now();overSequence+=1;chunks=[];initChunk=null;balls=[];lbwMoments=[];autoResults=[];decisionEngine?.reset();renderDecisionStrip();liveTracker?.reset();
-    recorder=createRecorder();mimeType=recorder.mimeType||mimeType||'video/mp4';
-    recorder.ondataavailable=e=>{if(!e.data||!e.data.size)return;if(!initChunk)initChunk=e.data;chunks.push({blob:e.data,at:performance.now()});updateClock();};
-    recorder.onerror=e=>setStatus(`Recorder error: ${e.error?.message||'unknown error'}`);
-    recorder.start(1000);
-    ui.overNumber.textContent=String(overSequence);ui.ballCount.textContent='0';ui.timelineDuration.textContent='00:00';renderBalls();
-    ui.startOverBtn.textContent='START NEXT OVER';ui.markBallBtn.disabled=false;ui.reviewOverBtn.disabled=false;ui.endOverBtn.disabled=false;ui.lbwMarkBtn.disabled=false;ui.resetOverBtn.disabled=false;
-    setMode('OVER LIVE','red');setStatus(calibrationValid()?'Over buffer running. Auto decision assist is armed; mark each completed delivery for the timeline.':'Over buffer running, but auto decisions need CALIBRATE first.');
-    clearInterval(clockTimer);clockTimer=setInterval(updateClock,500);updateClock();
-  }
-
-  function updateClock(){if(!overActive)return;const elapsed=performance.now()-overStartedAt;ui.overClock.textContent=fmtTime(elapsed);ui.bufferInfo.textContent=`Over ${fmtTime(elapsed)}`;ui.timelineDuration.textContent=fmtTime(elapsed);renderLiveTimeline(elapsed/1000);}
-
-  function markBall(){
-    if(!overActive)return;const offset=(performance.now()-overStartedAt)/1000;const recent=[...autoResults].reverse().find(r=>!r.ballNumber&&offset-r.offset>=0&&offset-r.offset<8);const ball={number:balls.length+1,offset,result:recent?.result||null,confidence:recent?.confidence||null};if(recent)recent.ballNumber=ball.number;balls.push(ball);ui.ballCount.textContent=String(balls.length);renderBalls();setStatus(`Ball ${balls.length} marked${ball.result?' · '+ball.result:''} at ${fmtTime(offset*1000)}. The over continues recording.`);
-  }
-  function markLBW(){if(!overActive)return;const offset=(performance.now()-overStartedAt)/1000;lbwMoments.push(offset);renderLiveTimeline(offset);setStatus(`LBW moment marked at ${fmtTime(offset*1000)}. Tap the red diamond or REVIEW OVER to inspect it.`);}
-
-  function renderBalls(){
-    if(!balls.length){ui.ballStrip.innerHTML='<span class="meta">No balls marked yet.</span>';}
-    else ui.ballStrip.innerHTML=balls.map(b=>`<button class="ball-chip marked" data-ball="${b.number}">Ball ${b.number}${b.result?' · '+b.result:''}</button>`).join('');
-    renderLiveTimeline(overActive?(performance.now()-overStartedAt)/1000:0);
-  }
-
-  const pct=(value,total)=>total>0?Math.max(1,Math.min(99,(value/total)*100)):1;
-  const ballSeekTime=b=>Math.max(0,(b?.offset||0)-6);
-
-  function renderLiveTimeline(totalSeconds){
-    const total=Math.max(totalSeconds,1);
-    const markers=[];
-    balls.forEach(b=>markers.push(`<button class="timeline-marker" style="left:${pct(b.offset,total)}%" data-ball="${b.number}" title="Ball ${b.number} at ${fmtTime(b.offset*1000)}">${b.number}</button>`));
-    lbwMoments.forEach((t,i)=>markers.push(`<button class="timeline-marker lbw" style="left:${pct(t,total)}%" data-lbw="${i}" title="LBW ${i+1} at ${fmtTime(t*1000)}">LBW</button>`));autoResults.forEach((r,i)=>markers.push(`<span class="decision-chip ${r.result}" style="position:absolute;top:42px;left:${pct(r.offset,total)}%;transform:translateX(-50%);padding:3px 5px;z-index:5" title="${r.result} ${Math.round(r.confidence*100)}%">${r.result}</span>`));
-    ui.timelineMarkers.innerHTML=markers.join('');
-  }
-
-  function renderReviewTimeline(){
-    const duration=reviewDuration||ui.reviewPlayer.duration||1;
-    const markers=[];
-    reviewMarks.forEach(b=>markers.push(`<button class="timeline-marker" style="left:${pct(b.offset,duration)}%" data-review-time="${ballSeekTime(b)}" data-review-ball="${b.number}" title="Replay Ball ${b.number}">${b.number}</button>`));
-    reviewLbw.forEach((t,i)=>markers.push(`<button class="timeline-marker lbw" style="left:${pct(t,duration)}%" data-review-time="${Math.max(0,t-6)}" data-review-lbw="${i}" title="Replay LBW ${i+1}">LBW</button>`));
-    ui.reviewTimelineMarkers.innerHTML=markers.join('');
-    updateReviewPlayhead();
-  }
-
-  function updateReviewPlayhead(){
-    const duration=ui.reviewPlayer.duration||reviewDuration||1;
-    const now=Number.isFinite(ui.reviewPlayer.currentTime)?ui.reviewPlayer.currentTime:0;
-    ui.reviewPlayhead.style.left=`${Math.max(0,Math.min(100,(now/duration)*100))}%`;
-    ui.reviewTimeLabel.textContent=`${fmtTime(now*1000)} / ${fmtTime(duration*1000)}`;
-    let active=null;
-    reviewMarks.forEach(b=>{if(now>=ballSeekTime(b))active=b.number;});
-    ui.reviewTimelineMarkers.querySelectorAll('[data-review-ball]').forEach(el=>el.classList.toggle('review-active',Number(el.dataset.reviewBall)===active));
-  }
-
-  function currentBlob(){
-    const parts=chunks.map(c=>c.blob);if(initChunk&&parts[0]!==initChunk)parts.unshift(initChunk);return parts.length?new Blob(parts,{type:mimeType||parts[0].type||'video/mp4'}):null;
-  }
-
-  async function reviewCurrentOver(){
-    if(!overActive||!chunks.length){setStatus('Wait a moment for the over buffer to contain video.');return;}
-    if(recorder?.state==='recording'&&recorder.requestData){try{recorder.requestData();await new Promise(r=>setTimeout(r,120));}catch(_){}}
-    const blob=currentBlob();if(!blob)return;
-    openReview(blob,balls,lbwMoments,`Over ${overSequence} · LIVE`,(performance.now()-overStartedAt)/1000);
-    setStatus('Review opened. Recording continues behind the review screen; close it to return to live view.');
-  }
-
-  function openReview(blob,ballMarks,lbw,title,durationHint=0){
-    if(reviewUrl)URL.revokeObjectURL(reviewUrl);
-    reviewUrl=URL.createObjectURL(blob);ui.reviewPlayer.src=reviewUrl;ui.reviewPlayer.playbackRate=1;
-    reviewMarks=[...(ballMarks||[])];reviewLbw=[...(lbw||[])];reviewDuration=durationHint||0;ui.reviewTitle.textContent=title||'Over review';
-    const jumps=[];reviewMarks.forEach(b=>jumps.push(`<button data-time="${ballSeekTime(b)}">Ball ${b.number}</button>`));reviewLbw.forEach((t,i)=>jumps.push(`<button data-time="${Math.max(0,t-6)}">LBW ${i+1}</button>`));
-    ui.jumpRow.innerHTML=jumps.length?jumps.join(''):`<span class="meta">No delivery markers in this over.</span>`;
-    ui.reviewDialog.showModal();setReviewTracking(reviewTrackingEnabled);reviewTracker?.reset();renderReviewTimeline();
-  }
-
-  async function endOver(save=true){
-    if(!overActive)return;
-    overActive=false;clearInterval(clockTimer);
-    if(recorder&&recorder.state!=='inactive'){
-      await new Promise(resolve=>{const old=recorder.onstop;recorder.onstop=e=>{if(old)old(e);resolve();};try{recorder.stop();}catch(_){resolve();}});
-    }
-    const blob=currentBlob();const duration=(performance.now()-overStartedAt)/1000;
-    if(save&&blob){
-      const item={id:`${Date.now()}-${Math.random().toString(36).slice(2,7)}`,createdAt:Date.now(),overNumber:overSequence,duration,balls:[...balls],lbwMoments:[...lbwMoments],autoResults:[...autoResults],calibration:calibrationValid()?calibration:null,mimeType:blob.type,size:blob.size,blob};
-      try{await put(item);setStatus(`Over ${overSequence} saved locally (${formatBytes(blob.size)}). Start the next over to reset the live buffer.`);await renderSaved();}catch(e){setStatus(`Could not save the over: ${e.message}`);}
-    }else setStatus('Over ended. Start the next over to reset the buffer.');
-    recorder=null;disableOverControls();ui.startOverBtn.disabled=false;ui.startOverBtn.textContent='START NEXT OVER';setMode('OVER ENDED','amber');
-  }
-
-  function resetOver(){if(!overActive)return;if(confirm('Clear this over buffer and immediately restart it?'))startOver();}
-
-  async function renderSaved(){
-    const items=(await all()).sort((a,b)=>b.createdAt-a.createdAt);if(!items.length){ui.savedOvers.innerHTML='<div class="empty">No overs saved yet.</div>';return;}
-    ui.savedOvers.innerHTML=items.map(i=>{const d=Math.max(i.duration||1,1);const ballDots=(i.balls||[]).map(b=>`<span class="saved-dot" style="left:${pct(b.offset,d)}%" title="Ball ${b.number}"></span>`).join('');const lbwDots=(i.lbwMoments||[]).map(t=>`<span class="saved-dot lbw" style="left:${pct(t,d)}%"></span>`).join('');return `<article class="saved-card" data-id="${i.id}"><div class="saved-head"><div><div class="saved-title">Over ${i.overNumber}</div><div class="meta">${formatDate(i.createdAt)} · ${fmtTime(i.duration*1000)} · ${i.balls?.length||0} balls · ${(i.autoResults||[]).map(r=>r.result).join(' / ')||'no auto results'} · ${formatBytes(i.size||0)}</div></div></div><div class="saved-mini-timeline">${ballDots}${lbwDots}</div><div class="saved-actions"><button class="secondary" data-action="play">Review timeline</button><button class="secondary" data-action="share">Share</button><button class="danger" data-action="delete">Delete</button></div></article>`;}).join('');
-  }
-
-  async function getItem(id){return (await all()).find(x=>x.id===id);}
-  async function shareItem(item){
-    const ext=(item.mimeType||'').includes('webm')?'webm':'mp4';const f=new File([item.blob],`LBW-Over-${item.overNumber}.${ext}`,{type:item.mimeType||item.blob.type});
-    try{if(navigator.canShare?.({files:[f]}))await navigator.share({title:`LBW Over ${item.overNumber}`,files:[f]});else throw new Error('File sharing is not available here.');}catch(e){if(e.name!=='AbortError')setStatus(e.message);}
-  }
-
-  ui.calibrateBtn.addEventListener('click',startCalibration);
-  ui.calibrationCanvas.addEventListener('pointerdown',calibrationPointerDown);
-  ui.calibrationCanvas.addEventListener('pointermove',calibrationPointerMove);
-  ui.calibrationCanvas.addEventListener('pointerup',calibrationPointerUp);
-  ui.calibrationCanvas.addEventListener('pointercancel',calibrationPointerUp);
-  ui.calAutoBtn.addEventListener('click',applyAutoCalibration);
-  ui.calSaveBtn.addEventListener('click',finishCalibration);
-  ui.calResetBtn.addEventListener('click',()=>{calibrationDraft=defaultCalibration();calDragIndex=-1;ui.calStep.textContent='Default calibration loaded';ui.calHelp.textContent='Drag all markers onto the real stump bases and wide-line intersections, then SAVE POINTS.';drawCalibrationGuide();});
-  ui.calCancelBtn.addEventListener('click',cancelCalibration);ui.cameraBtn.addEventListener('click',startCamera);
-  ui.trackBtn.addEventListener('click',()=>setLiveTracking(!trackingEnabled));
-  ui.switchBtn.addEventListener('click',async()=>{facingMode=facingMode==='environment'?'user':'environment';if(stream){await stopCamera();await startCamera();}});
-  ui.startOverBtn.addEventListener('click',startOver);ui.markBallBtn.addEventListener('click',markBall);ui.reviewOverBtn.addEventListener('click',reviewCurrentOver);ui.endOverBtn.addEventListener('click',()=>endOver(true));ui.lbwMarkBtn.addEventListener('click',markLBW);ui.resetOverBtn.addEventListener('click',resetOver);
-  const reviewBallFromLive=async number=>{const mark=balls[Number(number)-1];if(!mark)return;await reviewCurrentOver();setTimeout(()=>{try{ui.reviewPlayer.currentTime=ballSeekTime(mark);ui.reviewPlayer.play().catch(()=>{});}catch(_){}},180);};
-  ui.ballStrip.addEventListener('click',e=>{const b=e.target.closest('[data-ball]');if(b)reviewBallFromLive(b.dataset.ball);});
-  ui.timelineMarkers.addEventListener('click',e=>{const ball=e.target.closest('[data-ball]');if(ball){reviewBallFromLive(ball.dataset.ball);return;}const lbw=e.target.closest('[data-lbw]');if(lbw){const t=lbwMoments[Number(lbw.dataset.lbw)];reviewCurrentOver().then(()=>setTimeout(()=>{if(Number.isFinite(t))ui.reviewPlayer.currentTime=Math.max(0,t-6);},180));}});
-  ui.jumpRow.addEventListener('click',e=>{const b=e.target.closest('[data-time]');if(b){ui.reviewPlayer.currentTime=Number(b.dataset.time)||0;ui.reviewPlayer.play().catch(()=>{});}});
-  ui.reviewTimelineMarkers.addEventListener('click',e=>{const b=e.target.closest('[data-review-time]');if(b){ui.reviewPlayer.currentTime=Number(b.dataset.reviewTime)||0;ui.reviewPlayer.play().catch(()=>{});}});
-  ui.reviewPlayer.addEventListener('loadedmetadata',()=>{if(Number.isFinite(ui.reviewPlayer.duration))reviewDuration=ui.reviewPlayer.duration;if(ui.reviewVideoWrap&&ui.reviewPlayer.videoWidth&&ui.reviewPlayer.videoHeight)ui.reviewVideoWrap.style.aspectRatio=`${ui.reviewPlayer.videoWidth}/${ui.reviewPlayer.videoHeight}`;renderReviewTimeline();});
-  ui.reviewPlayer.addEventListener('timeupdate',updateReviewPlayhead);
-  ui.reviewPlayer.addEventListener('seeking',()=>reviewTracker?.reset(false));
-  ui.reviewPlayer.addEventListener('play',()=>{if(reviewTrackingEnabled)reviewTracker?.start();});
-  ui.ballColorSelect.addEventListener('change',()=>{liveTracker?.reset(false);reviewTracker?.reset(false);});
-  ui.sensitivitySelect.addEventListener('change',()=>{liveTracker?.reset(false);reviewTracker?.reset(false);});
-  ui.slowBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.25);ui.halfBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=.5);ui.normalBtn.addEventListener('click',()=>ui.reviewPlayer.playbackRate=1);
-  ui.reviewTrackBtn.addEventListener('click',()=>setReviewTracking(!reviewTrackingEnabled));ui.seedBallBtn.addEventListener('click',()=>{if(!reviewTrackingEnabled)setReviewTracking(true);ui.reviewTrackingCanvas.classList.add('seed-mode');setStatus('Replay seed mode: tap directly on the ball in the video, then press Play.');});ui.clearTrailBtn.addEventListener('click',()=>reviewTracker?.clearTrail());
-  ui.closeReviewBtn.addEventListener('click',()=>{ui.reviewPlayer.pause();ui.reviewTrackingCanvas.classList.remove('seed-mode');reviewTracker?.stop();ui.reviewDialog.close();reviewMarks=[];reviewLbw=[];});
-  ui.savedOvers.addEventListener('click',async e=>{const b=e.target.closest('button[data-action]');if(!b)return;const id=b.closest('[data-id]')?.dataset.id,item=id?await getItem(id):null;if(!item)return;if(b.dataset.action==='play')openReview(item.blob,item.balls||[],item.lbwMoments||[],`Over ${item.overNumber}`,item.duration||0);if(b.dataset.action==='share')await shareItem(item);if(b.dataset.action==='delete'&&confirm('Delete this saved over from this iPhone?')){await del(id);await renderSaved();}});
-  window.addEventListener('orientationchange',()=>setTimeout(()=>{updateOrientationState();drawCalibrationGuide();},150));window.addEventListener('resize',()=>{updateOrientationState();drawCalibrationGuide();});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden&&overActive)setStatus('Keep LBW Tracker visible while the over is recording.');});
-  window.addEventListener('beforeunload',()=>{liveTracker?.stop();reviewTracker?.stop();if(stream)stream.getTracks().forEach(t=>t.stop());});
-
-  (async()=>{updateOrientationState();updateCalibrationStatus();renderDecisionStrip();try{db=await openDB();await renderSaved();}catch(e){setStatus(`Local storage unavailable: ${e.message}`);}if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});})();
-})();
-</script>
+<script src="./app.js"></script>
 </body>
 </html>

@@ -1,40 +1,33 @@
-# LBW Tracker — Portrait + Auto Calibration
+# LBW Tracker Pro — Product Beta
 
-This PWA is designed to run directly on an iPhone from Safari / Add to Home Screen.
+A local-first iPhone PWA for club cricket video review and single-camera analytics. It combines the earlier over-buffer workflow with automatic delivery segmentation, editable pitch calibration, ball trail, speed/swing/post-bounce movement estimates, pitch map, beehive, shot tagging/wagon wheel, DRS-style replay and automatic WIDE/LBW/NOTHING/REVIEW decision assist.
 
-## New in this build
+## Match workflow
+1. Open from the iPhone Home Screen.
+2. Start Camera.
+3. Calibrate: Auto Detect, drag any incorrect markers, Save Points.
+4. Start Over. Keep the phone fixed.
+5. The tracker attempts to create a delivery automatically when a valid trajectory ends. MARK DELIVERY is the fallback.
+6. The result flashes immediately and the delivery appears on the timeline.
+7. End Over to persist the video and delivery metadata locally.
 
-- Portrait mode is supported for the full running page and recording workflow.
-- START OVER no longer requires the iPhone to be rotated sideways.
-- The camera preview adapts to the actual stream aspect ratio.
-- CALIBRATE performs a best-effort automatic detection of:
-  1. bowler-end left / middle / right stump bases
-  2. striker-end left / middle / right stump bases
-  3. left / right wide-line reference points
-- All eight points are shown as numbered draggable markers before saving.
-- AUTO DETECT can be run again before saving.
-- RESET DEFAULT gives a sensible starting geometry if automatic detection is poor.
-- After calibration is saved, the button becomes EDIT CALIBRATION. Reopen it at any time, move one or more points, then save again.
-- Cancelling an edit leaves the previously saved calibration unchanged.
-- Existing over-buffer, ball timeline, ball tracking and WIDE/LBW/NOTHING/REVIEW assist remain available.
+## Analytics implemented
+- Auto ball-by-ball delivery references inside each over recording
+- Live/replay 2D trajectory and projected wicket corridor
+- Estimated speed from calibrated pitch distance + frame timing
+- Pre-bounce lateral movement (“swing” estimate)
+- Post-bounce lateral movement angle proxy (not measured RPM)
+- Pitch map / line-length classification
+- Striker-end beehive
+- Speed trend
+- Batting tags: outcome, intent, footwork, loft, direction
+- Wagon wheel from shot-direction tags
+- WIDE / LBW / NOTHING / REVIEW decision assist
+- Player/session-style metadata, filtering and JSON export
+- Local video library and iOS share sheet
 
-## Calibration advice
+## Accuracy boundary
+This is a single-camera browser product beta. It is not certified DRS and should not be used as an authoritative umpiring system. A trained cricket-ball detector and calibrated 3D model/backend are needed for FullTrack/Hawk-Eye-class reliability. The current tracker uses motion + red/white colour candidates, temporal continuity and pitch calibration. LBW cannot reliably establish bat-before-pad, exact 3D height or front-foot No ball. Low-confidence cases deliberately return REVIEW.
 
-Automatic calibration is intentionally assistive rather than authoritative. It uses image contrast and line/stump heuristics from the current camera frame. For best results:
-
-- use the rear camera behind the bowler
-- hold or mount the iPhone still
-- keep both sets of stumps visible
-- perform calibration when players are not blocking the wickets
-- check every marker before pressing SAVE POINTS
-- recalibrate whenever the phone/tripod position changes
-
-Green markers 1–6 are stump-base points. Amber markers 7–8 are the wide guideline references at the striker end.
-
-## Deploy
-
-Replace `index.html`, `manifest.webmanifest`, and `sw.js` in the root of your existing GitHub Pages repository, commit to `main`, wait for the Pages deployment to turn green, then refresh the site in Safari and fully close/reopen the Home Screen app.
-
-## Important
-
-Automatic LBW and Wide outputs are review aids, not official umpire-grade decisions. A single iPhone camera cannot reliably establish every 3D/playing-condition requirement involved in LBW or Wide decisions.
+## GitHub Pages
+Replace your existing site files with this folder’s root files, commit to `main`, then wait for **Actions → pages build and deployment** to turn green. Open the Pages URL in Safari once and refresh before reopening the Home Screen app.
