@@ -1,7 +1,7 @@
 {
-  "name": "LBW Tracker \u2014 Ball Tracking",
+  "name": "LBW Tracker — Auto Decision Assist",
   "short_name": "LBW Tracker",
-  "description": "iPhone cricket over recorder with ball-by-ball timeline and experimental 2D ball tracking.",
+  "description": "iPhone cricket over recorder with pitch calibration, 2D ball tracking and automatic WIDE/LBW/NOTHING review assist.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -9,16 +9,7 @@
   "theme_color": "#09090b",
   "orientation": "landscape",
   "icons": [
-    {
-      "src": "./icon-180.png",
-      "sizes": "180x180",
-      "type": "image/png"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    {"src":"./icon-180.png","sizes":"180x180","type":"image/png"},
+    {"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }

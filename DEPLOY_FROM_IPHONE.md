@@ -1,16 +1,16 @@
-# Deploy from an iPhone
+# Update the existing GitHub Pages app from iPhone
 
-The PWA needs an HTTPS URL before Safari can grant live-camera access.
+Replace these files in the repository root and commit to `main`:
+- `index.html`
+- `manifest.webmanifest`
+- `sw.js`
 
-The easiest no-Mac workflow is to use a static hosting provider from Safari:
+Then open GitHub → Actions and wait for `pages build and deployment` to show a green check.
 
-1. Sign in to your preferred static host from Safari.
-2. Create a new static site/project.
-3. Upload all files from the `LBW-Tracker-PWA` folder, keeping the `icons` folder intact.
-4. Publish/deploy the project.
-5. Open the generated `https://...` address in Safari.
-6. Tap **Share → Add to Home Screen**.
+On the iPhone:
+1. Open the Pages URL in Safari and refresh once.
+2. Fully close the Home Screen LBW Tracker app.
+3. Reopen it.
+4. Start Camera and tap CALIBRATE.
 
-No Node.js, npm, database, API key, or server-side code is required.
-
-If your hosting provider only accepts a ZIP, upload `LBW-Tracker-PWA.zip` and choose the option that deploys/extracts static site files at the site root.
+If the old version persists, remove the Home Screen icon, open the Pages URL in Safari again, and Add to Home Screen again.
