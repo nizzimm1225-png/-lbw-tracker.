@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#0a0a0b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LBW Tracker" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icon-180.png" />
+  <title>LBW Tracker</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0a0a0b; --card:#151517; --line:#2a2a2f; --text:#f7f7f8; --muted:#a3a3ad; --accent:#34c759; --danger:#ff453a; --amber:#ffd60a; }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;min-height:100%}
+    body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+    button,input,select,textarea{font:inherit}
+    .app{max-width:760px;margin:0 auto;padding:12px 14px 30px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 12px}
+    h1{font-size:22px;margin:0}.badge{font-size:12px;color:#0b0b0c;background:var(--accent);padding:5px 8px;border-radius:999px;font-weight:700}
+    .camera-card{position:relative;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:9/16;max-height:64vh;border:1px solid var(--line)}
+    video#preview{width:100%;height:100%;object-fit:cover;background:#000}
+    .hud{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:12px}
+    .top-hud{display:flex;justify-content:space-between;gap:8px}.pill{background:rgba(0,0,0,.58);backdrop-filter:blur(8px);padding:7px 10px;border-radius:999px;font-size:12px;font-weight:650}
+    .reticle{align-self:center;width:62%;height:24%;border:1px solid rgba(255,255,255,.45);border-radius:10px;position:relative}.reticle:before{content:"";position:absolute;left:50%;top:-18%;height:136%;border-left:1px dashed rgba(255,255,255,.3)}
+    .reticle-label{position:absolute;bottom:-25px;left:0;right:0;text-align:center;color:rgba(255,255,255,.65);font-size:11px}
+    .controls{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:12px}
+    button{border:0;border-radius:16px;padding:14px 16px;font-weight:750;min-height:52px;cursor:pointer}
+    .primary{background:var(--accent);color:#061008}.secondary{background:var(--card);color:var(--text);border:1px solid var(--line)}.review{grid-column:1/-1;background:var(--amber);color:#161400;font-size:18px;min-height:62px}.danger{background:var(--danger);color:white}
+    button:disabled{opacity:.45;cursor:not-allowed}
+    .status{margin:12px 0;padding:11px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--muted)}
+    .section{margin-top:18px}.section h2{font-size:17px;margin:0 0 10px}
+    .settings{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.setting{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}.setting label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.setting select{width:100%;background:#0f0f11;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px}
+    .reviews{display:grid;gap:10px}.review-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}.review-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.review-title{font-weight:750}.review-meta{font-size:12px;color:var(--muted);margin-top:3px}.review-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.review-actions button{padding:9px 11px;min-height:auto;border-radius:11px;font-size:13px}.tag-row{display:flex;gap:6px;margin-top:9px}.tag{padding:5px 8px;border-radius:999px;background:#242429;font-size:11px;color:var(--muted)}
+    dialog{width:min(94vw,700px);border:1px solid var(--line);border-radius:18px;background:#0c0c0e;color:var(--text);padding:0;overflow:hidden}dialog::backdrop{background:rgba(0,0,0,.72)}.dialog-body{padding:14px}.dialog-video{width:100%;background:#000;border-radius:12px;max-height:65vh}.dialog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.dialog-actions button{flex:1;min-width:100px}
+    .empty{padding:22px;text-align:center;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:16px;font-size:13px}
+    .small{font-size:12px;color:var(--muted);line-height:1.45}.install{margin-top:18px;padding:12px;background:#10151f;border:1px solid #26344e;border-radius:14px}
+    @media (orientation:landscape){.camera-card{aspect-ratio:16/9;max-height:58vh}.app{max-width:1000px}.controls{grid-template-columns:1fr 1fr 1.4fr}.review{grid-column:auto}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header><div><h1>LBW Tracker</h1><div class="small">iPhone local review recorder</div></div><span id="modeBadge" class="badge">READY</span></header>
+
+    <section class="camera-card">
+      <video id="preview" autoplay muted playsinline></video>
+      <div class="hud">
+        <div class="top-hud"><span id="camInfo" class="pill">Camera off</span><span id="bufferInfo" class="pill">Buffer 0s</span></div>
+        <div class="reticle"><div class="reticle-label">Align the pitch / stumps inside this guide</div></div>
+        <div></div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <button id="cameraBtn" class="primary">Start Camera</button>
+      <button id="switchBtn" class="secondary" disabled>Switch Camera</button>
+      <button id="reviewBtn" class="review" disabled>REVIEW LBW</button>
+    </div>
+
+    <div id="status" class="status">Tap Start Camera. Video stays on this device unless you explicitly share it.</div>
+
+    <section class="section">
+      <h2>Capture settings</h2>
+      <div class="settings">
+        <div class="setting"><label for="bufferSelect">Rolling buffer</label><select id="bufferSelect"><option>15</option><option selected>30</option><option>45</option><option>60</option></select></div>
+        <div class="setting"><label for="preSelect">Before appeal</label><select id="preSelect"><option>5</option><option selected>8</option><option>10</option><option>15</option></select></div>
+        <div class="setting"><label for="postSelect">After appeal</label><select id="postSelect"><option>3</option><option selected>5</option><option>8</option><option>10</option></select></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Saved reviews</h2>
+      <div id="reviews" class="reviews"><div class="empty">No LBW reviews saved yet.</div></div>
+    </section>
+
+    <div class="install small"><strong>Install on iPhone:</strong> open this site in Safari → Share → <strong>Add to Home Screen</strong>. Camera access requires HTTPS.</div>
+  </main>
+
+  <dialog id="playerDialog">
+    <div class="dialog-body">
+      <video id="player" class="dialog-video" controls playsinline></video>
+      <div class="dialog-actions">
+        <button id="slowBtn" class="secondary">0.25×</button>
+        <button id="normalBtn" class="secondary">1×</button>
+        <button id="closeDialog" class="primary">Done</button>
+      </div>
+    </div>
+  </dialog>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const ui = {
+    preview: $('preview'), cameraBtn: $('cameraBtn'), switchBtn: $('switchBtn'), reviewBtn: $('reviewBtn'),
+    status: $('status'), camInfo: $('camInfo'), bufferInfo: $('bufferInfo'), modeBadge: $('modeBadge'),
+    bufferSelect: $('bufferSelect'), preSelect: $('preSelect'), postSelect: $('postSelect'), reviews: $('reviews'),
+    playerDialog: $('playerDialog'), player: $('player'), closeDialog: $('closeDialog'), slowBtn: $('slowBtn'), normalBtn: $('normalBtn')
+  };
+
+  let stream = null;
+  let recorder = null;
+  let facingMode = 'environment';
+  let chunks = [];
+  let initChunk = null;
+  let mimeType = '';
+  let pendingReview = null;
+  let captureStartedAt = 0;
+  let db = null;
+
+  const DB_NAME = 'lbw-tracker-db';
+  const STORE = 'reviews';
+
+  function setStatus(msg) { ui.status.textContent = msg; }
+  function setMode(text, active = false) { ui.modeBadge.textContent = text; ui.modeBadge.style.background = active ? 'var(--danger)' : 'var(--accent)'; }
+  function seconds(select) { return Number(select.value); }
+  function pickMimeType() {
+    const candidates = ['video/mp4;codecs=h264,aac','video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm'];
+    return candidates.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
+  }
+
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = () => {
+        const d = req.result;
+        if (!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, { keyPath: 'id' });
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function idbPut(value) { return new Promise((res, rej) => { const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).put(value); tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error); }); }
+  function idbDelete(id) { return new Promise((res, rej) => { const tx=db.transaction(STORE,'readwrite'); tx.objectStore(STORE).delete(id); tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error); }); }
+  function idbAll() { return new Promise((res, rej) => { const tx=db.transaction(STORE,'readonly'); const r=tx.objectStore(STORE).getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=()=>rej(r.error); }); }
+
+  async function startCamera() {
+    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+      setStatus('This browser does not expose the required camera recording APIs. Open the site in current Safari on iPhone.');
+      return;
+    }
+    await stopCamera();
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { facingMode: { ideal: facingMode }, width: { ideal: 1920 }, height: { ideal: 1080 }, frameRate: { ideal: 60, max: 60 } }
+      });
+      ui.preview.srcObject = stream;
+      await ui.preview.play();
+      const track = stream.getVideoTracks()[0];
+      const settings = track.getSettings ? track.getSettings() : {};
+      ui.camInfo.textContent = `${settings.width || ''}×${settings.height || ''}${settings.frameRate ? ' · '+Math.round(settings.frameRate)+'fps' : ''}`.replace(/^×/, 'Camera');
+      mimeType = pickMimeType();
+      recorder = mimeType ? new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8_000_000 }) : new MediaRecorder(stream);
+      chunks = []; initChunk = null; pendingReview = null; captureStartedAt = performance.now();
+      recorder.ondataavailable = onChunk;
+      recorder.onerror = (e) => setStatus(`Recorder error: ${e.error?.message || 'unknown error'}`);
+      recorder.start(1000);
+      ui.cameraBtn.textContent = 'Stop Camera';
+      ui.switchBtn.disabled = false; ui.reviewBtn.disabled = false;
+      setMode('LIVE', false); setStatus('Live camera active. Rolling buffer is running. Tap REVIEW LBW after an appeal.');
+    } catch (err) {
+      setStatus(`Camera could not start: ${err.message}. Check Safari camera permission.`);
+    }
+  }
+
+  async function stopCamera() {
+    if (recorder && recorder.state !== 'inactive') {
+      try { recorder.stop(); } catch (_) {}
+    }
+    recorder = null;
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    stream = null; ui.preview.srcObject = null;
+    ui.cameraBtn.textContent = 'Start Camera'; ui.switchBtn.disabled = true; ui.reviewBtn.disabled = true;
+    ui.camInfo.textContent = 'Camera off'; ui.bufferInfo.textContent = 'Buffer 0s'; setMode('READY');
+  }
+
+  function onChunk(event) {
+    if (!event.data || event.data.size === 0) return;
+    const now = performance.now();
+    const entry = { blob: event.data, at: now };
+    if (!initChunk) initChunk = event.data;
+    chunks.push(entry);
+    const maxMs = seconds(ui.bufferSelect) * 1000;
+    chunks = chunks.filter(c => now - c.at <= maxMs);
+    ui.bufferInfo.textContent = `Buffer ${Math.min(seconds(ui.bufferSelect), Math.round((now-captureStartedAt)/1000))}s`;
+
+    if (pendingReview && now >= pendingReview.finishAt) finalizeReview(now).catch(err => setStatus(`Could not save review: ${err.message}`));
+  }
+
+  function triggerReview() {
+    if (!recorder || recorder.state !== 'recording' || pendingReview) return;
+    const now = performance.now();
+    const pre = seconds(ui.preSelect); const post = seconds(ui.postSelect);
+    pendingReview = { eventAt: now, startAt: now - pre*1000, finishAt: now + post*1000, pre, post };
+    ui.reviewBtn.disabled = true; setMode('CAPTURING', true);
+    setStatus(`LBW marked. Capturing ${post}s after the appeal…`);
+  }
+
+  async function finalizeReview(now) {
+    const r = pendingReview; if (!r) return;
+    const selected = chunks.filter(c => c.at >= r.startAt && c.at <= now).map(c => c.blob);
+    // Safari's MP4 MediaRecorder is fragmented. Keeping the initial fragment improves replayability
+    // if the rolling window no longer contains it. Avoid duplicating when it is already selected.
+    const parts = (initChunk && selected[0] !== initChunk) ? [initChunk, ...selected] : selected;
+    if (!parts.length) throw new Error('No buffered media was available.');
+    const blob = new Blob(parts, { type: mimeType || parts[0].type || 'video/mp4' });
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+    const item = { id, createdAt: Date.now(), eventOffset: r.pre, pre: r.pre, post: r.post, mimeType: blob.type, size: blob.size, decision: 'UNREVIEWED', note: '', blob };
+    await idbPut(item);
+    pendingReview = null; ui.reviewBtn.disabled = false; setMode('LIVE');
+    setStatus(`Review saved locally (${formatBytes(blob.size)}). Tap Play below to inspect it.`);
+    await renderReviews();
+  }
+
+  function formatBytes(n) { if (n < 1024*1024) return `${Math.round(n/1024)} KB`; return `${(n/1024/1024).toFixed(1)} MB`; }
+  function formatDate(ms) { return new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(ms)); }
+  function escapeHtml(s='') { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  async function renderReviews() {
+    const items = (await idbAll()).sort((a,b)=>b.createdAt-a.createdAt);
+    if (!items.length) { ui.reviews.innerHTML = '<div class="empty">No LBW reviews saved yet.</div>'; return; }
+    ui.reviews.innerHTML = items.map(i => `
+      <article class="review-card" data-id="${i.id}">
+        <div class="review-head"><div><div class="review-title">${escapeHtml(i.decision || 'UNREVIEWED')}</div><div class="review-meta">${escapeHtml(formatDate(i.createdAt))} · ${i.pre}s before / ${i.post}s after · ${escapeHtml(formatBytes(i.size||0))}</div></div></div>
+        <div class="tag-row"><span class="tag">LBW</span><span class="tag">Local</span></div>
+        <div class="review-actions">
+          <button class="secondary" data-action="play">Play</button>
+          <button class="secondary" data-action="out">OUT</button>
+          <button class="secondary" data-action="notout">NOT OUT</button>
+          <button class="secondary" data-action="share">Share</button>
+          <button class="danger" data-action="delete">Delete</button>
+        </div>
+      </article>`).join('');
+  }
+
+  async function getItem(id) { const all=await idbAll(); return all.find(x=>x.id===id); }
+  async function updateDecision(id, decision) { const item=await getItem(id); if (!item) return; item.decision=decision; await idbPut(item); await renderReviews(); }
+  async function playItem(item) { if (!item?.blob) return; if (ui.player.src) URL.revokeObjectURL(ui.player.src); ui.player.src=URL.createObjectURL(item.blob); ui.player.playbackRate=1; ui.playerDialog.showModal(); try{await ui.player.play();}catch(_){} }
+  async function shareItem(item) {
+    if (!item?.blob) return;
+    const ext = (item.mimeType||'').includes('webm') ? 'webm' : 'mp4';
+    const file = new File([item.blob], `LBW-${new Date(item.createdAt).toISOString().replace(/[:.]/g,'-')}.${ext}`, {type:item.mimeType||item.blob.type});
+    try {
+      if (navigator.canShare?.({files:[file]})) await navigator.share({title:'LBW Review',files:[file]});
+      else if (navigator.share) await navigator.share({title:'LBW Review', text:'LBW review recorded in LBW Tracker'});
+      else throw new Error('Sharing is not supported by this browser.');
+    } catch (err) { if (err.name !== 'AbortError') setStatus(err.message); }
+  }
+
+  ui.cameraBtn.addEventListener('click', () => stream ? stopCamera() : startCamera());
+  ui.switchBtn.addEventListener('click', async () => { facingMode = facingMode === 'environment' ? 'user' : 'environment'; await startCamera(); });
+  ui.reviewBtn.addEventListener('click', triggerReview);
+  ui.reviews.addEventListener('click', async (e) => {
+    const btn=e.target.closest('button[data-action]'); if(!btn) return;
+    const card=btn.closest('[data-id]'); const id=card?.dataset.id; if(!id) return;
+    const item=await getItem(id); if(!item) return;
+    const action=btn.dataset.action;
+    if(action==='play') await playItem(item);
+    if(action==='out') await updateDecision(id,'OUT');
+    if(action==='notout') await updateDecision(id,'NOT OUT');
+    if(action==='share') await shareItem(item);
+    if(action==='delete' && confirm('Delete this LBW review from this iPhone?')) { await idbDelete(id); await renderReviews(); }
+  });
+  ui.closeDialog.addEventListener('click', ()=>{ ui.player.pause(); ui.playerDialog.close(); });
+  ui.slowBtn.addEventListener('click', ()=>{ ui.player.playbackRate=.25; });
+  ui.normalBtn.addEventListener('click', ()=>{ ui.player.playbackRate=1; });
+  document.addEventListener('visibilitychange', ()=>{ if(document.hidden && pendingReview) setStatus('Keep LBW Tracker visible until the post-appeal capture finishes.'); });
+  window.addEventListener('beforeunload', ()=>{ if(stream) stream.getTracks().forEach(t=>t.stop()); });
+
+  (async () => {
+    try { db = await openDB(); await renderReviews(); } catch (e) { setStatus(`Local storage unavailable: ${e.message}`); }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  })();
+})();
+</script>
+</body>
+</html>
