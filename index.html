@@ -7,7 +7,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="LBW Tracker" />
-  <meta name="screen-orientation" content="landscape" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icon-180.png" />
   <title>LBW Tracker</title>
@@ -41,23 +40,27 @@
     .timeline-wrap{margin-top:12px;background:#0f0f11;border:1px solid #29292e;border-radius:14px;padding:10px 10px 8px}.timeline-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.timeline-head strong{font-size:11px;letter-spacing:.08em;color:#c8c8ce}.timeline-head span{font-size:11px;color:var(--muted)}.timeline{position:relative;height:54px;margin:0 4px}.timeline-track{position:absolute;left:0;right:0;top:25px;height:4px;border-radius:999px;background:#303036;overflow:hidden}.timeline-fill{height:100%;width:100%;background:linear-gradient(90deg,#245b35,var(--green));opacity:.65}.timeline-marker{position:absolute;top:9px;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;border:2px solid #79df95;background:#12331e;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0;min-height:0;z-index:3;box-shadow:0 3px 12px rgba(0,0,0,.3)}.timeline-marker:active{transform:translateX(-50%) scale(.94)}.timeline-marker.lbw{width:18px;height:18px;top:18px;border-radius:5px;background:var(--red);border-color:#ff9b96;color:transparent;transform:translateX(-50%) rotate(45deg)}.timeline-marker.review-active{outline:3px solid rgba(255,214,10,.55);outline-offset:2px}.timeline-now{position:absolute;right:-1px;top:15px;width:2px;height:24px;background:var(--amber);border-radius:2px;box-shadow:0 0 8px rgba(255,214,10,.65)}.timeline-labels{display:flex;justify-content:space-between;font-size:10px;color:#777780;margin-top:-2px}.timeline-help{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35}.review-timeline{margin:10px 0 4px}.review-timeline .timeline{height:58px}.review-playhead{position:absolute;top:12px;bottom:10px;width:2px;background:white;z-index:4;pointer-events:none;box-shadow:0 0 7px rgba(255,255,255,.65)}.review-title{font-size:14px;font-weight:850;margin:0 0 8px}.saved-mini-timeline{position:relative;height:26px;margin-top:10px}.saved-mini-timeline:before{content:"";position:absolute;left:0;right:0;top:12px;height:3px;background:#303036;border-radius:99px}.saved-dot{position:absolute;top:7px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid #a4edb8;transform:translateX(-50%)}.saved-dot.lbw{background:var(--red);border-color:#ff9b96;border-radius:3px;transform:translateX(-50%) rotate(45deg)}
     .calibration-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
     .calibration-canvas.active{pointer-events:auto;touch-action:none;cursor:crosshair}
-    .calibration-hud{display:none;position:absolute;left:12px;right:12px;bottom:12px;z-index:7;background:rgba(0,0,0,.86);border:1px solid #54545d;border-radius:14px;padding:10px;backdrop-filter:blur(10px)}
-    .calibration-hud.show{display:block}.cal-step{font-size:13px;font-weight:850}.cal-help{font-size:11px;color:#c7c7cd;margin-top:4px;line-height:1.35}.cal-actions{display:flex;gap:7px;margin-top:8px}.cal-actions button{min-height:36px;padding:7px 10px;border-radius:9px;font-size:11px}
+    .calibration-hud{display:none;position:absolute;left:10px;right:10px;bottom:10px;z-index:7;background:rgba(0,0,0,.88);border:1px solid #54545d;border-radius:14px;padding:10px;backdrop-filter:blur(10px)}
+    .calibration-hud.show{display:block}.cal-step{font-size:13px;font-weight:850}.cal-help{font-size:11px;color:#c7c7cd;margin-top:4px;line-height:1.35}.cal-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.cal-actions button{min-height:36px;padding:7px 9px;border-radius:9px;font-size:11px}
+    .calibration-canvas.active{pointer-events:auto;touch-action:none;cursor:grab}.calibration-canvas.dragging{cursor:grabbing}
+    .cal-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:#d1d1d6}.cal-legend span{display:inline-flex;align-items:center;gap:4px}.cal-key{width:9px;height:9px;border-radius:50%;display:inline-block}.cal-key.stump{background:var(--green)}.cal-key.wide{background:var(--amber)}
     .result-flash{position:absolute;inset:0;z-index:6;display:none;align-items:center;justify-content:center;pointer-events:none;background:rgba(0,0,0,.16)}
     .result-flash.show{display:flex}.result-card{min-width:210px;text-align:center;padding:20px 24px;border-radius:22px;background:rgba(10,10,12,.9);border:2px solid #666;box-shadow:0 12px 42px rgba(0,0,0,.55);backdrop-filter:blur(12px)}
     .result-main{font-size:34px;font-weight:950;letter-spacing:.04em}.result-sub{margin-top:5px;font-size:11px;color:#d4d4d8}.result-flash.wide .result-card{border-color:var(--amber)}.result-flash.wide .result-main{color:var(--amber)}.result-flash.lbw .result-card{border-color:var(--red)}.result-flash.lbw .result-main{color:#ff8f89}.result-flash.nothing .result-card{border-color:var(--green)}.result-flash.nothing .result-main{color:#8df0a7}.result-flash.review .result-card{border-color:var(--blue)}.result-flash.review .result-main{color:#7ebcff}
     .decision-row{display:flex;gap:7px;overflow-x:auto;padding:8px 0 0}.decision-chip{white-space:nowrap;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:850;border:1px solid #3b3b42;background:#1d1d21}.decision-chip.WIDE{border-color:#846e12;color:#ffe36a}.decision-chip.LBW{border-color:#7c2d29;color:#ff9b96}.decision-chip.NOTHING{border-color:#245b35;color:#8df0a7}.decision-chip.REVIEW{border-color:#24508a;color:#8cc5ff}
     .cal-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:8px}.cal-dot{width:8px;height:8px;border-radius:50%;background:#555}.cal-dot.ok{background:var(--green)}
-    @media (orientation:landscape){.camera-card{aspect-ratio:16/9;max-height:64vh}.app{max-width:1100px}.controls{grid-template-columns:repeat(4,1fr)}.wide{grid-column:auto}}
-    .rotate-overlay{display:none;position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.88);align-items:center;justify-content:center;text-align:center;padding:28px}.rotate-card{max-width:320px}.rotate-icon{font-size:46px;margin-bottom:10px}.rotate-card strong{font-size:20px;display:block}.rotate-card span{font-size:13px;color:#ccc;display:block;margin-top:8px;line-height:1.4}@media (orientation:portrait){.rotate-overlay{display:flex}.camera-card{aspect-ratio:16/9;max-height:none}.app{padding-top:8px}}
+    @media (orientation:landscape){.app{max-width:1100px}.controls{grid-template-columns:repeat(4,1fr)}.wide{grid-column:auto}}
+    @media (orientation:portrait){.app{padding-top:8px;max-width:760px}.camera-card{max-height:64vh}.controls{grid-template-columns:1fr 1fr}}
+    .camera-card{aspect-ratio:9/16;max-height:70vh}.camera-card.landscape-stream{aspect-ratio:16/9}.camera-card.portrait-stream{aspect-ratio:9/16}
+    #preview{object-fit:contain}
 
     .tracking-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:auto;touch-action:none}
     .tracking-canvas.off{pointer-events:none;opacity:0}
-    .hud{z-index:4}.rotate-overlay{z-index:8}
+    .hud{z-index:4}
     .tracker-pill{background:rgba(0,0,0,.68);border:1px solid rgba(52,199,89,.35)}
     .tracker-pill.searching{color:#ffd60a}.tracker-pill.locked{color:#8df0a7}.tracker-pill.off{color:#aaa}
     .tracking-note{margin-top:8px;padding:10px 11px;border-radius:12px;background:#111b14;border:1px solid #27432e;font-size:11px;line-height:1.45;color:#c8e8d0}
-    .review-video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
+    .review-video-wrap{position:relative;width:100%;aspect-ratio:16/9;max-height:70vh;background:#000;border-radius:12px;overflow:hidden}
     .review-video-wrap .dialog-video{width:100%;height:100%;max-height:none;object-fit:contain;border-radius:0}
     .review-video-wrap .tracking-canvas{z-index:2;pointer-events:none}.review-video-wrap .tracking-canvas.seed-mode{pointer-events:auto;cursor:crosshair}
     .tracker-legend{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:10px;color:var(--muted)}
@@ -66,19 +69,28 @@
 </head>
 <body>
 <main class="app">
-  <header><div><h1>LBW Tracker</h1><div class="sub">Over-buffer review · calibration · auto decision assist</div></div><span id="modeBadge" class="badge">READY</span></header>
+  <header><div><h1>LBW Tracker</h1><div class="sub">Portrait-ready · adjustable auto calibration · auto decision assist</div></div><span id="modeBadge" class="badge">READY</span></header>
 
   <section class="camera-card">
     <video id="preview" autoplay muted playsinline></video>
     <canvas id="trackingCanvas" class="tracking-canvas off" aria-label="Ball tracking overlay"></canvas>
     <canvas id="calibrationCanvas" class="calibration-canvas" aria-label="Pitch calibration overlay"></canvas>
     <div id="resultFlash" class="result-flash"><div class="result-card"><div id="resultMain" class="result-main">NOTHING</div><div id="resultSub" class="result-sub">AUTO ASSIST</div></div></div>
-    <div id="calibrationHud" class="calibration-hud"><div id="calStep" class="cal-step">Calibration</div><div id="calHelp" class="cal-help"></div><div class="cal-actions"><button id="calUndoBtn" class="secondary">Undo</button><button id="calCancelBtn" class="danger">Cancel</button></div></div>
+    <div id="calibrationHud" class="calibration-hud">
+      <div id="calStep" class="cal-step">Calibration</div>
+      <div id="calHelp" class="cal-help"></div>
+      <div class="cal-legend"><span><i class="cal-key stump"></i> stump points 1–6</span><span><i class="cal-key wide"></i> wide guides 7–8</span></div>
+      <div class="cal-actions">
+        <button id="calAutoBtn" class="blue">AUTO DETECT</button>
+        <button id="calSaveBtn" class="primary">SAVE POINTS</button>
+        <button id="calResetBtn" class="secondary">RESET DEFAULT</button>
+        <button id="calCancelBtn" class="danger">CANCEL</button>
+      </div>
+    </div>
     <div class="hud">
       <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="trackInfo" class="pill tracker-pill off">Ball track off</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
       <div class="reticle"><span class="crease left"></span><span class="crease right"></span><span class="pitch-axis"></span></div><div></div>
     </div>
-      <div id="rotateOverlay" class="rotate-overlay"><div class="rotate-card"><div class="rotate-icon">↻</div><strong>Rotate iPhone sideways</strong><span>LBW Tracker records each over in landscape so the cricket pitch stays horizontally aligned in the frame.</span></div></div>
   </section>
 
   <div class="controls">
@@ -92,7 +104,7 @@
     <button id="endOverBtn" class="danger wide" disabled>END OVER</button>
   </div>
 
-  <div id="status" class="status">Rotate the iPhone to landscape, start the camera, then tap START OVER. Keep the pitch horizontal inside the green guide.</div>
+  <div id="status" class="status">Keep the iPhone upright if you prefer portrait mode. Start the camera, auto-detect the pitch points, adjust any marker if needed, save calibration, then start the over.</div>
 
   <section class="section">
     <h2>Current over</h2>
@@ -137,7 +149,7 @@
     <div id="calibrationStatus" class="cal-status"><span id="calDot" class="cal-dot"></span><span id="calText">Pitch not calibrated</span></div>
     <div id="decisionStrip" class="decision-row"></div>
     <div class="sub" style="margin-top:7px">The current over stays in memory until END OVER or Reset. Starting the next over clears the live over buffer.</div>
-    <div class="tracking-note"><strong>Auto decisions are experimental.</strong> WIDE uses the two calibrated wide-guideline points; official Wide law also depends on striker position, movement and reach. LBW uses a single-camera 2D projection and an impact estimate; it cannot reliably verify bat contact, exact pitching point, ball height, or No ball. <strong>REVIEW remains the safe fallback.</strong><br><br><strong>Ball tracking:</strong> It detects a small fast-moving red/white object inside the pitch frame and draws a 2D trail. Tap the ball on the camera/replay if it locks onto the wrong object. After calibration, the app can flash WIDE / LBW / NOTHING when a tracked trajectory ends. Single-camera LBW remains an assistive estimate, not umpire-grade DRS; low-confidence cases show REVIEW.</div>
+    <div class="tracking-note"><strong>Auto decisions are experimental.</strong> WIDE uses the two calibrated wide-guideline points; official Wide law also depends on striker position, movement and reach. LBW uses a single-camera 2D projection and an impact estimate; it cannot reliably verify bat contact, exact pitching point, ball height, or No ball. <strong>REVIEW remains the safe fallback.</strong><br><br><strong>Calibration:</strong> AUTO DETECT makes an initial best-effort guess from the live camera frame. Always check all eight numbered markers and drag any incorrect point before saving. Tap EDIT CALIBRATION later to correct a saved setup without recreating it.<br><br><strong>Ball tracking:</strong> It detects a small fast-moving red/white object inside the pitch frame and draws a 2D trail. Tap the ball on the camera/replay if it locks onto the wrong object. After calibration, the app can flash WIDE / LBW / NOTHING when a tracked trajectory ends. Single-camera LBW remains an assistive estimate, not umpire-grade DRS; low-confidence cases show REVIEW.</div>
   </section>
 
   <section class="section"><h2>Saved overs</h2><div id="savedOvers" class="saved"><div class="empty">No overs saved yet.</div></div></section>
@@ -147,7 +159,7 @@
 <dialog id="reviewDialog">
   <div class="dialog-body">
     <div id="reviewTitle" class="review-title">Over review</div>
-    <div class="review-video-wrap"><video id="reviewPlayer" class="dialog-video" controls playsinline></video><canvas id="reviewTrackingCanvas" class="tracking-canvas off" aria-label="Replay ball tracking overlay"></canvas></div>
+    <div id="reviewVideoWrap" class="review-video-wrap"><video id="reviewPlayer" class="dialog-video" controls playsinline></video><canvas id="reviewTrackingCanvas" class="tracking-canvas off" aria-label="Replay ball tracking overlay"></canvas></div>
     <div class="tracker-legend"><span><i class="tracker-dot"></i> detected ball / trail</span><span><i class="tracker-dash"></i> short 2D motion projection</span><span>Tap video to re-seed tracker</span></div>
     <div class="timeline-wrap review-timeline">
       <div class="timeline-head"><strong>DELIVERY TIMELINE</strong><span id="reviewTimeLabel">00:00 / 00:00</span></div>
@@ -176,9 +188,9 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const ui = {
-    preview:$('preview'),trackingCanvas:$('trackingCanvas'),calibrationCanvas:$('calibrationCanvas'),trackInfo:$('trackInfo'),resultFlash:$('resultFlash'),resultMain:$('resultMain'),resultSub:$('resultSub'),calibrationHud:$('calibrationHud'),calStep:$('calStep'),calHelp:$('calHelp'),calUndoBtn:$('calUndoBtn'),calCancelBtn:$('calCancelBtn'),calibrateBtn:$('calibrateBtn'),cameraBtn:$('cameraBtn'),switchBtn:$('switchBtn'),trackBtn:$('trackBtn'),startOverBtn:$('startOverBtn'),markBallBtn:$('markBallBtn'),reviewOverBtn:$('reviewOverBtn'),endOverBtn:$('endOverBtn'),lbwMarkBtn:$('lbwMarkBtn'),resetOverBtn:$('resetOverBtn'),
+    preview:$('preview'),trackingCanvas:$('trackingCanvas'),calibrationCanvas:$('calibrationCanvas'),trackInfo:$('trackInfo'),resultFlash:$('resultFlash'),resultMain:$('resultMain'),resultSub:$('resultSub'),calibrationHud:$('calibrationHud'),calStep:$('calStep'),calHelp:$('calHelp'),calAutoBtn:$('calAutoBtn'),calSaveBtn:$('calSaveBtn'),calResetBtn:$('calResetBtn'),calCancelBtn:$('calCancelBtn'),calibrateBtn:$('calibrateBtn'),cameraCard:document.querySelector('.camera-card'),cameraBtn:$('cameraBtn'),switchBtn:$('switchBtn'),trackBtn:$('trackBtn'),startOverBtn:$('startOverBtn'),markBallBtn:$('markBallBtn'),reviewOverBtn:$('reviewOverBtn'),endOverBtn:$('endOverBtn'),lbwMarkBtn:$('lbwMarkBtn'),resetOverBtn:$('resetOverBtn'),
     status:$('status'),camInfo:$('camInfo'),bufferInfo:$('bufferInfo'),modeBadge:$('modeBadge'),overNumber:$('overNumber'),ballCount:$('ballCount'),overClock:$('overClock'),ballStrip:$('ballStrip'),timelineDuration:$('timelineDuration'),overTimeline:$('overTimeline'),timelineMarkers:$('timelineMarkers'),qualitySelect:$('qualitySelect'),fpsSelect:$('fpsSelect'),ballColorSelect:$('ballColorSelect'),sensitivitySelect:$('sensitivitySelect'),handednessSelect:$('handednessSelect'),shotSelect:$('shotSelect'),autoDecisionSelect:$('autoDecisionSelect'),decisionSensitivity:$('decisionSensitivity'),calibrationStatus:$('calibrationStatus'),calDot:$('calDot'),calText:$('calText'),decisionStrip:$('decisionStrip'),savedOvers:$('savedOvers'),
-    reviewDialog:$('reviewDialog'),reviewTitle:$('reviewTitle'),reviewPlayer:$('reviewPlayer'),reviewTrackingCanvas:$('reviewTrackingCanvas'),reviewTrackBtn:$('reviewTrackBtn'),seedBallBtn:$('seedBallBtn'),clearTrailBtn:$('clearTrailBtn'),jumpRow:$('jumpRow'),reviewTimeline:$('reviewTimeline'),reviewTimelineMarkers:$('reviewTimelineMarkers'),reviewPlayhead:$('reviewPlayhead'),reviewTimeLabel:$('reviewTimeLabel'),slowBtn:$('slowBtn'),halfBtn:$('halfBtn'),normalBtn:$('normalBtn'),closeReviewBtn:$('closeReviewBtn')
+    reviewDialog:$('reviewDialog'),reviewTitle:$('reviewTitle'),reviewPlayer:$('reviewPlayer'),reviewVideoWrap:$('reviewVideoWrap'),reviewTrackingCanvas:$('reviewTrackingCanvas'),reviewTrackBtn:$('reviewTrackBtn'),seedBallBtn:$('seedBallBtn'),clearTrailBtn:$('clearTrailBtn'),jumpRow:$('jumpRow'),reviewTimeline:$('reviewTimeline'),reviewTimelineMarkers:$('reviewTimelineMarkers'),reviewPlayhead:$('reviewPlayhead'),reviewTimeLabel:$('reviewTimeLabel'),slowBtn:$('slowBtn'),halfBtn:$('halfBtn'),normalBtn:$('normalBtn'),closeReviewBtn:$('closeReviewBtn')
   };
 
   let stream=null, recorder=null, facingMode='environment', mimeType='';
@@ -188,13 +200,13 @@
 
   const isLandscape=()=>window.matchMedia('(orientation: landscape)').matches || innerWidth>innerHeight;
   function updateOrientationState(){
-    const landscape=isLandscape();
-    if(ui.startOverBtn) ui.startOverBtn.dataset.orientationOk=landscape?'1':'0';
-    if(stream && !overActive) ui.startOverBtn.disabled=!landscape;
-    if(!landscape && overActive) setStatus('Rotate the iPhone to landscape. The over buffer is still running, but behind-bowler pitch alignment is required for review.');
-  }
-  async function requestLandscape(){
-    try{if(screen.orientation?.lock) await screen.orientation.lock('landscape');}catch(_){}
+    if(stream && !overActive) ui.startOverBtn.disabled=false;
+    if(ui.cameraCard&&ui.preview?.videoWidth&&ui.preview?.videoHeight){
+      const portrait=ui.preview.videoHeight>ui.preview.videoWidth;
+      ui.cameraCard.classList.toggle('portrait-stream',portrait);
+      ui.cameraCard.classList.toggle('landscape-stream',!portrait);
+      ui.cameraCard.style.aspectRatio=`${ui.preview.videoWidth}/${ui.preview.videoHeight}`;
+    }
   }
   const DB_NAME='lbw-over-tracker-db', STORE='overs';
 
@@ -206,34 +218,219 @@
   const pickMimeType=()=>['video/mp4;codecs=avc1.42E01E','video/mp4;codecs=h264','video/mp4','video/webm;codecs=vp8','video/webm'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
 
 
-  const CAL_KEY='lbwPitchCalibrationV2';
-  const CAL_STEPS=[
-    ['Bowler end · LEFT stump','Tap the base of the left-most bowler-end stump.'],
-    ['Bowler end · MIDDLE stump','Tap the base of the middle bowler-end stump.'],
-    ['Bowler end · RIGHT stump','Tap the base of the right-most bowler-end stump.'],
-    ['Striker end · LEFT stump','Tap the base of the left-most striker-end stump.'],
-    ['Striker end · MIDDLE stump','Tap the base of the middle striker-end stump.'],
-    ['Striker end · RIGHT stump','Tap the base of the right-most striker-end stump.'],
-    ['LEFT wide guideline','Tap the left wide guideline where it meets the striker crease.'],
-    ['RIGHT wide guideline','Tap the right wide guideline where it meets the striker crease.']
-  ];
-  let calibration=null,calibrationDraft=[],calibrationMode=false;
-  try{const saved=localStorage.getItem(CAL_KEY);if(saved)calibration=JSON.parse(saved);}catch(_){}
+  const CAL_KEY='lbwPitchCalibrationV3';
+  const CAL_KEYS=['bL','bM','bR','sL','sM','sR','wL','wR'];
+  const CAL_LABELS=['Bowler L','Bowler M','Bowler R','Striker L','Striker M','Striker R','Wide L','Wide R'];
+  let calibration=null,calibrationDraft=[],calibrationMode=false,calDragIndex=-1,calPointerId=null;
+  try{
+    const saved=localStorage.getItem(CAL_KEY)||localStorage.getItem('lbwPitchCalibrationV2');
+    if(saved)calibration=JSON.parse(saved);
+  }catch(_){}
   const lerp=(a,b,t)=>a+(b-a)*t;
   function calPoint(name){return calibration?.[name]||null;}
-  function calibrationValid(){return calibration&&['bL','bM','bR','sL','sM','sR','wL','wR'].every(k=>calibration[k]&&Number.isFinite(calibration[k].x)&&Number.isFinite(calibration[k].y));}
-  function updateCalibrationStatus(){const ok=calibrationValid();ui.calDot?.classList.toggle('ok',ok);if(ui.calText)ui.calText.textContent=ok?'Pitch calibrated · auto decisions ready':'Pitch not calibrated · auto decisions disabled';drawCalibrationGuide();}
+  function calibrationArray(src=calibration){return CAL_KEYS.map(k=>src?.[k]).filter(Boolean).map(p=>({x:p.x,y:p.y}));}
+  function arrayToCalibration(arr){const out={updatedAt:Date.now(),source:'adjusted'};CAL_KEYS.forEach((k,i)=>out[k]={x:arr[i].x,y:arr[i].y});return out;}
+  function defaultCalibration(){
+    return [
+      {x:.39,y:.80},{x:.50,y:.80},{x:.61,y:.80},
+      {x:.465,y:.30},{x:.50,y:.30},{x:.535,y:.30},
+      {x:.34,y:.30},{x:.66,y:.30}
+    ];
+  }
+  function calibrationValid(src=calibration){return src&&CAL_KEYS.every(k=>src[k]&&Number.isFinite(src[k].x)&&Number.isFinite(src[k].y));}
+  function updateCalibrationStatus(){
+    const ok=calibrationValid();
+    ui.calDot?.classList.toggle('ok',ok);
+    if(ui.calText)ui.calText.textContent=ok?'Pitch calibrated · auto decisions ready':'Pitch not calibrated · auto decisions disabled';
+    if(ui.calibrateBtn)ui.calibrateBtn.textContent=ok?'EDIT CALIBRATION':'CALIBRATE';
+    drawCalibrationGuide();
+  }
   function canvasFit(canvas){const vw=ui.preview.videoWidth||1280,vh=ui.preview.videoHeight||720;if(canvas.width!==vw||canvas.height!==vh){canvas.width=vw;canvas.height=vh;}return {vw,vh};}
-  function drawCalibrationGuide(){if(!ui.calibrationCanvas)return;const {vw,vh}=canvasFit(ui.calibrationCanvas),c=ui.calibrationCanvas.getContext('2d');c.clearRect(0,0,vw,vh);const pts=calibrationMode?calibrationDraft:(calibrationValid()?[calibration.bL,calibration.bM,calibration.bR,calibration.sL,calibration.sM,calibration.sR,calibration.wL,calibration.wR]:[]);if(!pts.length)return;c.save();c.lineCap='round';c.lineJoin='round';
-    const P=p=>[p.x*vw,p.y*vh];c.strokeStyle='rgba(52,199,89,.72)';c.lineWidth=Math.max(2,vw/600);c.setLineDash([10,8]);
-    if(pts.length>=6){const [bL,bM,bR,sL,sM,sR]=pts;[[bL,sL],[bM,sM],[bR,sR]].forEach(pair=>{const a=P(pair[0]),b=P(pair[1]);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();});const a=P(bL),b=P(bR);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();const d=P(sL),e=P(sR);c.beginPath();c.moveTo(...d);c.lineTo(...e);c.stroke();}
-    if(pts.length>=8){c.strokeStyle='rgba(255,214,10,.78)';const bM=pts[1],sM=pts[4],wL=pts[6],wR=pts[7];const axis={x:sM.x-bM.x,y:sM.y-bM.y},len=Math.hypot(axis.x,axis.y)||1,n={x:-axis.y/len,y:axis.x/len};[wL,wR].forEach(w=>{const a=P({x:w.x-n.x*.14,y:w.y-n.y*.14}),b=P({x:w.x+n.x*.14,y:w.y+n.y*.14});c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();});}
-    pts.forEach((p,i)=>{const [x,y]=P(p);c.setLineDash([]);c.beginPath();c.arc(x,y,Math.max(5,vw/180),0,Math.PI*2);c.fillStyle=i>=6?'#ffd60a':'#34c759';c.fill();c.fillStyle='#fff';c.font=`${Math.max(13,vw/90)}px -apple-system`;c.fillText(String(i+1),x+9,y-9);});c.restore();}
-  function startCalibration(){if(!stream){setStatus('Start the camera first.');return;}calibrationMode=true;calibrationDraft=[];liveTracker?.stop();ui.calibrationCanvas.classList.add('active');ui.calibrationHud.classList.add('show');updateCalStep();drawCalibrationGuide();setMode('CALIBRATE','blue');}
-  function updateCalStep(){const i=calibrationDraft.length;if(i>=CAL_STEPS.length){finishCalibration();return;}ui.calStep.textContent=`Step ${i+1} of ${CAL_STEPS.length} · ${CAL_STEPS[i][0]}`;ui.calHelp.textContent=CAL_STEPS[i][1];}
-  function finishCalibration(){const [bL,bM,bR,sL,sM,sR,wL,wR]=calibrationDraft;calibration={bL,bM,bR,sL,sM,sR,wL,wR,updatedAt:Date.now()};try{localStorage.setItem(CAL_KEY,JSON.stringify(calibration));}catch(_){}calibrationMode=false;ui.calibrationCanvas.classList.remove('active');ui.calibrationHud.classList.remove('show');drawCalibrationGuide();updateCalibrationStatus();if(trackingEnabled)liveTracker?.start();setMode(overActive?'OVER LIVE':'CAMERA',overActive?'red':'green');setStatus('Calibration saved. Auto WIDE / LBW / NOTHING assist is enabled.');}
-  function cancelCalibration(){calibrationMode=false;calibrationDraft=[];ui.calibrationCanvas.classList.remove('active');ui.calibrationHud.classList.remove('show');drawCalibrationGuide();if(trackingEnabled)liveTracker?.start();setMode(overActive?'OVER LIVE':'CAMERA',overActive?'red':'green');}
-  function calibrationTap(e){if(!calibrationMode)return;const r=ui.calibrationCanvas.getBoundingClientRect();const x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));calibrationDraft.push({x,y});drawCalibrationGuide();updateCalStep();}
+  function drawCalibrationGuide(){
+    if(!ui.calibrationCanvas)return;
+    const {vw,vh}=canvasFit(ui.calibrationCanvas),c=ui.calibrationCanvas.getContext('2d');
+    c.clearRect(0,0,vw,vh);
+    const pts=calibrationMode?calibrationDraft:(calibrationValid()?calibrationArray():[]);
+    if(!pts.length)return;
+    c.save();c.lineCap='round';c.lineJoin='round';
+    const P=p=>[p.x*vw,p.y*vh];
+    c.strokeStyle='rgba(52,199,89,.72)';c.lineWidth=Math.max(2,vw/600);c.setLineDash([10,8]);
+    if(pts.length>=6){
+      const [bL,bM,bR,sL,sM,sR]=pts;
+      [[bL,sL],[bM,sM],[bR,sR]].forEach(pair=>{const a=P(pair[0]),b=P(pair[1]);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();});
+      let a=P(bL),b=P(bR);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();
+      a=P(sL);b=P(sR);c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();
+    }
+    if(pts.length>=8){
+      c.strokeStyle='rgba(255,214,10,.80)';
+      const bM=pts[1],sM=pts[4],wL=pts[6],wR=pts[7];
+      const axis={x:sM.x-bM.x,y:sM.y-bM.y},len=Math.hypot(axis.x,axis.y)||1,n={x:-axis.y/len,y:axis.x/len};
+      [wL,wR].forEach(w=>{const a=P({x:w.x-n.x*.14,y:w.y-n.y*.14}),b=P({x:w.x+n.x*.14,y:w.y+n.y*.14});c.beginPath();c.moveTo(...a);c.lineTo(...b);c.stroke();});
+    }
+    pts.forEach((p,i)=>{
+      const [x,y]=P(p),r=Math.max(8,Math.min(vw,vh)/70);
+      c.setLineDash([]);c.beginPath();c.arc(x,y,r,0,Math.PI*2);
+      c.fillStyle=i>=6?'#ffd60a':'#34c759';c.fill();
+      c.lineWidth=Math.max(2,vw/700);c.strokeStyle=i===calDragIndex?'#ffffff':'rgba(0,0,0,.72)';c.stroke();
+      c.fillStyle=i>=6?'#111':'#041008';c.font=`900 ${Math.max(12,Math.min(vw,vh)/55)}px -apple-system`;c.textAlign='center';c.textBaseline='middle';c.fillText(String(i+1),x,y);
+      c.textAlign='left';c.textBaseline='alphabetic';c.fillStyle='rgba(255,255,255,.92)';c.font=`700 ${Math.max(10,Math.min(vw,vh)/70)}px -apple-system`;
+      c.fillText(CAL_LABELS[i],x+r+4,y-r-2);
+    });
+    c.restore();
+  }
+
+  function frameLuma(){
+    if(!ui.preview.videoWidth||!ui.preview.videoHeight)return null;
+    const targetW=320,targetH=Math.max(180,Math.round(targetW*ui.preview.videoHeight/ui.preview.videoWidth));
+    const cv=document.createElement('canvas');cv.width=targetW;cv.height=targetH;
+    const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(ui.preview,0,0,targetW,targetH);
+    const data=cx.getImageData(0,0,targetW,targetH).data,luma=new Float32Array(targetW*targetH);
+    for(let i=0,j=0;i<data.length;i+=4,j++)luma[j]=.2126*data[i]+.7152*data[i+1]+.0722*data[i+2];
+    return {w:targetW,h:targetH,luma};
+  }
+  function pxLuma(f,x,y){x=Math.max(0,Math.min(f.w-1,x|0));y=Math.max(0,Math.min(f.h-1,y|0));return f.luma[y*f.w+x];}
+  function bestHorizontalLine(f,y0,y1){
+    let bestY=Math.round((y0+y1)*f.h/2),best=-Infinity;
+    const xa=Math.round(f.w*.18),xb=Math.round(f.w*.82);
+    for(let y=Math.max(5,Math.round(y0*f.h));y<Math.min(f.h-5,Math.round(y1*f.h));y++){
+      let score=0;
+      for(let x=xa;x<xb;x+=2){
+        const c=pxLuma(f,x,y),around=(pxLuma(f,x,y-4)+pxLuma(f,x,y+4))/2;
+        score+=Math.max(0,c-around-5);
+      }
+      if(score>best){best=score;bestY=y;}
+    }
+    return {y:bestY/f.h,score:Math.max(0,best)};
+  }
+  function verticalPeaks(f,y0,y1){
+    const scores=[],xa=Math.round(f.w*.18),xb=Math.round(f.w*.82),ya=Math.round(y0*f.h),yb=Math.round(y1*f.h);
+    for(let x=xa;x<=xb;x++){
+      let score=0;
+      for(let y=ya;y<yb;y+=2){
+        const c=pxLuma(f,x,y),side=(pxLuma(f,x-4,y)+pxLuma(f,x+4,y))/2;
+        score+=Math.max(0,c-side-4);
+      }
+      scores.push({x,score});
+    }
+    const local=scores.filter((v,i,a)=>i>1&&i<a.length-2&&v.score>=a[i-1].score&&v.score>=a[i+1].score).sort((a,b)=>b.score-a.score);
+    const picked=[];
+    for(const p of local){
+      if(picked.every(q=>Math.abs(q.x-p.x)>=3)){picked.push(p);if(picked.length>=14)break;}
+    }
+    return picked;
+  }
+  function chooseStumpTriplet(peaks,far=false){
+    if(peaks.length<3)return null;
+    const top=peaks.slice(0,10);let best=null,bestScore=-Infinity;
+    for(let i=0;i<top.length;i++)for(let j=i+1;j<top.length;j++)for(let k=j+1;k<top.length;k++){
+      const xs=[top[i],top[j],top[k]].sort((a,b)=>a.x-b.x),span=(xs[2].x-xs[0].x);
+      const center=(xs[0].x+xs[2].x)/2,centerPenalty=Math.abs(center-160)*(far?.35:.16);
+      const idealSpan=far?12:36,spanPenalty=Math.abs(span-idealSpan)*(far?.4:.18);
+      const spacingPenalty=Math.abs((xs[1].x-xs[0].x)-(xs[2].x-xs[1].x))*.6;
+      const sc=xs.reduce((a,p)=>a+p.score,0)-centerPenalty-spanPenalty-spacingPenalty;
+      if(sc>bestScore){bestScore=sc;best=xs;}
+    }
+    return best;
+  }
+  function bestWideX(f,strikerY,side,stumpEdge){
+    const y=Math.round(strikerY*f.h),xStart=side==='left'?Math.round(f.w*.12):Math.round(stumpEdge*f.w+8),xEnd=side==='left'?Math.round(stumpEdge*f.w-8):Math.round(f.w*.88);
+    let bestX=side==='left'?f.w*.34:f.w*.66,best=-Infinity;
+    for(let x=Math.max(5,xStart);x<Math.min(f.w-5,xEnd);x++){
+      let score=0;
+      for(let dy=-8;dy<=8;dy+=2){
+        const c=pxLuma(f,x,y+dy),sideLum=(pxLuma(f,x-4,y+dy)+pxLuma(f,x+4,y+dy))/2;
+        score+=Math.max(0,c-sideLum-3);
+      }
+      if(score>best){best=score;bestX=x;}
+    }
+    return bestX/f.w;
+  }
+  function autoDetectCalibration(){
+    const f=frameLuma();
+    if(!f)return {points:defaultCalibration(),confidence:.25};
+    const nearLine=bestHorizontalLine(f,.58,.92),farLine=bestHorizontalLine(f,.16,.52);
+    const near=chooseStumpTriplet(verticalPeaks(f,.50,.93),false);
+    const far=chooseStumpTriplet(verticalPeaks(f,.10,.58),true);
+    const d=defaultCalibration();
+    const nearXs=near?near.map(p=>p.x/f.w):d.slice(0,3).map(p=>p.x);
+    const farXs=far?far.map(p=>p.x/f.w):d.slice(3,6).map(p=>p.x);
+    let bY=nearLine.y,sY=farLine.y;
+    if(!(bY>.52&&bY<.95))bY=d[1].y;
+    if(!(sY>.12&&sY<.56))sY=d[4].y;
+    const sLeft=Math.min(...farXs),sRight=Math.max(...farXs);
+    let wL=bestWideX(f,sY,'left',sLeft),wR=bestWideX(f,sY,'right',sRight);
+    const stumpSpan=Math.max(.02,sRight-sLeft);
+    if(wL>=sLeft-.02)wL=Math.max(.06,sLeft-stumpSpan*3.5);
+    if(wR<=sRight+.02)wR=Math.min(.94,sRight+stumpSpan*3.5);
+    const points=[
+      {x:nearXs[0],y:bY},{x:nearXs[1],y:bY},{x:nearXs[2],y:bY},
+      {x:farXs[0],y:sY},{x:farXs[1],y:sY},{x:farXs[2],y:sY},
+      {x:wL,y:sY},{x:wR,y:sY}
+    ];
+    const confidence=Math.min(.88,.35+(near?.length===3?.20:0)+(far?.length===3?.20:0)+(nearLine.score>100?.06:0)+(farLine.score>100?.06:0));
+    return {points,confidence};
+  }
+  function applyAutoCalibration(){
+    const found=autoDetectCalibration();
+    calibrationDraft=found.points;
+    calDragIndex=-1;
+    ui.calStep.textContent=`Auto-detected · ${Math.round(found.confidence*100)}% initial confidence`;
+    ui.calHelp.textContent='Check all 8 markers. Drag any marker that is not exactly on the stump base or wide-line intersection, then tap SAVE POINTS.';
+    drawCalibrationGuide();
+    setStatus(`Calibration points auto-detected (${Math.round(found.confidence*100)}% initial confidence). Adjust before saving.`);
+  }
+  function startCalibration(){
+    if(!stream){setStatus('Start the camera first.');return;}
+    calibrationMode=true;calDragIndex=-1;calPointerId=null;
+    liveTracker?.stop();
+    ui.calibrationCanvas.classList.add('active');ui.calibrationHud.classList.add('show');
+    if(calibrationValid()){
+      calibrationDraft=calibrationArray();
+      ui.calStep.textContent='Edit saved calibration';
+      ui.calHelp.textContent='Drag any numbered marker to correct it. AUTO DETECT can replace all markers with a new camera-based estimate.';
+    }else applyAutoCalibration();
+    drawCalibrationGuide();setMode('CALIBRATE','blue');
+  }
+  function finishCalibration(){
+    if(calibrationDraft.length!==8){setStatus('Calibration needs all 8 points. Tap AUTO DETECT or RESET DEFAULT first.');return;}
+    calibration=arrayToCalibration(calibrationDraft);
+    try{localStorage.setItem(CAL_KEY,JSON.stringify(calibration));}catch(_){}
+    calibrationMode=false;calDragIndex=-1;calPointerId=null;
+    ui.calibrationCanvas.classList.remove('active','dragging');ui.calibrationHud.classList.remove('show');
+    updateCalibrationStatus();if(trackingEnabled)liveTracker?.start();
+    setMode(overActive?'OVER LIVE':'CAMERA',overActive?'red':'green');
+    setStatus('Calibration saved. Tap EDIT CALIBRATION at any time to correct a point later.');
+  }
+  function cancelCalibration(){
+    calibrationMode=false;calDragIndex=-1;calPointerId=null;calibrationDraft=[];
+    ui.calibrationCanvas.classList.remove('active','dragging');ui.calibrationHud.classList.remove('show');
+    drawCalibrationGuide();if(trackingEnabled)liveTracker?.start();setMode(overActive?'OVER LIVE':'CAMERA',overActive?'red':'green');
+  }
+  function pointerToCal(e){
+    const r=ui.calibrationCanvas.getBoundingClientRect();
+    return {x:Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y:Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))};
+  }
+  function nearestCalIndex(p){
+    if(!calibrationDraft.length)return -1;
+    const r=ui.calibrationCanvas.getBoundingClientRect(),rx=28/Math.max(1,r.width),ry=28/Math.max(1,r.height);
+    let best=-1,dist=Infinity;
+    calibrationDraft.forEach((q,i)=>{const dx=(q.x-p.x)/rx,dy=(q.y-p.y)/ry,d=dx*dx+dy*dy;if(d<dist){dist=d;best=i;}});
+    return dist<=1.7?best:-1;
+  }
+  function calibrationPointerDown(e){
+    if(!calibrationMode)return;
+    const p=pointerToCal(e),idx=nearestCalIndex(p);if(idx<0)return;
+    calDragIndex=idx;calPointerId=e.pointerId;ui.calibrationCanvas.setPointerCapture?.(e.pointerId);ui.calibrationCanvas.classList.add('dragging');
+    calibrationDraft[idx]=p;drawCalibrationGuide();
+  }
+  function calibrationPointerMove(e){
+    if(!calibrationMode||calDragIndex<0||(calPointerId!==null&&e.pointerId!==calPointerId))return;
+    calibrationDraft[calDragIndex]=pointerToCal(e);drawCalibrationGuide();
+  }
+  function calibrationPointerUp(e){
+    if(calDragIndex<0)return;
+    if(calPointerId===null||e.pointerId===calPointerId){calDragIndex=-1;calPointerId=null;ui.calibrationCanvas.classList.remove('dragging');drawCalibrationGuide();}
+  }
   function axisMetrics(p){if(!calibrationValid())return null;const B=calibration.bM,S=calibration.sM,ax=S.x-B.x,ay=S.y-B.y,L2=ax*ax+ay*ay;if(L2<1e-6)return null;const u=((p.x-B.x)*ax+(p.y-B.y)*ay)/L2;const L=Math.sqrt(L2),nx=-ay/L,ny=ax/L;const C={x:B.x+ax*u,y:B.y+ay*u};const signed=(p.x-C.x)*nx+(p.y-C.y)*ny;const bHalf=Math.max(.001,Math.abs((calibration.bR.x-calibration.bL.x)*nx+(calibration.bR.y-calibration.bL.y)*ny)/2);const sHalf=Math.max(.001,Math.abs((calibration.sR.x-calibration.sL.x)*nx+(calibration.sR.y-calibration.sL.y)*ny)/2);const half=Math.max(.001,lerp(bHalf,sHalf,Math.max(0,Math.min(1,u))));return {u,lat:signed/half,nx,ny,half};}
   function wideLimits(){if(!calibrationValid())return null;const a=axisMetrics(calibration.wL),b=axisMetrics(calibration.wR);if(!a||!b)return null;return {min:Math.min(a.lat,b.lat),max:Math.max(a.lat,b.lat)};}
   function linearFit(points){if(points.length<3)return null;let su=0,sl=0,suu=0,sul=0;for(const q of points){su+=q.u;sl+=q.lat;suu+=q.u*q.u;sul+=q.u*q.lat;}const n=points.length,d=n*suu-su*su;if(Math.abs(d)<1e-7)return null;const m=(n*sul-su*sl)/d,b=(sl-m*su)/n;let err=0;for(const q of points){const e=q.lat-(m*q.u+b);err+=e*e;}return {m,b,rmse:Math.sqrt(err/n),predict:u=>m*u+b};}
@@ -348,16 +545,19 @@
   function all(){return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readonly');const r=tx.objectStore(STORE).getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error);});}
 
   async function startCamera(){
-    await requestLandscape();
     if(stream){await stopCamera();return;}
     if(!window.isSecureContext){setStatus('Camera needs HTTPS. Open the published GitHub Pages URL.');return;}
     if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){setStatus('Current Safari camera recording APIs are required.');return;}
     try{
-      const q=Number(ui.qualitySelect.value),fps=Number(ui.fpsSelect.value);
-      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:facingMode},width:{ideal:q===1080?1920:1280},height:{ideal:q===1080?1080:720},frameRate:{ideal:fps,max:fps}}});
+      const q=Number(ui.qualitySelect.value),fps=Number(ui.fpsSelect.value),portrait=!isLandscape();
+      const longSide=q===1080?1920:1280,shortSide=q===1080?1080:720;
+      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:facingMode},width:{ideal:portrait?shortSide:longSide},height:{ideal:portrait?longSide:shortSide},frameRate:{ideal:fps,max:fps}}});
       ui.preview.srcObject=stream;await ui.preview.play();
-      const s=stream.getVideoTracks()[0]?.getSettings?.()||{};ui.camInfo.textContent=`${s.width||''}×${s.height||''}${s.frameRate?' · '+Math.round(s.frameRate)+'fps':''}`;
-      ui.cameraBtn.textContent='Stop Camera';ui.switchBtn.disabled=false;ui.trackBtn.disabled=false;ui.calibrateBtn.disabled=false;ui.startOverBtn.disabled=!isLandscape();setLiveTracking(trackingEnabled);updateCalibrationStatus();setMode('CAMERA');setStatus(isLandscape()?'Camera ready. Centre both sets of stumps in the guide, then calibrate the pitch.':'Camera ready. Rotate the iPhone sideways to enable START OVER.');updateOrientationState();
+      const settings=stream.getVideoTracks()[0]?.getSettings?.()||{};
+      ui.camInfo.textContent=`${settings.width||ui.preview.videoWidth||''}×${settings.height||ui.preview.videoHeight||''}${settings.frameRate?' · '+Math.round(settings.frameRate)+'fps':''}`;
+      updateOrientationState();
+      ui.cameraBtn.textContent='Stop Camera';ui.switchBtn.disabled=false;ui.trackBtn.disabled=false;ui.calibrateBtn.disabled=false;ui.startOverBtn.disabled=false;setLiveTracking(trackingEnabled);updateCalibrationStatus();setMode('CAMERA');
+      setStatus(calibrationValid()?'Camera ready in portrait or landscape. Check EDIT CALIBRATION if the phone/tripod moved.':'Camera ready. Tap CALIBRATE: AUTO DETECT will suggest the 8 pitch points, then drag any incorrect marker and save.');
     }catch(e){setStatus(`Camera could not start: ${e.message}. Check Safari camera permission.`);}
   }
 
@@ -377,8 +577,6 @@
 
   async function startOver(){
     if(!stream)return;
-    await requestLandscape();
-    if(!isLandscape()){setStatus('START OVER requires landscape. Rotate the iPhone sideways and keep both sets of stumps centred.');return;}
     if(overActive&&!confirm('Reset the current over buffer and start a new over?'))return;
     if(recorder&&recorder.state!=='inactive'){try{recorder.stop();}catch(_){}}
     overActive=true;overStartedAt=performance.now();overSequence+=1;chunks=[];initChunk=null;balls=[];lbwMoments=[];autoResults=[];decisionEngine?.reset();renderDecisionStrip();liveTracker?.reset();
@@ -483,7 +681,15 @@
     try{if(navigator.canShare?.({files:[f]}))await navigator.share({title:`LBW Over ${item.overNumber}`,files:[f]});else throw new Error('File sharing is not available here.');}catch(e){if(e.name!=='AbortError')setStatus(e.message);}
   }
 
-  ui.calibrateBtn.addEventListener('click',startCalibration);ui.calibrationCanvas.addEventListener('pointerdown',calibrationTap);ui.calUndoBtn.addEventListener('click',()=>{if(calibrationDraft.length){calibrationDraft.pop();drawCalibrationGuide();updateCalStep();}});ui.calCancelBtn.addEventListener('click',cancelCalibration);ui.cameraBtn.addEventListener('click',startCamera);
+  ui.calibrateBtn.addEventListener('click',startCalibration);
+  ui.calibrationCanvas.addEventListener('pointerdown',calibrationPointerDown);
+  ui.calibrationCanvas.addEventListener('pointermove',calibrationPointerMove);
+  ui.calibrationCanvas.addEventListener('pointerup',calibrationPointerUp);
+  ui.calibrationCanvas.addEventListener('pointercancel',calibrationPointerUp);
+  ui.calAutoBtn.addEventListener('click',applyAutoCalibration);
+  ui.calSaveBtn.addEventListener('click',finishCalibration);
+  ui.calResetBtn.addEventListener('click',()=>{calibrationDraft=defaultCalibration();calDragIndex=-1;ui.calStep.textContent='Default calibration loaded';ui.calHelp.textContent='Drag all markers onto the real stump bases and wide-line intersections, then SAVE POINTS.';drawCalibrationGuide();});
+  ui.calCancelBtn.addEventListener('click',cancelCalibration);ui.cameraBtn.addEventListener('click',startCamera);
   ui.trackBtn.addEventListener('click',()=>setLiveTracking(!trackingEnabled));
   ui.switchBtn.addEventListener('click',async()=>{facingMode=facingMode==='environment'?'user':'environment';if(stream){await stopCamera();await startCamera();}});
   ui.startOverBtn.addEventListener('click',startOver);ui.markBallBtn.addEventListener('click',markBall);ui.reviewOverBtn.addEventListener('click',reviewCurrentOver);ui.endOverBtn.addEventListener('click',()=>endOver(true));ui.lbwMarkBtn.addEventListener('click',markLBW);ui.resetOverBtn.addEventListener('click',resetOver);
@@ -492,7 +698,7 @@
   ui.timelineMarkers.addEventListener('click',e=>{const ball=e.target.closest('[data-ball]');if(ball){reviewBallFromLive(ball.dataset.ball);return;}const lbw=e.target.closest('[data-lbw]');if(lbw){const t=lbwMoments[Number(lbw.dataset.lbw)];reviewCurrentOver().then(()=>setTimeout(()=>{if(Number.isFinite(t))ui.reviewPlayer.currentTime=Math.max(0,t-6);},180));}});
   ui.jumpRow.addEventListener('click',e=>{const b=e.target.closest('[data-time]');if(b){ui.reviewPlayer.currentTime=Number(b.dataset.time)||0;ui.reviewPlayer.play().catch(()=>{});}});
   ui.reviewTimelineMarkers.addEventListener('click',e=>{const b=e.target.closest('[data-review-time]');if(b){ui.reviewPlayer.currentTime=Number(b.dataset.reviewTime)||0;ui.reviewPlayer.play().catch(()=>{});}});
-  ui.reviewPlayer.addEventListener('loadedmetadata',()=>{if(Number.isFinite(ui.reviewPlayer.duration))reviewDuration=ui.reviewPlayer.duration;renderReviewTimeline();});
+  ui.reviewPlayer.addEventListener('loadedmetadata',()=>{if(Number.isFinite(ui.reviewPlayer.duration))reviewDuration=ui.reviewPlayer.duration;if(ui.reviewVideoWrap&&ui.reviewPlayer.videoWidth&&ui.reviewPlayer.videoHeight)ui.reviewVideoWrap.style.aspectRatio=`${ui.reviewPlayer.videoWidth}/${ui.reviewPlayer.videoHeight}`;renderReviewTimeline();});
   ui.reviewPlayer.addEventListener('timeupdate',updateReviewPlayhead);
   ui.reviewPlayer.addEventListener('seeking',()=>reviewTracker?.reset(false));
   ui.reviewPlayer.addEventListener('play',()=>{if(reviewTrackingEnabled)reviewTracker?.start();});

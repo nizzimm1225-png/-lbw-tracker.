@@ -1,42 +1,40 @@
-# LBW Tracker — Auto Decision Assist
+# LBW Tracker — Portrait + Auto Calibration
 
-An iPhone-first cricket PWA with per-over recording, ball-by-ball review, experimental 2D ball tracking, pitch calibration, and automatic result flashing.
+This PWA is designed to run directly on an iPhone from Safari / Add to Home Screen.
 
-## Camera position
-Use one fixed iPhone in **landscape behind the bowler**, looking straight down the pitch toward the striker. Keep both sets of stumps visible and as close to the centreline as practical. A tripod is strongly recommended.
+## New in this build
 
-## One-time pitch calibration
-Tap **CALIBRATE** and mark these eight points in order:
-1. Bowler-end left stump base
-2. Bowler-end middle stump base
-3. Bowler-end right stump base
-4. Striker-end left stump base
-5. Striker-end middle stump base
-6. Striker-end right stump base
-7. Left wide guideline at the striker crease
-8. Right wide guideline at the striker crease
+- Portrait mode is supported for the full running page and recording workflow.
+- START OVER no longer requires the iPhone to be rotated sideways.
+- The camera preview adapts to the actual stream aspect ratio.
+- CALIBRATE performs a best-effort automatic detection of:
+  1. bowler-end left / middle / right stump bases
+  2. striker-end left / middle / right stump bases
+  3. left / right wide-line reference points
+- All eight points are shown as numbered draggable markers before saving.
+- AUTO DETECT can be run again before saving.
+- RESET DEFAULT gives a sensible starting geometry if automatic detection is poor.
+- After calibration is saved, the button becomes EDIT CALIBRATION. Reopen it at any time, move one or more points, then save again.
+- Cancelling an edit leaves the previously saved calibration unchanged.
+- Existing over-buffer, ball timeline, ball tracking and WIDE/LBW/NOTHING/REVIEW assist remain available.
 
-Calibration is saved locally on the iPhone. Recalibrate whenever the phone moves, zoom/framing changes, or you use a different pitch.
+## Calibration advice
 
-## Match workflow
-1. Start Camera.
-2. CALIBRATE if required.
-3. Select red/white ball, striker handedness and LBW shot assumption.
-4. Tap **START OVER**.
-5. Ball tracking follows the delivery.
-6. When the tracked trajectory ends/disappears, the decision engine evaluates it and flashes one of:
-   - **WIDE** — projected outside the calibrated wide corridor
-   - **LBW** — projected through the wicket corridor and the 2D impact condition is eligible
-   - **NOTHING** — trajectory is inside the wide corridor and does not satisfy the LBW estimate
-   - **REVIEW** — tracking/geometry confidence is below the selected threshold
-7. Tap **MARK BALL** after each delivery to add a review marker. The latest auto result is attached to that marker when possible.
-8. END OVER saves the whole over locally.
+Automatic calibration is intentionally assistive rather than authoritative. It uses image contrast and line/stump heuristics from the current camera frame. For best results:
 
-## Important rules/accuracy note
-This is an **experimental club-cricket decision aid**, not DRS/Hawk-Eye and not an authoritative umpire replacement.
+- use the rear camera behind the bowler
+- hold or mount the iPhone still
+- keep both sets of stumps visible
+- perform calibration when players are not blocking the wickets
+- check every marker before pressing SAVE POINTS
+- recalibrate whenever the phone/tripod position changes
 
-- Wide decisions under MCC Law 22 depend on striker position, movement and whether the ball is within reach for a normal cricket stroke. This build uses the two calibrated local wide-guideline points as a practical club-mode approximation.
-- LBW under MCC Law 36 also requires checks such as No ball, pitching line, first interception, bat contact, impact position, shot attempt and whether the ball would hit the wicket. A single rear iPhone cannot recover all of those reliably in 3D. The app therefore treats LBW as a **review recommendation** even when the main flash reads LBW.
-- No-ball detection is not implemented yet. A No ball overrides Wide and prevents LBW dismissal.
+Green markers 1–6 are stump-base points. Amber markers 7–8 are the wide guideline references at the striker end.
 
-Good daylight, a fixed tripod, 720p/60fps, and a clearly visible red or white ball materially improve results.
+## Deploy
+
+Replace `index.html`, `manifest.webmanifest`, and `sw.js` in the root of your existing GitHub Pages repository, commit to `main`, wait for the Pages deployment to turn green, then refresh the site in Safari and fully close/reopen the Home Screen app.
+
+## Important
+
+Automatic LBW and Wide outputs are review aids, not official umpire-grade decisions. A single iPhone camera cannot reliably establish every 3D/playing-condition requirement involved in LBW or Wide decisions.
