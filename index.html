@@ -18,7 +18,7 @@
     <div>
       <div class="eyebrow">CRICKET VISION · SINGLE IPHONE</div>
       <h1>LBW Tracker <span>Pro</span></h1>
-      <div class="sub">Live ball tracking · DRS assist · automatic analytics</div>
+      <div class="sub">Hybrid AI ball tracking · DRS assist · automatic analytics</div>
     </div>
     <span id="modeBadge" class="badge">READY</span>
   </header>
@@ -62,7 +62,7 @@
       </div>
 
       <div class="hud">
-        <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="trackInfo" class="pill tracker-pill off">Track off</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
+        <div class="hudrow"><span id="camInfo" class="pill">Camera off</span><span id="trackInfo" class="pill tracker-pill off">Track off</span><span id="mlInfo" class="pill ml-pill">AI standby</span><span id="bufferInfo" class="pill">Over 00:00</span></div>
         <div class="reticle"><span class="crease left"></span><span class="crease right"></span><span class="pitch-axis"></span></div><div></div>
       </div>
     </div>
@@ -147,6 +147,26 @@
       <div class="setting"><label for="shotSelect">LBW shot assumption</label><select id="shotSelect"><option value="shot" selected>Shot offered</option><option value="noshot">No genuine shot</option></select></div>
       <div class="setting"><label for="autoDecisionSelect">Decision assist</label><select id="autoDecisionSelect"><option value="on" selected>On</option><option value="off">Off</option></select></div>
       <div class="setting"><label for="decisionSensitivity">Confidence gate</label><select id="decisionSensitivity"><option value="strict" selected>Strict</option><option value="normal">Normal</option></select></div>
+    </div>
+
+    <div class="ml-panel">
+      <div class="ml-panel-head">
+        <div><span class="eyebrow">BALL DETECTOR</span><h3>Hybrid AI tracking</h3></div>
+        <span id="mlStateBadge" class="assist-chip">STANDBY</span>
+      </div>
+      <p class="ml-copy">Uses an on-device TensorFlow.js sports-ball detector as a periodic AI anchor, fused with the fast motion/colour tracker between AI frames. If the AI model cannot load, tracking automatically falls back to the fast tracker.</p>
+      <div class="settings ml-settings">
+        <div class="setting"><label for="mlModeSelect">Tracking engine</label><select id="mlModeSelect"><option value="hybrid" selected>Hybrid AI + fast tracker</option><option value="fast">Fast tracker only</option></select></div>
+        <div class="setting"><label for="mlRateSelect">AI anchor rate</label><select id="mlRateSelect"><option value="220">High · ~4 fps</option><option value="320" selected>Balanced · ~3 fps</option><option value="500">Battery saver · ~2 fps</option></select></div>
+      </div>
+      <div class="ml-status-grid">
+        <div><span>Model</span><strong id="mlModelName">COCO-SSD Lite</strong></div>
+        <div><span>Backend</span><strong id="mlBackend">—</strong></div>
+        <div><span>AI detections</span><strong id="mlDetectionCount">0</strong></div>
+        <div><span>Training samples</span><strong id="mlSampleCount">0</strong></div>
+      </div>
+      <div class="setup-actions ml-actions"><button id="mlLoadBtn" class="blue">LOAD / RETRY AI</button><button id="mlPositiveBtn" class="secondary" disabled>CAPTURE BALL SAMPLE</button><button id="mlNegativeBtn" class="secondary" disabled>CAPTURE BACKGROUND</button><button id="mlExportBtn" class="secondary">EXPORT ML DATA</button><button id="mlClearBtn" class="danger">CLEAR ML DATA</button></div>
+      <div class="feature-note"><strong>Why samples?</strong> The bundled AI model understands the generic COCO “sports ball” class. Capturing confirmed cricket-ball examples from your own ground gives us the data needed for the next upgrade: a truly cricket-specific detector tuned to red/white balls at long distance.</div>
     </div>
     <div id="calibrationStatus" class="cal-status"><span id="calDot" class="cal-dot"></span><span id="calText">Pitch not calibrated</span></div>
     <div id="decisionStrip" class="decision-row"></div>

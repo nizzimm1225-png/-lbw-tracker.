@@ -1,7 +1,7 @@
 {
   "name": "LBW Tracker Pro - Cricket Vision",
   "short_name": "LBW Pro",
-  "description": "Single-iPhone cricket recording, ball tracking, DRS assist and analytics.",
+  "description": "Single-iPhone cricket recording with hybrid AI ball tracking, DRS assist and analytics.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

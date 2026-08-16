@@ -21,3 +21,14 @@
 | Cloud storage | No | Local IndexedDB + export/share; backend required |
 | True 3D trajectory | No | Requires trained 3D model / multi-view or proprietary approach |
 | Live streaming to viewers | No | Requires backend/WebRTC service |
+
+## Hybrid AI stage
+
+| Capability | Status | Notes |
+|---|---|---|
+| Generic sports-ball ML detection | Implemented | TensorFlow.js COCO-SSD Lite, periodic inference |
+| ML + temporal tracker fusion | Implemented | AI anchors fast tracker; fallback remains available |
+| iPhone WebGL inference | Implemented | Falls back if unavailable |
+| Cricket-specific trained detector | Data-collection stage | Requires real labelled cricket-ball footage |
+| Local labelled sample capture | Implemented | Ball/background frames stored in IndexedDB |
+| Dataset export | Implemented | JSON with JPEG data + normalized bounding box |
